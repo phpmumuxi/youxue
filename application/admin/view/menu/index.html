@@ -1,0 +1,62 @@
+{extend name="layout" /}
+{block name="body"}
+<title>菜单管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+	系统管理
+	<span class="c-gray en">&gt;</span>
+	菜单管理
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-hover table-bg table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="80">序号</th>
+					<th width="80">排序</th>
+					<th width="220">url</th>
+					<th>菜单名称</th>
+					<th width="80">状态</th>
+					<th width="100">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+			   <tr class="text-c">
+			                 <td>1</td>
+			                 <td>99999</td>
+			                 <td></td>
+			                 <td>总后台</td>
+			                 <td></td>
+			                 <td><a title="添加" href="{:url('admin/menu/add',['kot'=>1,'doType'=>0])}" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe600;</i></a>
+								  </td>
+			   </tr>
+              {volist  name="menu_lists" id="vo" key='k'}
+				<tr class="text-c">
+					<td>{$k+1}</td>
+					<td>{$vo.sort}</td>
+					<td>{$vo.url}</td>
+					<td class="text-l">{neq name="vo.level" value="0"}&nbsp;&nbsp;&nbsp;|{php}for($i=0;$i<$vo['level'];$i++){echo ' ---- ';}{/php}{/neq}{$vo.name}
+                    {if condition="$vo.type==2"}(商户)
+                    {elseif condition="$vo.type==3"/}(校区){else /}
+                    {/if}
+					</td>
+					<td>{php}echo $vo['status']==1 ? '显示' : '隐藏';{/php}</td>
+					<td class="f-14">
+					<a title="添加" href="{:url('admin/Menu/add',['id'=>$vo.id,'doType'=>$vo.type])}" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe600;</i></a>&nbsp;&nbsp;&nbsp;
+					<a href="{:url('admin/Menu/edit',['id'=>$vo['id'],'doType'=>$vo.type])}"
+					title="编辑" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+					<a title="删除" href="{:url('admin/Menu/del',['id'=>$vo['id']])}" onclick="return confirm('删除须谨慎，确认要删除吗？')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+					</td>
+				</tr>
+             {/volist}
+			</tbody>
+		</table>
+	</div>
+</div>
+{/block}
+
+</body>
+</html>

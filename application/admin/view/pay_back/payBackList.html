@@ -1,0 +1,191 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+    .pagination {
+        list-style-type: none;
+        display: inline-block;
+        overflow: auto;
+    }
+
+    .pagination li {
+        float: left;
+        /*padding: 6px 12px;*/
+        border: 1px solid #e1e2e3;
+        margin: 3px;
+    }
+
+    .pagination li a, .pagination li span {
+        display: inline-block;
+        padding: 6px 12px;
+    }
+
+    .pagination li:hover {
+        border: 1px solid #38f;
+        background: #f2f8ff;
+    }
+
+    .pagination .active {
+        border: 1px solid #38f;
+    }
+</style>
+<style>
+    .layui-layer-btn0 {
+        background-color: red !important;
+        border-color: red !important;
+        color: #fff;
+    }
+</style>
+{/block}
+{block name="body"}
+<title>退款列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 退款管理 <span
+        class="c-gray en">&gt;</span> 退款列表 <a class="btn btn-success radius r"
+                                              style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:window.location.href = '/admin/PayBack/payBackList';"
+                                              title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c">
+        <input type="text" name="" id="orderNo" placeholder="订单号" style="width:250px" class="input-text"
+               value="{if(isset($orderNo))}{$orderNo}{/if}">
+        <button name="" id="btnSearch" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="r">共有数据：<strong>{$info['total']}</strong> 条</span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr class="text-c">
+                <th width="10">序号</th>
+                <th width="10">订单号</th>
+                <th width="10">应退款</th>
+                <th width="20">实退款</th>
+                <th width="20">退款原因</th>
+                <th width="10">操作人</th>
+                <th width="10">操作时间</th>
+                <th width="20">审核人</th>
+                <th width="20">审核时间</th>
+                <th width="20">审核状态</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if($info['data'])}
+            {volist name="data" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo['orderNo']}</td>
+                <td>{$vo['money']}</td>
+                <td>{$vo['actualMoney']}</td>
+                <td>{$vo['reason']}</td>
+                <td>{$vo['adminName']}</td>
+                <td>{$vo['createTime']|date='Y-m-d H:i:s',###}</td>
+                <td>
+                    {if condition="($vo['isReview'])"}
+                    {$vo['reviewName']}
+                    {else}
+                    /
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['isReview'])"}
+                    {$vo['reviewTime']|date='Y-m-d H:i:s',###}
+                    {else}
+                    /
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['isReview'] == 1)"}
+                    <span style="color: #008000">已审核</span>
+                    {elseif condition="($vo['isReview'] == 2)"}
+                    <span style="color: #FF0000;">已拒绝</span>
+                    {else}
+                    未审核
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['isReview'] == 0)"}
+                    <a href="javascript:;" va="{$vo['id']}" class="sureBtn" title="审核">
+                        <i class="Hui-iconfont Hui-iconfont-shenhe-tongguo f-16"></i>
+                    </a>
+                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <a href="javascript:;" va="{$vo['id']}" class="someCancel" title="拒绝">
+                        <i class="Hui-iconfont Hui-iconfont-shenhe-butongguo2 f-16"></i>
+                    </a>
+                    {/if}
+                </td>
+            </tr>
+            {/volist}
+            {else /}
+            <tr class="text-c">
+                <td colspan="11">暂无数据</td>
+            </tr>
+            {/if}
+            <tr class="text-c">
+                <td colspan="11" style="text-align: center">{$pages}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $('.sureBtn').on('click', function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+        layer.confirm('确认审核通过？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.post('/admin/PayBack/payBackReview', {id: id}, function (res) {
+                if (res.status == 'ok') {
+                    layer.msg('操作成功!');
+                    setTimeout(function () {
+                        window.location.href = location.href;
+                    }, 1000);
+                } else {
+                    layer.msg('操作失败!');
+                }
+            }, 'json');
+        }, function () {
+            layer.msg('操作已取消!');
+        });
+    });
+
+    $('#btnSearch').on('click', function () {
+        var orderNo = $('#orderNo').val();
+        if (!orderNo || orderNo == 0 || orderNo == '') {
+            return false;
+        }
+        window.location.href = '/admin/PayBack/payBackList?orderNo=' + orderNo;
+    });
+
+    $('.someCancel').on('click', function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+        layer.confirm('确认拒绝退款申请？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.post('/admin/PayBack/payBackReviewCancel', {id: id}, function (res) {
+                if (res.status == 'ok') {
+                    layer.msg('操作成功!');
+                    setTimeout(function () {
+                        window.location.href = location.href;
+                    }, 1000);
+                } else {
+                    layer.msg('操作失败!');
+                }
+            }, 'json');
+        }, function () {
+            layer.msg('操作已取消!');
+        });
+    });
+</script>
+{/block}
+</body>
+</html>

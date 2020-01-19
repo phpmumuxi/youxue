@@ -1,0 +1,291 @@
+{extend name="layout" /}
+{block name="body"}
+<title>添加万人砍活动</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 万人砍管理 <span class="c-gray en">&gt;</span><a href="{:url('admin/Activity/activityIndex')}">万人砍活动列表</a><span class="c-gray en">&gt;</span>添加万人砍活动<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<article class="page-container">
+	<form class="form form-horizontal" action='' method='post' enctype="multipart/form-data" onsubmit='return checks()'>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>活动名称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+		</div>
+	</div>
+	
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>开始时间：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<input class="input-text" type="text" id="startTime" placeholder="选择开始时间" name="startTime">
+			</div>
+	</div>
+
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>结束时间：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<input class="input-text" type="text" id="endTime" placeholder="选择结束时间" name="endTime">
+			</div>
+	</div>
+	
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>库存数量：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="stock" name="stock">
+		</div>
+	</div>
+
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>顶部图片：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<img style="display: none;width: 150px;height: 80px;" src="" alt="" class="thumbnail" id="topImgUrl">
+				<input type="file" name="topImg" id="topImg"><span class='c-red'>推荐尺寸:1125*528</span></div>
+	</div>
+
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>列表图片：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<img style="display: none;width: 80px;height: 80px;" src="" alt="" class="thumbnail" id="listImgUrl">
+				<input type="file" name="listImg" id="listImg"><span class='c-red'>推荐尺寸:300*300</span></div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择活动课程：</label>
+		<div class="formControls col-xs-8 col-sm-9"> 
+			<span class="select-box" style="width:150px;">
+			<select class="select" id="brandId" size="1">
+				<option value="">--请选择品牌--</option>
+               {foreach $brands as $v}
+				<option value="{$v.id}">{$v.name}</option>
+		       {/foreach}
+			</select>
+			</span>
+            <span class="select-box" style="width:150px;">
+			<select class="select" id="shopId" size="1">
+				<option value="">--请选择商户--</option>
+			</select>
+			</span>
+			<span class="select-box" style="width:150px;">
+			<select class="select" id="schoolId" size="1">
+				<option value="">--请选择校区--</option>
+			</select>
+			</span>
+			<div class="mt-10" id='activityClass'>	
+			</div>			
+		</div>
+	</div>
+
+	<div class="row cl allSelectedActivityClassDiv" style="display: none;">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>已选择活动课程：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<div class="mb-5" id='selectedActivityClass'>	
+				</div>
+			</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>活动说明：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea type="text" rows="" cols="" value="" placeholder="活动说明" id="explain" name="explain" style="width:60%;height:100px"></textarea>
+		</div>
+	</div>
+	
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">备注：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="remark" name="remark">
+		</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>活动详情：</label>
+		<div class="formControls col-xs-8 col-sm-9">				
+			<textarea name="content" id="activityContainer"></textarea>
+		</div>
+	</div>
+
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+		</div>
+	</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+var ue = UE.getEditor('activityContainer');
+
+function add_tr_ele(o,vaId){
+	var obj=o.clone();	
+	var id=obj.find('input').val();
+	var ids=checkIsHasId();
+	if($.inArray(id,ids) > -1){		
+		layer.msg('已选择过该活动课程!',{icon:2,time:2000});
+		return false;
+	}else{
+		obj.find('i').append("<input type='checkbox' value='"+vaId+"' name='classIds[]' checked='checked' style='display:none'>");
+		obj.find('span').remove();
+		obj.find('em').append("<span onclick='del_tr_ele($(this).parent().parent())' style='cursor:pointer;color:red;font-size:16px'>&nbsp;&nbsp;[ - ]</span>");		
+		o.remove();
+		$('.allSelectedActivityClassDiv').show();	
+	   	$('#selectedActivityClass').after(obj);
+	}	
+}
+
+function del_tr_ele(obj){
+	obj.remove();
+	var _ids=checkIsHasId();
+	if(_ids.length<=0){
+		$('.allSelectedActivityClassDiv').hide();
+	}
+}
+
+function checkIsHasId(){
+	var arrayIds = new Array();
+	$(".allSelectedActivityClassDiv input[type='checkbox']").each(function(){
+		arrayIds.push($(this).val());
+	})
+	return arrayIds;
+}
+
+$(function(){
+	//日期插件
+	laydate.render({
+	elem: '#startTime'
+	    ,type: 'datetime'
+	    ,format: 'yyyy-MM-dd HH:mm:ss'
+	});
+	laydate.render({
+	    elem: '#endTime'
+	    ,type: 'datetime'
+	    ,format: 'yyyy-MM-dd HH:mm:ss'
+	});
+
+	function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    $('#topImg').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#topImgUrl").attr("src", objUrl);
+            $("#topImgUrl").show();
+        }
+    });
+
+    $('#listImg').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#listImgUrl").attr("src", objUrl);
+            $("#listImgUrl").show();
+        }
+    });
+
+});
+
+$('#brandId').change(function(){
+	var brandId=parseInt($(this).val());
+	if(brandId>0){
+		$.post("/admin/Activity/getAjaxDatas",{id:brandId,type:'1'},function(res){
+			$('#shopId').empty();
+	        $('#shopId').html(res);	        
+	    });
+	}else{
+		$('#shopId').empty();
+		$('#shopId').html('<option value="">--请选择商户--</option>');
+	}
+		$('#schoolId').empty();
+		$('#schoolId').html('<option value="">--请选择校区--</option>');
+		$('#activityClass').empty();
+});
+$('#shopId').change(function(){
+	var shopId=parseInt($(this).val());
+	if(shopId>0){
+		$.post("/admin/Activity/getAjaxDatas",{id:shopId,type:'2'},function(res){
+			$('#schoolId').empty();
+	        $('#schoolId').html(res);
+	    });
+	}else{
+		$('#schoolId').empty();
+		$('#schoolId').html('<option value="">--请选择校区--</option>');
+		$('#activityClass').empty();
+	}
+});
+$('#schoolId').change(function(){
+	var _schoolId=parseInt($(this).val());
+	var _brandId=parseInt($('#brandId').val());
+	var _shopId=parseInt($('#shopId').val());
+	if(_brandId>0 && _shopId>0 && _schoolId>0){
+		$.post("/admin/Activity/getAjaxActivityClassDatas",{brandId:_brandId,shopId:_shopId,schoolId:_schoolId},function(res){		
+				$('#activityClass').empty();
+				$('#activityClass').show();
+		        $('#activityClass').html(res);
+	    });
+	}else{
+		$('#activityClass').empty();
+		layer.msg('请选择对应的校区!',{icon:2,time:2000});
+	}
+});
+function checks(){	  
+	  var _classIds=checkIsHasId();
+	
+	 if($.trim($("#name").val())==''){
+	     layer.msg('活动名称必填！',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#startTime").val()==''){
+	     layer.msg('开始时间必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#endTime").val()==''){
+	     layer.msg('结束时间必填!',{icon:2,time:2000});
+	      return false;
+	  }
+	  if($("#startTime").val() > $("#endTime").val()){
+	  	layer.msg('时间错误!',{icon:2,time:2000});
+	      return false;
+	  }
+	  if($.trim($("#stock").val())==''){	  	
+	     layer.msg('库存数量必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#topImg").val()==''){
+	     layer.msg('请上传顶部图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#listImg").val()==''){
+	     layer.msg('请上传列表图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(_classIds.length<=0){
+		layer.msg('请选择活动课程！',{icon:2,time:2000});
+	    return false;
+	  }
+	  if($.trim($("#explain").val())==''){	  	
+	     layer.msg('活动说明必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($.trim(ue.getContent())==''){
+	     layer.msg('活动详情必填!',{icon:2,time:2000});
+	      return false;
+	  }
+	   return true;
+	}
+</script>
+{/block}
+</body>
+</html>

@@ -1,0 +1,139 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>顾问销售额管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    财务管理
+	<span class="c-gray en">&gt;</span>
+	顾问销售额管理
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<div class="text-c">
+		开始时间:&nbsp;<input style="width:100px" class="input-text" type="text" id="LAY_demorange_s" value="{if(isset($date))}{$date.sTime}{/if}" placeholder="开始时间" name="startTime">&nbsp;&nbsp;&nbsp;
+		结束时间:&nbsp;<input style="width:100px" class="input-text" type="text" id="LAY_demorange_e" value="{if(isset($date))}{$date.eTime}{/if}" placeholder="结束时间" name="endTime">&nbsp;
+        <button name="" id="adviserMoneyButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-sort">
+			<thead>
+				<tr >
+					<th colspan="8">						
+					   <span class="r">
+					   		共有数据：<strong>{$lists['total']}</strong> 条
+					   </span>
+				   </th>
+				</tr>
+				<tr class="text-c">
+					<th width="60">序号</th>
+					<th width="100">顾问姓名</th>
+					<th width="120">手机号</th>
+					<th width="100">
+						<select id="schoolId" style='border:0;background:white none repeat scroll 0 0;'>
+			                    <option value="0">所属校区</option>
+			                    {foreach $schools as $v}
+			                    <option value="{$v.id}" {if condition="$v.id==$schoolId"}selected{/if}>{$v.name}</option>
+			                    {/foreach}
+			            </select>
+					</th>
+					<th width="100">总额(元)</th>
+					<th width="80">新用户(元)</th>
+					<th width="80">老用户(元)</th>					
+					<th width="80">详情</th>
+				</tr>
+			</thead>
+			<tbody>
+			{if($lists['data'])}{volist name="lists.data" id="vo" key='k'}
+				<tr class="text-c">
+					<td>{$k}</td>
+					<td>{$vo.name}</td>
+					<td>{$vo.phone}</td>
+					<td>{$vo.schoolName}</td>
+					<td>{$vo.allMoney}</td>
+					<td>{$vo.newMoney}</td>
+					<td>{$vo.oldMoney}</td>	
+					<td><a style="text-decoration:none"  href="{:url('shop/Finance/adviserMoneyBill',['id'=>$vo['id'],'sTime'=>$vo['sTime'],'eTime'=>$vo['eTime']])}" title="账单详情"><i class="Hui-iconfont">&#xe715;</i></a></td>	
+				</tr>
+				{/volist}
+				{else /}
+                <tr class="text-c">
+                    <td colspan="8">暂无数据</td>
+                </tr>
+                {/if}
+				<tr class="text-c">
+					<td colspan="8" style="text-align: center;">
+					{$page}
+					</td>
+				</tr>
+			</tbody>
+		</table>	
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+	 laydate.render({
+            elem: '#LAY_demorange_s'
+            ,type: 'date'
+            ,format: 'yyyy-MM-dd'
+            ,max:'{$date.eTime}'
+    });
+    laydate.render({
+        elem: '#LAY_demorange_e'
+        ,type: 'date'
+        ,format: 'yyyy-MM-dd'
+        ,max:'{$date.eTime}'
+    });
+
+    $('#adviserMoneyButton').click(function(){
+    	urlShow();
+    })
+
+    $('#schoolId').on('change',function(){
+        urlShow();
+    })
+
+    function urlShow(){
+    	var sTime = $('#LAY_demorange_s').val();
+    	var eTime = $('#LAY_demorange_e').val();
+    	var schoolId = $('#schoolId').val();
+        if (sTime == '' || eTime == '' || ( eTime < sTime ) ) {
+        	layer.msg('时间错误!',{icon:2,time:2000});
+            return false;
+        }        
+        window.location.href = "/shop/Finance/adviserMoney?sTime=" + sTime + "&eTime=" + eTime + "&schoolId=" + schoolId;
+    }
+</script>
+{/block}
+</body>
+</html>

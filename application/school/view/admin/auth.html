@@ -1,0 +1,101 @@
+{extend name="layout" /}
+{block name="body"}
+<title>分配权限</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> <a href="{:url('school/Admin/index')}">管理员列表</a><span class="c-gray en">&gt;</span> 分配权限 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal">
+	{empty name='hasAccess'}
+	<input type="hidden" name="accessType" value='1'/>
+	{/empty}
+		<!-- 校区权限列表 -->
+		<div class="row cl accessList" id="accessList_1">
+			<label class="form-label col-xs-3 col-sm-2">分配权限：</label>
+			<div class="col-xs-7 col-sm-8"><input type="checkbox" id='allChecked'>&nbsp;全选</div>
+			<div class="formControls col-xs-7 col-sm-8">
+			{if condition="!empty($menu_lists)"}
+			{volist name="menu_lists" id="vo" key="k"}
+				<dl class="permission-list">             
+					<dt>
+						<label>
+							<em style="display:none">{$k}</em><input type="checkbox" value="{$vo.id}" name="ids[]" id='checkIds_{$k}' {in name="vo.id" value="$hasAccess" }checked{/in}>
+							{$vo.name}</label>
+					</dt>
+					<dd>
+					  {if condition="!empty($vo.childs)"}
+					  {volist name="vo.childs" id="val"}
+						<dl class="cl permission-list2">
+							<dt>							
+								<label class="">
+									<input type="checkbox" value="{$val.id}" name="ids[]" {in name="val.id" value="$hasAccess" }checked{/in}>
+									{$val.name}</label>			
+							</dt>
+							<dd>
+							   {if condition="!empty($val.childs)"}
+					           {volist name="val.childs" id="v"}		
+								<label class="">
+									<input type="checkbox" value="{$v.id}" name="ids[]" {in name="v.id" value="$hasAccess" }checked{/in}>
+									{$v.name}</label>		
+								{/volist}
+						        {/if}
+							</dd>
+						</dl>						
+						{/volist}
+						{/if}
+					</dd>
+				</dl>
+            {/volist}
+            {/if}
+			</div>
+		</div>
+
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+				<button onclick="javascript:window.location.href='/school/Admin/index';;" class="btn btn-default radius" type="button"> 返回</button>
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+$(function(){
+	$("#allChecked").click(function(){
+		if(this.checked){   
+        	$(".permission-list input[type='checkbox']").prop("checked", true);  
+	    }else{   
+			$(".permission-list input[type='checkbox']").prop("checked", false);
+	    }
+	})
+
+	$(".permission-list dt input:checkbox").click(function(){
+		$(this).closest("dl").find("dd input:checkbox").prop("checked",$(this).prop("checked"));
+		var v=$(this).parents("dl").find("em").text();
+		$("#checkIds_"+v).prop("checked",$(this).prop("checked"));	
+	});
+	$(".permission-list2 dd input:checkbox").click(function(){
+		var l =$(this).parent().parent().find("input:checked").length;
+		var l2=$(this).parents(".permission-list").find(".permission-list2 dd").find("input:checked").length;
+		if($(this).prop("checked")){
+			$(this).closest("dl").find("dt input:checkbox").prop("checked",true);
+			$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",true);
+		}
+		else{
+			if(l==0){
+				$(this).closest("dl").find("dt input:checkbox").prop("checked",false);
+			}
+			if(l2==0){
+				$(this).parents(".permission-list").find("dt").first().find("input:checkbox").prop("checked",false);
+			}
+		}
+	});
+});
+</script>
+{/block}
+
+</body>
+</html>

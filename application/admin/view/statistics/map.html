@@ -1,0 +1,65 @@
+{extend name="layout" /}
+{block name="body"}
+<title>地图</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    统计概况
+	<span class="c-gray en">&gt;</span>
+	地图
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<div class="mt-15 ml-20">
+		<div id="allMap" style="width:100%;height:500px;"></div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ycTgY5YTSnk5PsqumqZboxtXaKU6Io6K"></script>
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("allMap")
+    //初始化定点
+    var point = new BMap.Point(118.800591,32.065714)
+    //设置定点与缩放比例
+    map.centerAndZoom(point, 12)
+    //控制缩放和移动
+    map.enableScrollWheelZoom(true)
+
+    var size = new BMap.Size(10, 20)
+    //调用城市列表控件
+    // map.addControl(new BMap.CityListControl({
+    //     anchor: BMAP_ANCHOR_TOP_LEFT,
+    //     offset: size,
+    // }))
+    
+    $(function(){
+        getSchoolMapDatas()
+    })
+    function getSchoolMapDatas(){
+        $.ajax({
+            url:'/admin/Statistics/dataAjax',
+            data:{"action":"map"},
+            dataType:'JSON',
+            success:function(res){
+                for(var i in res){
+                    var marker = new BMap.Marker(new BMap.Point(res[i].longitude, res[i].latitude),{
+                        title:res[i].name
+                    })
+                    var infoW = new BMap.InfoWindow(res[i].name)
+                    marker.addEventListener("click", ( function(a,b){
+                        return function(){
+                            a.openInfoWindow(b) 
+                        }
+                    })(marker,infoW) )
+                    map.addOverlay(marker)
+                }
+            }
+        })
+    }
+</script>
+{/block}
+</body>
+</html>

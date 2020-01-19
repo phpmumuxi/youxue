@@ -1,0 +1,224 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+    .pagination {
+        list-style-type: none;
+        display: inline-block;
+        overflow: auto;
+    }
+
+    .pagination li {
+        float: left;
+        /*padding: 6px 12px;*/
+        border: 1px solid #e1e2e3;
+        margin: 3px;
+    }
+
+    .pagination li a, .pagination li span {
+        display: inline-block;
+        padding: 6px 12px;
+    }
+
+    .pagination li:hover {
+        border: 1px solid #38f;
+        background: #f2f8ff;
+    }
+
+    .pagination .active {
+        border: 1px solid #38f;
+    }
+</style>
+{/block}
+{block name="body"}
+<title>会员课程订单列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 会员管理 <span
+        class="c-gray en">&gt;</span> 会员课程订单列表 <a class="btn btn-success radius r"
+                                                  style="line-height:1.6em;margin-top:3px"
+                                                  href="javascript:window.location.href = '/admin/Member/memberCourseOrder?id={$Think.get.id}';"
+                                                  title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c">
+        <input type="text" name="" id="orderNo" placeholder="订单号" style="width:250px" class="input-text"
+               value="{if(isset($orderNo))}{$orderNo}{/if}">
+        <button name="" id="btnMember" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20" style="height: 2em;line-height: 2em;">
+        <span class="l">
+            <input id="btnBack" class="btn btn-primary radius" type="button" value="返回">
+        </span>
+
+        <span class="r">共有数据：<strong>{$info['total']}</strong> 条</span>
+    </div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr class="text-c">
+                <th width="10">序号</th>
+                <th width="30">订单编号</th>
+                <th width="20">课程名称</th>
+                <th width="20">价格</th>
+                <th width="10">是否签约</th>
+                <th width="20">订单状态</th>
+                <th width="20">订单时间</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if($info['data'])}
+            {volist name="data" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo.orderNo}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.money}</td>
+                <td>{$signStatus[$vo['isSign']]}</td>
+                <td>{$status[$vo['status']]}</td>
+                <td>{$vo.createTime|date='Y-m-d H:i:s',###}</td>
+                <td>
+                    {if condition="($vo['status'] == 1 && $vo['isSign'] == 0)"}
+                    <a href="javascript:;" va="{$vo['id']}" class="payBack" title="退款">
+                        <i class="Hui-iconfont Hui-iconfont-chexiao"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    {/if}
+                    <a href="javascript:;" va="{$vo['id']}" class="seeDetail" title="详细">
+                        <i class="Hui-iconfont Hui-iconfont-gengduo"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+            {else /}
+            <tr class="text-c">
+                <td colspan="11">暂无数据</td>
+            </tr>
+            {/if}
+            <tr class="text-c">
+                <td colspan="11" style="text-align: center">{$pages}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $('#btnMember').click(function () {
+        var orderNo = $('#orderNo').val();
+        if (!orderNo) {
+            return false;
+        }
+        var id = '{$Think.get.id}';
+        if (!id) {
+            return false;
+        }
+        window.location.href = '/admin/Member/memberMoney?id=' + id + '&orderNo=' + orderNo;
+    });
+
+    $('.seeDetail').on('click', function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+        window.location.href = '/admin/Member/memberCourseOrderDetail?id=' + id;
+    });
+    
+    $('.payBack').on('click',function () {
+        var t = $(this);
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+        $.post('/admin/Member/getBackMoney',{id: id},function (res) {
+            console.log(res);
+            if(res.status == 'ok'){
+                var backMoney = res.data.backMoney;
+                var cal = res.data.cal;
+
+                layer.open({
+                    title: '退款',
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['420px','300px'],
+                    content: '<div>'+
+                                '<table class="table table-border table-bordered table-bg table-admin">'+
+                                    '<tr>'+
+                                        '<td class="text-c">应退款</td>'+
+                                        '<td>'+cal+' = '+backMoney+'</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td class="text-c">实退款</td>'+
+                                        '<td>'+
+                                            '<input name="realBackMoney" id="realBackMoney" value="" style="width: 100%;height: 2em;">'+
+                                        '</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td class="text-c">退款说明</td>'+
+                                        '<td>'+
+                                            '<textarea id="backInfo" style="height: 100px;width: 100%;"></textarea>'+
+                                        '</td>'+
+                                    '</tr>'+
+                                    '<tr>'+
+                                        '<td class="text-r" colspan="2">'+
+                                            '<input id="backSureBtn" class="btn btn-danger radius" type="button" value="退款">&nbsp;&nbsp;'+
+                                            '<input id="backCancelBtn" class="btn btn-default radius" type="button" value="取消">'+
+                                        '</td>'+
+                                    '</tr>'+
+                                '</table>'+
+                            '</div>'
+                });
+
+                $('#backCancelBtn').on('click',function () {
+                    layer.closeAll();
+                });
+
+                $('#backSureBtn').on('click',function () {
+                    var realBackMoney = $('#realBackMoney').val();
+                    var backInfo = $('#backInfo').val();
+
+                    if(!realBackMoney){
+                        layer.msg('请填写实际退款金额!');
+                        return false;
+                    }
+
+                    // 正整数或正小数
+                    if(!(/^\d+(\.\d+)?$/.test(realBackMoney))){
+                        layer.msg('请填写正确的实际退款金额！');
+                        return false;
+                    }
+
+                    if(backMoney < realBackMoney){
+                        layer.msg('实际退款金额不能大于应退金额!');
+                        return false;
+                    }
+
+                    if(!backInfo){
+                        layer.msg('请填写退款说明!');
+                        return false;
+                    }
+
+                    $.post('/admin/Member/payBackMoney',{id: id,realBackMoney: realBackMoney,backInfo: backInfo},function (res) {
+                        if(res.status == 'ok'){
+                            layer.closeAll();
+                            t.hide();
+                            layer.msg('退款成功!');
+                        }else{
+                            layer.msg('退款失败!');
+                        }
+                    },'json');
+                });
+            }else{
+                layer.msg('操作异常!');
+            }
+        },'json');
+    });
+
+    $('#btnBack').on('click',function () {
+        window.history.go(-1);
+    });
+</script>
+{/block}
+</body>
+</html>

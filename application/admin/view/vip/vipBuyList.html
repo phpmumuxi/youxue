@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>购买VIP订单列表</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> VIP管理
+    <span class="c-gray en">&gt;</span> 购买VIP订单列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.href = '/admin/Vip/vipBuyList';" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    {if condition="($data)"}
+
+    <div class="text-c">
+        <input type="text" name="searchData" id="searchData" placeholder="订单号或手机号" style="width:250px"
+               class="input-text"
+               value="{if(isset($orderNo))}{$orderNo}{/if}{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="btnSearch" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <th scope="col" colspan="12">购买VIP订单列表</th>
+            </tr>
+            <tr class="text-c">
+                <th width="20">序号</th>
+                <th width="20">订单号</th>
+                <th width="20">会员名称</th>
+                <th width="20">手机号</th>
+                <th width="20">金额/元</th>
+                <th width="20">
+                    <select class="select" size="1" name="level" id="levelSort">
+                        <option value="0">等级</option>
+                        <option value="1" {if condition="($Think.get.sort == 'ASC')" }selected{/if}>升序</option>
+                        <option value="2" {if condition="($Think.get.sort == 'DESC')" }selected{/if}>降序</option>
+                    </select>
+                </th>
+                <th width="20">有效期/月</th>
+                <th width="20">支付方式</th>
+                <th width="20">支付时间</th>
+                <th width="20">
+                    <select class="select" size="1" name="level" id="orderStatus">
+                        <option value="-1">订单状态</option>
+                        {volist name="($orderStatus)" id="vo"}
+                        <option value="{$key}">{$vo}</option>
+                        {/volist}
+                    </select>
+                </th>
+                <th width="20">订单类型</th>
+                <th width="20" class="hide">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {volist name="data" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo['orderNo']}</td>
+                <td>{$vo['uName']}</td>
+                <td>{$vo['phone']}</td>
+                <td>{$vo['money']}</td>
+                <td>{$vo['level']}</td>
+                <td>{$vo['month']}</td>
+                <td>
+                    {if condition="($vo['status'] == 1)"}
+                    {$payType[$vo['payType']]}
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['status'] == 1)"}
+                    {$vo['payTime']|date='Y-m-d H:i:s',###}
+                    {/if}
+                </td>
+                <td>
+                    {$orderStatus[$vo['status']]}
+                </td>
+                <td>
+                    {$orderType[$vo['type']]}
+                </td>
+
+                <td class="hide">
+                    <a href="javascript:;" title="启用" class="sureUse" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-shangjia"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+
+        </table>
+    </div>
+
+    {else /}
+    <div style="width: 100%;text-align: center;font-size: 30px;color: #d1d1d1;">暂无数据</div>
+    {/if}
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript">
+    $('#btnSearch').click(function () {
+        var searchData = $('#searchData').val();
+        if (!searchData) {
+            return false;
+        } else {
+            if (/^1(3|4|5|7|8)\d{9}$/.test(searchData)) {
+                window.location.href = '/admin/Vip/vipBuyList?phone=' + searchData;
+            } else {
+                window.location.href = '/admin/Vip/vipBuyList?orderNo=' + searchData;
+            }
+        }
+    });
+
+    $('#levelSort').change(function () {
+        var sort = $('#levelSort').val();
+        if (!sort) {
+            return false;
+        } else {
+            if (sort == 1) {
+                window.location.href = '/admin/Vip/vipBuyList?sort=ASC&value=level';
+            } else if (sort == 2) {
+                window.location.href = '/admin/Vip/vipBuyList?sort=DESC&value=level';
+            }
+        }
+    });
+
+    $('#orderStatus').change(function () {
+        var st = $('#orderStatus').val();
+        if(st == -1){
+            return false;
+        }else{
+            window.location.href = '/admin/Vip/vipBuyList?orderStatus=' + st;
+        }
+    });
+</script>
+
+</body>
+</html>

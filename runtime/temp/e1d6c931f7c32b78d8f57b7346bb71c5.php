@@ -1,0 +1,335 @@
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:93:"D:\wamp64\web\youxue\public/../application/admin\view\order_subscribe\orderSubscribeList.html";i:1521799117;}*/ ?>
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>线下预订列表</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 线下预订管理
+    <span class="c-gray en">&gt;</span> 线下预订列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.href = '/admin/OrderSubscribe/orderSubscribeList';" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray hide">
+        <span class="l">
+            <a href="javascript:;" class="btn btn-primary radius" id="newAdd">
+                <i class="Hui-iconfont">&#xe600;</i> 填写线下订单
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <th scope="col" colspan="15">线下预订列表</th>
+            </tr>
+            <tr class="text-c">
+                <th width="5">序号</th>
+                <th width="5">商户</th>
+                <th width="5">校区</th>
+                <th width="5">用户</th>
+                <th width="20">手机</th>
+                <th width="10">支付金额/元</th>
+                <th width="10">支付方式</th>
+                <th width="20">支付信息</th>
+                <th width="10">订单类型</th>
+                <th width="10">备注</th>
+                <th width="10">顾问</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <?php if(($data['data'])): if(is_array($data['data']) || $data['data'] instanceof \think\Collection || $data['data'] instanceof \think\Paginator): $k = 0; $__LIST__ = $data['data'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($k % 2 );++$k;?>
+            <tr class="text-c">
+                <td><?php echo $k; ?></td>
+                <td><?php echo $vo['shopName']; ?></td>
+                <td><?php echo $vo['schoolName']; ?></td>
+                <td><?php echo $vo['uName']; ?></td>
+                <td><?php echo $vo['phone']; ?></td>
+                <td><?php echo $vo['money']; ?></td>
+                <td>
+                    <?php if(($vo['payType'] == 1)): ?>
+                    支付宝
+                    <?php elseif(($vo['payType'] == 2)): ?>
+                    微信
+                    <?php elseif(($vo['payType'] == 3)): ?>
+                    POS机
+                    <?php elseif(($vo['payType'] == 4)): ?>
+                    其他
+                    <?php endif; ?>
+                </td>
+                <td><?php echo $vo['orderInfo']; ?></td>
+                <td>
+                    <?php if(($vo['orderType'] == 1)): ?>
+                    订金
+                    <?php elseif(($vo['orderType'] == 2)): ?>
+                    尾款或分笔
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if(($vo['mark'])): ?>
+                    <?php echo $vo['mark']; else: ?>
+                    无
+                    <?php endif; ?>
+                </td>
+
+                <td>
+                    <?php echo $vo['adviserName']; ?>
+                </td>
+
+                <td>
+                    <?php if(($vo['isDone'] == 0 && $vo['pid'] == 0 && $vo['status'] == 1)): ?>
+                    <a href="javascript:;" title="退款" class="somePayBack" va="<?php echo $vo['id']; ?>">
+                        <i class="Hui-iconfont Hui-iconfont-chexiao f-16"></i>
+                    </a>
+                    <?php endif; ?>
+
+                    <div class="hide">
+                    <?php if(($vo['isDone'] == 0)): if(($vo['orderType'] == 1)): ?>
+                        <a href="javascript:;" title="填写尾款" class="someAddMoney" va="<?php echo $vo['id']; ?>">
+                            <i class="Hui-iconfont Hui-iconfont-add f-16"></i>
+                        </a>
+                        <span>&nbsp;&nbsp;</span>
+                        <?php endif; ?>
+                    <a href="javascript:;" title="修改" class="someEdit" va="<?php echo $vo['id']; ?>">
+                        <i class="Hui-iconfont Hui-iconfont-edit f-16"></i>
+                    </a>
+                    <span>&nbsp;&nbsp;</span>
+                    <a href="javascript:;" title="删除" class="someDelete" va="<?php echo $vo['id']; ?>">
+                        <i class="Hui-iconfont Hui-iconfont-del3 f-16"></i>
+                    </a>
+                        <?php if(($vo['orderType'] == 2)): ?>
+                            <span>&nbsp;&nbsp;</span>
+                            <a href="javascript:;" title="导入个人订单" class="someSave" va="<?php echo $vo['id']; ?>">
+                                <i class="Hui-iconfont Hui-iconfont-daoru f-16"></i>
+                            </a>
+                        <?php endif; endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <?php endforeach; endif; else: echo "" ;endif; if($pages): ?>
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    <?php echo $pages; ?>
+                </td>
+            </tr>
+            <?php endif; else: ?>
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    暂无数据
+                </td>
+            </tr>
+            <?php endif; ?>
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript" src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+    // 退款
+    $('.somePayBack').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+
+        layer.confirm('确认退款？', {
+            btn: ['确认','取消']
+        }, function(){
+            $.post('/admin/OrderSubscribe/orderPayBack',{id: id},function (res) {
+                if(res.status == 'ok'){
+                    layer.closeAll();
+                    layer.msg('操作成功');
+                    setTimeout(function () {
+                        window.location.reload();
+                    },500);
+                }else if(res.status == 'errMoney'){
+                    layer.msg('已支付尾款或尾款分笔,请在校区生成订单后,在课程订单模块进行退款!',{icon: 2});
+                }else{
+                    layer.msg('操作失败');
+                }
+            },'json');
+        });
+    });
+
+    // 新增 总后台无
+    $('#newAdd').on('click',function () {
+        window.location.href = '/school/OrderSubscribe/addOrderSubscribe';
+    });
+
+    // 修改 总后台无
+    $('.someEdit').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+        window.location.href = '/school/OrderSubscribe/editOrderSubscribe?id='+ id;
+    });
+
+    // 删除 总后台无
+    $('.someDelete').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+
+        layer.confirm('确认删除当前线下订单记录？', {
+            btn: ['确认','取消']
+        }, function(){
+            $.post('/school/OrderSubscribe/deleteOrderSubscribe',{id: id},function (res) {
+                if(res.status == 'ok'){
+                    layer.msg('操作成功!');
+                    setTimeout(function () {
+                        window.location.reload();
+                    },500);
+                }else if(res.status == 'errHad'){
+                    layer.msg('请先删除尾款记录!');
+                }else{
+                    layer.msg('操作失败!');
+                }
+            },'json');
+        }, function(){
+        });
+    });
+
+    // 导入 总后台无
+    $('.someSave').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+
+        $.post('/school/OrderSubscribe/courseList',{id: id},function (res) {
+            if(res.status == 'ok') {
+                var _html = '<div style="width: 100%;text-align: center;margin-top: 2em;">'
+                    + '<select class="select" style="width: 90%;height: 2em;line-height: 2em;" id="courseSelect" name="courseSelect">'
+                    + '<option value="-1">选择课程</option>';
+
+                $.each(res.data, function (k, v) {
+                    _html += '<option value="' + v['id'] + '">' + v['name'] + '金额: '+ v['money'] +'</option>';
+                });
+
+                _html += '</select>'
+                    + '<div style="position: absolute;bottom: 1em;right: 2em;">'
+                    + '<input id="adviserSure" style="width: 6em;background-color: #ff0000;border-color: #ff0000;" class="btn radius btn-secondary" type="button" value="确认">'
+                    + '<input id="adviserCancel" style="width: 6em;margin-left: 2em;background-color: #eee;border-color: #eee;color: #000000;" class="btn btn-warning radius" type="button" value="取消">'
+                    + '</div>'
+                    + '</div>';
+
+                layer.open({
+                    title: '提示',
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['420px', '240px'],
+                    content: _html
+                });
+
+                $('#adviserSure').on('click',function () {
+                    var courseId = $('#courseSelect').val();
+                    if(courseId == -1){
+                        layer.msg('请选择课程!');
+                        return false;
+                    }
+
+                    layer.confirm('确认导入到订单？', {
+                        btn: ['确认','取消']
+                    }, function() {
+                        $.post('/school/OrderSubscribe/doneOrderSubscribe',{id: id,courseId: courseId},function (ret) {
+                            if(ret.status == 'ok'){
+                                layer.closeAll();
+                                layer.msg('操作成功!');
+                                setTimeout(function () {
+                                    window.location.reload();
+                                },500);
+                            }else if(ret.status == 'errMoney'){
+                                layer.msg('已付金额与课程金额不符!');
+                            }else{
+                                layer.msg('操作失败!');
+                            }
+                        },'json');
+                    });
+                });
+
+                $('#adviserCancel').on('click',function () {
+                    layer.closeAll();
+                });
+            }else{
+                layer.msg('操作异常!');
+            }
+        },'json');
+
+        /*
+        layer.confirm('确认线下订单已支付全部金额，并导入到用户订单？', {
+            btn: ['确认','取消']
+        }, function(){
+            $.post('/school/OrderSubscribe/doneOrderSubscribe',{id: id},function (res) {
+                if(res.status == 'ok'){
+                    layer.msg('操作成功!');
+                    setTimeout(function () {
+                        window.location.reload();
+                    },500);
+                }else{
+                    layer.msg('操作失败!');
+                }
+            },'json');
+        }, function(){
+        });
+        */
+    });
+
+    // 新增尾款 总后台无
+    $('.someAddMoney').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+        window.location.href = '/school/OrderSubscribe/addOrderSubscribeMoney?id=' + id;
+    });
+</script>
+
+</body>
+</html>

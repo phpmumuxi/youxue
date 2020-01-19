@@ -1,0 +1,188 @@
+{extend name="layout" /}
+{block name="body"}
+<title>校区收入柱状图</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    财务统计管理
+	<span class="c-gray en">&gt;</span>
+	校区收入柱状图
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<div class="text-c">
+        <span id="timeDay">
+        开始时间: <input type="text" id="sTime" placeholder="开始时间" style="width:150px" class="input-text"
+                     value="{if(isset($data.sTime))}{$data.sTime}{/if}">
+        &nbsp;
+        结束时间: <input type="text" id="eTime" placeholder="结束时间" style="width:150px" class="input-text"
+                     value="{if(isset($data.eTime))}{$data.eTime}{/if}">
+        </span>
+
+        <span id="timeMonth" style='display:none'>
+        开始时间: <input type="text" id="ssTime" placeholder="开始时间" style="width:150px" class="input-text"
+                     value="{if(isset($data.ssTime))}{$data.ssTime}{/if}">
+        &nbsp;
+        结束时间: <input type="text" id="eeTime" placeholder="结束时间" style="width:150px" class="input-text"
+                     value="{if(isset($data.eeTime))}{$data.eeTime}{/if}">
+        </span>&nbsp;
+
+        <input id="btnSearchOne" type="radio" name="type" value="1" checked> 按天&nbsp;
+        <input id="btnSearchTwo" type="radio" name="type" value="2"> 按月
+        <button name="" id="btnSearch" class="btn btn-success" type="button">查询</button>
+    </div>
+
+    <div class="mt-20">
+        <div id="mainContent" style="height: 400px;"></div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript" src="/static/js/echarts.min.js"></script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('mainContent'));
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '校区收入'
+        },
+        color : [ "#ff6262", "#4796f9","#55e07a"],
+        tooltip: {
+            trigger: 'axis',
+        },
+        legend: {
+            data:['总收入','已入账','未入账']
+        },
+        xAxis: {
+            name:'日期',
+            type : 'category'      
+        },
+        yAxis: {
+            name:'金额',
+            type : 'value',
+            axisLabel : {
+                formatter: '{value}k'
+            }
+        },
+        series: [{
+            name: '总收入',
+            type: 'line'
+        },{
+            name: '已入账',
+            type: 'line'
+        },{
+            name: '未入账',
+            type: 'line'
+        }]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+<script type="text/javascript">
+$(function(){
+
+    //按天查询
+    laydate.render({
+        elem: '#sTime'
+        ,type: 'date'
+        ,format: 'yyyy-MM-dd'
+        ,max: '{$data.eTime}'              
+    });
+    laydate.render({
+        elem: '#eTime'
+        ,type: 'date'
+        ,format: 'yyyy-MM-dd'
+        ,max: '{$data.eTime}' 
+    });
+
+    //按月查询
+    laydate.render({
+        elem: '#ssTime'
+        ,type: 'month'
+        ,format: 'yyyy-MM'           
+    });
+    laydate.render({
+        elem: '#eeTime'
+        ,type: 'month'
+        ,format: 'yyyy-MM'        
+    });
+    
+    //类型改变（天或月）
+    $('input[name="type"]').on('change',function(){
+        var viewType = $(this).val();    
+        if(viewType == 1){
+            $("#timeDay").show();
+            $("#timeMonth").hide();          
+        }else{
+            $("#timeDay").hide();
+            $("#timeMonth").show();
+        }
+    })
+
+    //全局首次调用
+    loadData(1,"{$data.sTime}","{$data.eTime}");
+})
+
+$('#btnSearch').click(function () {
+        var type = $('input[name="type"]:checked').val();
+
+        if (type == 1) {
+
+            var aTime = $('#sTime').val();
+            var bTime = $('#eTime').val();
+
+            if (aTime > bTime) {
+                layer.msg('开始时间不能大于结束时间!',{icon:2,time:2000});
+                return false;
+            }
+
+            loadData(1,aTime,bTime);
+        } else if (type == 2) {
+
+            var aTime = $('#ssTime').val();
+            var bTime = $('#eeTime').val();
+
+            if (aTime > bTime) {
+                layer.msg('开始时间不能大于结束时间!',{icon:2,time:2000});
+                return false;
+            }
+
+            loadData(2,aTime,bTime);
+        }
+});
+
+function loadData(type,aTime,bTime){
+    myChart.showLoading('default',{text:'加载中'})
+    $.ajax({
+        url:'/school/Finance/dataAjax',
+        data:{type:type,aTime:aTime,bTime:bTime,action:'school'},
+        dataType:'JSON',
+        success:function(res){
+           renderData(res);
+            myChart.hideLoading();
+        }
+    })
+}
+
+/*显示数据*/
+function renderData(data){
+    myChart.setOption({
+        xAxis: {
+            data:data['key']
+        },
+        series:[
+            {data:data['all'],itemStyle: {normal:{label:{show: true,formatter: '{c}k'}}}},
+            {data:data['yes'],itemStyle: {normal:{label:{show: true,formatter: '{c}k'}}}},
+            {data:data['no'], itemStyle: {normal:{label:{show: true,formatter: '{c}k'}}}}
+        ]
+    })
+}
+
+</script>
+{/block}
+</body>
+</html>

@@ -1,0 +1,92 @@
+{extend name="layout" /}
+{block name="body"}
+<title>编辑顾问</title>
+</head>
+<body>
+<article class="page-container">
+ <div class="form form-horizontal">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>顾问昵称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="{$info.name}" placeholder="" id="name" name="name">
+		</div>
+	</div>
+	
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机号：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="{$info.phone}" placeholder="" id="phone" name="phone">
+		</div>
+	</div>
+	<input type="hidden" id="hiddenAdviserId" value="{$info.id}"/>
+	<input type="hidden" id="hiddenAdviserPhone" value="{$info.phone}"/>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button type="submit" id='adviserSubmitBtn' class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>			
+		</div>
+	</div>
+  </div>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+
+<script type="text/javascript">
+$('#adviserSubmitBtn').click(function(){
+	  var phone = $.trim($("#phone").val());
+	  var tel = $("#hiddenAdviserPhone").val();
+	  var type=0;	  
+	  var name = $.trim($("#name").val());
+	  var id = $("#hiddenAdviserId").val();
+	  var re = checks(phone,name);
+	  if(re){
+	  	if(phone!=tel){ type=1; }
+	  	layer.confirm('你确认要修改嘛？', {icon: 3, title:'提示'}, function(index){  
+	  		$.post("{:url('school/Adviser/edit')}",{id:id,name:name,phone:phone,type:type},function(res){
+		  		var _msg=res.msg;
+		  		if(res.status=='no'){
+		  			layerShowMsg(_msg,2);
+		  		}else if(res.status=='isBenefit'){
+		  			layerShowMsg(_msg,2);
+		  		}else if(res.status=='changePhone'){
+		  			layerShowMsg(_msg,1);
+		  		}else if(res.status=='has'){
+		  			layerShowMsg(_msg,2);
+		  		}else if(res.status=='ok'){
+		  			layerShowMsg(_msg,1);
+		  		}else{
+		  			layerShowMsg(_msg,2);
+		  		}
+		  	})
+	  		layer.close(index);
+		});	  	
+	  }
+})
+
+function layerShowMsg(msg,type){
+	layer.msg(msg,{icon:type,time:1200},function(){
+	  		layer_close();
+	});
+}
+
+	function checks(phone,name){
+	  var mobile = /^1[345789]{1}\d{9}$/;
+	  if(name==''){
+	     layer.msg('顾问昵称必填！',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(phone==''){	  	
+	     layer.msg('手机号必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(phone.length!=11 || !mobile.test(phone)){	  	
+	     layer.msg('请填写正确手机号!',{icon:2,time:2000});
+	     return false;
+	  }
+	  return true;
+	}
+</script>
+{/block}
+</body>
+</html>

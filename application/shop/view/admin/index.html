@@ -1,0 +1,92 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>管理员列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 管理员列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('shop/Admin/add')}" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a></span> <span class="r">共有数据：<strong>{$info['total']}</strong> 条</span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">				
+				<th width="80">序号</th>
+				<th width="100">登录名</th>
+				<th width="100">手机</th>
+				<th width="160">
+					<select id="schoolId" style='border:0;background:  #f5fafe none repeat scroll 0 0;'>
+						  <option value="0" {eq name="$schoolId" value='0'}selected='selected'{/eq}>所属校区</option>
+							{foreach $schools as $v}
+						  <option value="{$v.id}" {eq name="$v.id" value='$schoolId'}selected='selected'{/eq}>{$v.name}</option>
+						  {/foreach}
+					</select>
+				</th>
+				<th width="120">角色名</th>
+				<th width="120">创建时间</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		{if($info['data'])}{volist name="info.data" id="vo" key="k"}
+			<tr class="text-c">
+	   			<td >{$k}</td>
+				<td>{$vo.name}</td>
+				<td>{$vo.phone}</td>
+				<td>{$vo.schoolName|default=''}</td>
+				<td>{$vo.roleName}</td>
+				<td class="td-status">{$vo.createTime|date="Y-m-d H:i:s",###}</td>
+				<td class="td-Admin">
+				<a style="text-decoration:none" href="{:url('shop/Admin/auth',['id'=>$vo['id']])}" title="分配权限"><i class="Hui-iconfont f-18">&#xe631;</i></a> 
+				<a title="删除" href="{:url('shop/Admin/del',['id'=>$vo['id']])}" onclick="return confirm('删除须谨慎，确认要删除吗？')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+			</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="7">暂无数据</td>
+        </tr>
+        {/if}
+		<tr class="text-c">
+			<td colspan="7" style="text-align: center;">
+			{$page}
+			</td>
+		</tr>
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">    
+    $('#schoolId').on('change',function(){
+		window.location.href= "/shop/Admin/index?schoolId="+$('#schoolId').val();
+	  })
+</script>
+{/block}
+</body>
+</html>

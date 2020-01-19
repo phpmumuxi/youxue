@@ -1,0 +1,522 @@
+---------------------------------------------------------------
+[ 2018-04-28T14:37:49+08:00 ] 127.0.0.1 127.0.0.1 GET /
+[ info ] yx.com/ [运行时间：0.694040s][吞吐率：1.44req/s] [内存消耗：2,284.66kb] [文件加载：36]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-28T14:37:49+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/Login/index
+[ info ] yx.com/admin/Login/index [运行时间：0.227012s][吞吐率：4.41req/s] [内存消耗：2,695.26kb] [文件加载：40]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'Login',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\admin\controller\Login->index[ D:\wamp64\web\youxue\application\admin\controller\Login.php ]
+[ info ] [ VIEW ] D:\wamp64\web\youxue\public/../application/admin\view\login\index.html [ array (
+) ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-28T14:37:57+08:00 ] 127.0.0.1 127.0.0.1 POST /admin/login/login.html
+[ info ] yx.com/admin/login/login.html [运行时间：0.426024s][吞吐率：2.35req/s] [内存消耗：4,381.41kb] [文件加载：48]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'login',
+    2 => 'login',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/Login/index',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'content-length' => '26',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+  'name' => 'admin',
+  'password' => '123456',
+)
+[ info ] [ RUN ] app\admin\controller\Login->login[ D:\wamp64\web\youxue\application\admin\controller\Login.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.058003s ] mysql:dbname=yxtest;host=106.15.180.65;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin` [ RunTime:0.048003s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,`type`,`shopId`,`schoolId` FROM `t_admin` WHERE  `name` = 'admin'  AND `password` = '78907c14d740487374d6a75dbaa41cde'  AND `isDelete` = 1 LIMIT 1 [ RunTime:0.045003s ]
+---------------------------------------------------------------
+[ 2018-04-28T14:37:58+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/index/index.html
+[ info ] yx.com/admin/index/index.html [运行时间：0.407023s][吞吐率：2.46req/s] [内存消耗：4,859.23kb] [文件加载：50]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/Login/index',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\admin\controller\Index->index[ D:\wamp64\web\youxue\application\admin\controller\Index.php ]
+[ info ] [ VIEW ] D:\wamp64\web\youxue\public/../application/admin\view\index\index.html [ array (
+  0 => 'menus',
+) ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.048003s ] mysql:dbname=yxtest;host=106.15.180.65;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin_access` [ RunTime:0.026001s ]
+[ sql ] [ SQL ] SELECT `ids` FROM `t_admin_access` WHERE  `uid` = 1 LIMIT 1 [ RunTime:0.034002s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_menu` [ RunTime:0.022002s ]
+[ sql ] [ SQL ] SELECT `id` FROM `t_menu` WHERE  `url` = 'admin/Index/index' LIMIT 1 [ RunTime:0.040002s ]
+[ sql ] [ SQL ] SELECT `id`,`url`,`pid`,`name`,`icon` FROM `t_menu` WHERE  `status` = 1  AND `type` = 1 ORDER BY `sort`  DESC,`id`  ASC [ RunTime:0.041003s ]
+---------------------------------------------------------------
+[ 2018-04-28T14:37:58+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/Index/welcome.html
+[ info ] yx.com/admin/Index/welcome.html [运行时间：0.292017s][吞吐率：3.42req/s] [内存消耗：4,647.77kb] [文件加载：49]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'Index',
+    2 => 'welcome',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/index/index.html',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\admin\controller\Index->welcome[ D:\wamp64\web\youxue\application\admin\controller\Index.php ]
+[ info ] [ VIEW ] D:\wamp64\web\youxue\public/../application/admin\view\index\welcome.html [ array (
+  0 => 'menus',
+) ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.041002s ] mysql:dbname=yxtest;host=106.15.180.65;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin_access` [ RunTime:0.023001s ]
+[ sql ] [ SQL ] SELECT `ids` FROM `t_admin_access` WHERE  `uid` = 1 LIMIT 1 [ RunTime:0.031002s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_menu` [ RunTime:0.056003s ]
+[ sql ] [ SQL ] SELECT `id` FROM `t_menu` WHERE  `url` = 'admin/Index/welcome' LIMIT 1 [ RunTime:0.030001s ]
+[ sql ] [ SQL ] SELECT `id`,`url`,`pid`,`name`,`icon` FROM `t_menu` WHERE  `status` = 1  AND `type` = 1 ORDER BY `sort`  DESC,`id`  ASC [ RunTime:0.042003s ]
+---------------------------------------------------------------
+[ 2018-04-28T14:38:13+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/Finance/adminMoney.html
+[ info ] yx.com/admin/Finance/adminMoney.html [运行时间：0.720041s][吞吐率：1.39req/s] [内存消耗：5,361.02kb] [文件加载：54]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'Finance',
+    2 => 'adminMoney',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/index/index.html',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\admin\controller\Finance->adminMoney[ D:\wamp64\web\youxue\application\admin\controller\Finance.php ]
+[ info ] [ VIEW ] D:\wamp64\web\youxue\public/../application/admin\view\finance\adminMoney.html [ array (
+  0 => 'menus',
+  1 => 'date',
+  2 => 'totalData',
+  3 => 'shops',
+  4 => 'lists',
+  5 => 'page',
+) ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.031002s ] mysql:dbname=yxtest;host=106.15.180.65;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin_access` [ RunTime:0.022001s ]
+[ sql ] [ SQL ] SELECT `ids` FROM `t_admin_access` WHERE  `uid` = 1 LIMIT 1 [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_menu` [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SELECT `id` FROM `t_menu` WHERE  `url` = 'admin/Finance/adminMoney' LIMIT 1 [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SELECT `id`,`url`,`pid`,`name`,`icon` FROM `t_menu` WHERE  `status` = 1  AND `type` = 1 ORDER BY `sort`  DESC,`id`  ASC [ RunTime:0.022001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_shop_money_record` [ RunTime:0.022001s ]
+[ sql ] [ SQL ] SELECT SUM(money) AS tp_sum FROM `t_shop_money_record` WHERE  `recordDate` BETWEEN 1524240000 AND 1524844799 LIMIT 1 [ RunTime:0.021002s ]
+[ sql ] [ SQL ] SELECT SUM(money) AS tp_sum FROM `t_shop_money_record` WHERE  (  isOff=1 )  AND `recordDate` BETWEEN 1524240000 AND 1524844799 LIMIT 1 [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SELECT SUM(money) AS tp_sum FROM `t_shop_money_record` WHERE  (  isOff=0 )  AND `recordDate` BETWEEN 1524240000 AND 1524844799 LIMIT 1 [ RunTime:0.020001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_shop` [ RunTime:0.021002s ]
+[ sql ] [ SQL ] SELECT `id`,`name` FROM `t_shop` WHERE  (  status!=3 ) [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM `t_shop` WHERE  (  status!=3 ) LIMIT 1 [ RunTime:0.021002s ]
+[ sql ] [ SQL ] SELECT `id`,`name`,money as yuEMoney FROM `t_shop` WHERE  (  status!=3 ) LIMIT 0,10 [ RunTime:0.022001s ]
+[ sql ] [ SQL ] SELECT `shopId`,SUM(money) as allMoney FROM `t_shop_money_record` WHERE  `recordDate` BETWEEN 1524240000 AND 1524844799 GROUP BY shopId [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SELECT `shopId`,SUM(money) as yesMoney FROM `t_shop_money_record` WHERE  `recordDate` BETWEEN 1524240000 AND 1524844799  AND (  isOff=1 ) GROUP BY shopId [ RunTime:0.028002s ]
+[ sql ] [ SQL ] SELECT `shopId`,SUM(money) as noMoney FROM `t_shop_money_record` WHERE  `recordDate` BETWEEN 1524240000 AND 1524844799  AND (  isOff=0 ) GROUP BY shopId [ RunTime:0.021001s ]
+---------------------------------------------------------------
+[ 2018-04-28T14:38:22+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/Statistics/money.html
+[ info ] yx.com/admin/Statistics/money.html [运行时间：0.380022s][吞吐率：2.63req/s] [内存消耗：4,836.59kb] [文件加载：50]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'Statistics',
+    2 => 'money',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/index/index.html',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\admin\controller\Statistics->money[ D:\wamp64\web\youxue\application\admin\controller\Statistics.php ]
+[ info ] [ VIEW ] D:\wamp64\web\youxue\public/../application/admin\view\statistics\money.html [ array (
+  0 => 'menus',
+  1 => 'data',
+  2 => 'shops',
+) ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.056004s ] mysql:dbname=yxtest;host=106.15.180.65;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin_access` [ RunTime:0.022001s ]
+[ sql ] [ SQL ] SELECT `ids` FROM `t_admin_access` WHERE  `uid` = 1 LIMIT 1 [ RunTime:0.028002s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_menu` [ RunTime:0.020001s ]
+[ sql ] [ SQL ] SELECT `id` FROM `t_menu` WHERE  `url` = 'admin/Statistics/money' LIMIT 1 [ RunTime:0.025002s ]
+[ sql ] [ SQL ] SELECT `id`,`url`,`pid`,`name`,`icon` FROM `t_menu` WHERE  `status` = 1  AND `type` = 1 ORDER BY `sort`  DESC,`id`  ASC [ RunTime:0.021002s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_shop` [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SELECT `id`,`name` FROM `t_shop` WHERE  (  status!=3 ) [ RunTime:0.031001s ]
+---------------------------------------------------------------
+[ 2018-04-28T14:38:22+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/Statistics/dataAjax?type=1&aTime=2018-04-21&bTime=2018-04-27&shopId=0&schoolId=0&action=money
+[ info ] yx.com/admin/Statistics/dataAjax?type=1&aTime=2018-04-21&bTime=2018-04-27&shopId=0&schoolId=0&action=money [运行时间：0.263015s][吞吐率：3.80req/s] [内存消耗：4,553.89kb] [文件加载：48]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'Statistics',
+    2 => 'dataAjax',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'application/json, text/javascript, */*; q=0.01',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/Statistics/money.html',
+  'x-requested-with' => 'XMLHttpRequest',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+)
+[ info ] [ PARAM ] array (
+  'type' => '1',
+  'aTime' => '2018-04-21',
+  'bTime' => '2018-04-27',
+  'shopId' => '0',
+  'schoolId' => '0',
+  'action' => 'money',
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\admin\controller\Statistics->dataAjax[ D:\wamp64\web\youxue\application\admin\controller\Statistics.php ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.034002s ] mysql:dbname=yxtest;host=106.15.180.65;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin_access` [ RunTime:0.020001s ]
+[ sql ] [ SQL ] SELECT `ids` FROM `t_admin_access` WHERE  `uid` = 1 LIMIT 1 [ RunTime:0.020002s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_menu` [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SELECT `id` FROM `t_menu` WHERE  `url` = 'admin/Statistics/dataAjax' LIMIT 1 [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SELECT `id`,`url`,`pid`,`name`,`icon` FROM `t_menu` WHERE  `status` = 1  AND `type` = 1 ORDER BY `sort`  DESC,`id`  ASC [ RunTime:0.021001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_shop_money_record` [ RunTime:0.035002s ]
+[ sql ] [ SQL ] SELECT FROM_UNIXTIME(recordDate,'%Y-%m-%d') as time,SUM(price) as totalMoney FROM `t_shop_money_record` WHERE  `recordDate` BETWEEN 1524240000 AND 1524844799 GROUP BY FROM_UNIXTIME(recordDate,'%Y-%m-%d') [ RunTime:0.020001s ]
+---------------------------------------------------------------
+[ 2018-04-28T14:38:35+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/UserManage/userAdd.html
+[ info ] yx.com/admin/UserManage/userAdd.html [运行时间：0.481027s][吞吐率：2.08req/s] [内存消耗：5,134.06kb] [文件加载：55]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'UserManage',
+    2 => 'userAdd',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/index/index.html',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\admin\controller\UserManage->userAdd[ D:\wamp64\web\youxue\application\admin\controller\UserManage.php ]
+[ info ] [ VIEW ] D:\wamp64\web\youxue\public/../application/admin\view\user_manage\userAdd.html [ array (
+  0 => 'menus',
+  1 => 'data',
+  2 => 'pages',
+) ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.030002s ] mysql:dbname=yxtest;host=106.15.180.65;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin_access` [ RunTime:0.019001s ]
+[ sql ] [ SQL ] SELECT `ids` FROM `t_admin_access` WHERE  `uid` = 1 LIMIT 1 [ RunTime:0.019001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_menu` [ RunTime:0.020001s ]
+[ sql ] [ SQL ] SELECT `id` FROM `t_menu` WHERE  `url` = 'admin/UserManage/userAdd' LIMIT 1 [ RunTime:0.018001s ]
+[ sql ] [ SQL ] SELECT `id`,`url`,`pid`,`name`,`icon` FROM `t_menu` WHERE  `status` = 1  AND `type` = 1 ORDER BY `sort`  DESC,`id`  ASC [ RunTime:0.019001s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin` [ RunTime:0.019002s ]
+[ sql ] [ SQL ] SELECT `schoolId` FROM `t_admin` WHERE  `id` = 1 LIMIT 1 [ RunTime:0.036002s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_user_add` [ RunTime:0.020001s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM t_user_add ua LEFT JOIN `t_admin` `a` ON `a`.`id`=`ua`.`adminId` LEFT JOIN `t_shop` `s` ON `s`.`id`=`ua`.`shopId` LEFT JOIN `t_school` `sc` ON `sc`.`id`=`ua`.`schoolId` WHERE  `ua`.`isDelete` = 0 LIMIT 1 [ RunTime:0.031002s ]
+[ sql ] [ SQL ] SELECT `ua`.*,a.name as adminName,s.name as shopName,sc.name as schoolName FROM t_user_add ua LEFT JOIN `t_admin` `a` ON `a`.`id`=`ua`.`adminId` LEFT JOIN `t_shop` `s` ON `s`.`id`=`ua`.`shopId` LEFT JOIN `t_school` `sc` ON `sc`.`id`=`ua`.`schoolId` WHERE  `ua`.`isDelete` = 0 ORDER BY isDone ASC LIMIT 0,10 [ RunTime:0.055003s ]
+---------------------------------------------------------------
+[ 2018-04-28T14:38:38+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/OrderSubscribe/orderSubscribeList.html
+[ info ] yx.com/admin/OrderSubscribe/orderSubscribeList.html [运行时间：0.526030s][吞吐率：1.90req/s] [内存消耗：5,042.84kb] [文件加载：54]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'OrderSubscribe',
+    2 => 'orderSubscribeList',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/index/index.html',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\admin\controller\OrderSubscribe->orderSubscribeList[ D:\wamp64\web\youxue\application\admin\controller\OrderSubscribe.php ]
+[ info ] [ VIEW ] D:\wamp64\web\youxue\public/../application/admin\view\order_subscribe\orderSubscribeList.html [ array (
+  0 => 'menus',
+  1 => 'pages',
+  2 => 'data',
+) ]
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.051003s ] mysql:dbname=yxtest;host=106.15.180.65;port=3306;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_admin_access` [ RunTime:0.028001s ]
+[ sql ] [ SQL ] SELECT `ids` FROM `t_admin_access` WHERE  `uid` = 1 LIMIT 1 [ RunTime:0.043003s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_menu` [ RunTime:0.038002s ]
+[ sql ] [ SQL ] SELECT `id` FROM `t_menu` WHERE  `url` = 'admin/OrderSubscribe/orderSubscribeList' LIMIT 1 [ RunTime:0.031002s ]
+[ sql ] [ SQL ] SELECT `id`,`url`,`pid`,`name`,`icon` FROM `t_menu` WHERE  `status` = 1  AND `type` = 1 ORDER BY `sort`  DESC,`id`  ASC [ RunTime:0.030002s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `t_order_subscribe` [ RunTime:0.022001s ]
+[ sql ] [ SQL ] SELECT COUNT(*) AS tp_count FROM t_order_subscribe os LEFT JOIN `t_user` `u` ON `u`.`id`=`os`.`userId` LEFT JOIN `t_adviser_name` `an` ON `an`.`id`=`os`.`adviserId` LEFT JOIN `t_shop` `s` ON `s`.`id`=`os`.`shopId` LEFT JOIN `t_school` `sc` ON `sc`.`id`=`os`.`schoolId` WHERE  `os`.`isDelete` = 0 LIMIT 1 [ RunTime:0.051003s ]
+[ sql ] [ SQL ] SELECT `os`.*,u.name as uName,`u`.`phone`,an.name as adviserName,s.name as shopName,sc.name as schoolName,`os`.`status` FROM t_order_subscribe os LEFT JOIN `t_user` `u` ON `u`.`id`=`os`.`userId` LEFT JOIN `t_adviser_name` `an` ON `an`.`id`=`os`.`adviserId` LEFT JOIN `t_shop` `s` ON `s`.`id`=`os`.`shopId` LEFT JOIN `t_school` `sc` ON `sc`.`id`=`os`.`schoolId` WHERE  `os`.`isDelete` = 0 LIMIT 0,10 [ RunTime:0.028002s ]
+---------------------------------------------------------------
+[ 2018-04-28T14:38:46+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/login/logout.html
+[ info ] yx.com/admin/login/logout.html [运行时间：0.045003s][吞吐率：22.22req/s] [内存消耗：2,479.48kb] [文件加载：39]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'login',
+    2 => 'logout',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/index/index.html',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\admin\controller\Login->logout[ D:\wamp64\web\youxue\application\admin\controller\Login.php ]
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2018-04-28T14:38:46+08:00 ] 127.0.0.1 127.0.0.1 GET /admin/login/index.html
+[ info ] yx.com/admin/login/index.html [运行时间：0.020001s][吞吐率：50.00req/s] [内存消耗：2,444.46kb] [文件加载：38]
+[ info ] [ LANG ] D:\wamp64\web\youxue\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'login',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'yx.com',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language' => 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://yx.com/admin/index/index.html',
+  'cookie' => 'PHPSESSID=9brj0p8v3cc7j9hg1hvjvdt8s4',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ RUN ] app\admin\controller\Login->index[ D:\wamp64\web\youxue\application\admin\controller\Login.php ]
+[ info ] [ VIEW ] D:\wamp64\web\youxue\public/../application/admin\view\login\index.html [ array (
+) ]
+[ info ] [ LOG ] INIT File

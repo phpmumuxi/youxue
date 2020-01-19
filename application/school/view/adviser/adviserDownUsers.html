@@ -1,0 +1,177 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>名下客户</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 顾问管理<span class="c-gray en">&gt;</span><a href="{:url('school/Adviser/distribute')}"> 顾问列表管理 </a><span class="c-gray en">&gt;</span> 名下客户 <button class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:;" title="刷新" onclick="urlReplaceLoad()" ><i class="Hui-iconfont">&#xe68f;</i></button></nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="userPhone" placeholder="用户手机号" style="width:250px" class="input-text"
+               value="{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="userPhoneButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+	<span class="l">
+	<button id="distributeAdviser" class="btn btn-primary radius" type="button"> 分配顾问</button>&nbsp;&nbsp;&nbsp;&nbsp;
+	<select id='adviserId' style='border:0;background:white none repeat scroll 0 0;'>
+	  <option value="0" >选择顾问</option>
+	  {if($advises)}{volist name="advises" id="vo"}
+	  <option value="{$vo.id}">{$vo.name}</option>
+	  {/volist}{/if}
+	</select>
+	</span>
+	<span class="r">
+	<a href="{:url('school/Adviser/distribute')}" class="btn btn-success radius" type="button"> 返回</a>&nbsp;&nbsp;&nbsp;&nbsp;
+	共有数据：<strong>{$lists['total']}</strong> 条</span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+	<input type="hidden" id="hiddenParamId" value="{$id}"/>
+		<thead>
+			<tr class="text-c">
+				<th width="30">
+				<input style="width:15px;height:15px" type="checkbox" value='0'> </th>
+				<th width="100">客户</th>
+				<th width="110">手机号</th>
+				<!-- <th width="110">详情</th>				 -->
+			</tr>
+		</thead>
+		<tbody>
+	   {if($lists['data'])}{volist name="lists.data" id="vo" key='k'}
+			<tr class="text-c" id='checkIds'>
+	   			<td ><input style="width:15px;height:15px" type="checkbox" name="userIds[]" value="{$vo.userId}"></td>
+				<td>{$vo.userName}</td>
+				<td>{$vo.phone}</td>
+				<!-- <td><a href="/school/Adviser/info?adviserId={$vo['adviserId']}&userId={$vo['userId']}&schoolId={$vo['schoolId']}" class="btn btn-primary radius">详情</a></td> -->
+			</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="3">暂无数据</td>
+        </tr>
+        {/if}
+		<tr class="text-c">
+			<td colspan="3" style="text-align: center;">
+			{$page}
+			</td>
+		</tr>
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+
+	function urlReplaceLoad(){
+   		window.location.href="/school/Adviser/adviserDownUsers?id="+$('#hiddenParamId').val();
+   }
+
+    $('#userPhoneButton').click(function () {
+        var phone = $("#userPhone").val();
+		var mobile = /^1[345789]{1}\d{9}$/;
+        if (phone == '') {
+	     	layer.msg('手机号必填!',{icon:2,time:2000});
+            return false;
+        }
+	  if(phone.length!=11 || !mobile.test(phone)){
+	     layer.msg('请填写正确手机号!',{icon:2,time:2000});
+	     return false;
+	  }
+        window.location.href= "/school/Adviser/adviserDownUsers?id="+$('#hiddenParamId').val()+"&phone="+$('#userPhone').val();
+    });
+
+   function checkRule(adviseId,ids){
+   		if(adviseId==0){
+			layer.msg('请选择分配的顾问!',{icon:2,time:2000});
+			return false;
+	    }
+	    if(ids.length<=0){
+	    	layer.msg('请先勾选用户!',{icon:2,time:2000});
+	    	return false;
+	    }
+	    return true;
+   }
+
+   $('#distributeAdviser').click(function(){
+   		var adviserId=$('#adviserId').val();
+   		var oldAdviserId=$('#hiddenParamId').val()
+	   	var id_array=new Array();
+	    $('#checkIds input[type="checkbox"]:checked').each(function(){
+			id_array.push($(this).val());
+		});
+	    var ids=id_array.join(',');
+	    var re = checkRule(adviserId,ids);
+	    if(re){
+		     var _html = '<div style="width: 100%;text-align: center;margin-top: 2em;"><textarea id="adviserRmark" placeholder="重新分配顾问的备注信息" style="width: 90%;height:7em"></textarea>';
+	             _html +=
+	                 '<div style="position: absolute;bottom: 1em;right: 2em;">'
+	                + '<input id="adviserCancel" style="width: 6em;" class="btn btn-warning radius" type="button" value="取消">'
+	                + '<input id="adviserSure" style="width: 6em;margin-left: 2em;" class="btn radius btn-secondary" type="button" value="确认">'
+	                + '</div>'
+	                + '</div>';
+	        layer.open({
+	            type: 1,
+	            title: '分配顾问备注信息',
+	            skin: 'layui-layer-rim', //加上边框
+	            area: ['420px', '240px'], //宽高
+	            content: _html
+	        });
+	        $('#adviserCancel').on('click', function () {
+	            layer.closeAll();
+	        });
+		   $('#adviserSure').on('click', function () {
+			     var _remark = $.trim($("#adviserRmark").val());
+			     if(_remark){
+			     	$.post("{:url('school/Adviser/distributeAjax')}",{adviserId:adviserId,ids:ids,oldAdviserId:oldAdviserId,remark:_remark},function(res){
+			     		var _msg =res.msg;
+				  		if(res.status=='ok'){
+				  			layerShowMsg(_msg,1);
+				  		}else{
+				  			layerShowMsg(_msg,2);
+				  		}
+			  		})
+			     }else{
+			     	layer.msg('请填写分配顾问备注信息!',{icon:2,time:2000});
+			     }
+			})
+		}
+   })
+
+   function layerShowMsg(msg,type){
+		layer.msg(msg,{icon:type,time:1200},function(){
+		  		layer.closeAll();
+		  		urlReplaceLoad();
+		});
+	}
+
+</script>
+{/block}
+</body>
+</html>

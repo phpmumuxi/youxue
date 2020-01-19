@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>课程管理</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 课程管理
+    <span class="c-gray en">&gt;</span> 课程类型列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray">
+        <span class="l">
+            <a href="{:url('admin/Course/courseTypeAdd')}" class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> 添加课程类型
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <span class="l">
+                        课程类别列表
+                    </span>
+                    <span class="r">
+                        <!--共有数据：<strong>0</strong> 条-->
+                    </span>
+                </div>
+            </tr>
+            <tr class="text-c">
+                <th width="20">ID</th>
+                <th width="60">一级类别</th>
+                <th width="60">二级类别</th>
+                <th width="20">创建时间</th>
+                <th width="40">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name="data['levelOne']" id="vo"}
+            <tr class="text-c">
+                <td>{$vo.id}</td>
+                <td class="cname">{$vo.name}</td>
+                <td>/</td>
+                <td>{:date('Y-m-d H:i:s',$vo.createTime)}</td>
+
+                <td>
+                    <a href="javascript:;" title="编辑" class="courseTypeEdit" va="{$vo.id}"
+                       vname="{$vo.name}">
+                        <i class="Hui-iconfont Hui-iconfont-edit"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" title="删除" class="courseTypeDel" level="1" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-del3"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+            {volist name="data['levelTwo']" id="vo"}
+            <tr class="text-c">
+                <td>{$vo.id}</td>
+                <td>{$vo.one}</td>
+                <td class="cname">{$vo.two}</td>
+                <td>{:date('Y-m-d H:i:s',$vo.createTime)}</td>
+
+                <td>
+                    <a href="javascript:;" title="编辑" class="courseTypeEdit" va="{$vo.id}" vname="{$vo.two}">
+                        <i class="Hui-iconfont Hui-iconfont-edit"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" title="删除" class="courseTypeDel" level="2" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-del3"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript">
+
+    $('.courseTypeEdit').on('click', function () {
+        var id = $(this).attr('va');
+        var name = $(this).attr('vname');
+        var level = $(this).attr('vlevel');
+        var cname = $(this).parent().parent().children('.cname');
+        var cthis = $(this);
+
+        layer.prompt({
+            title: '修改类型名称',
+            formType: 0,
+            value: name
+        }, function (value, index) {
+            if (value == name) {
+                layer.msg('请填写新的类型名称!');
+            } else if (value.replace('/[]/g', ' ').length == 0 || !value || value == 0) {
+                layer.msg('请填写类型名称!');
+            } else {
+                $.post('/admin/Course/courseTypeEdit', {'id': id, 'name': value}, function (res) {
+                    console.log(res);
+                    if (res.status == 'ok') {
+                        cthis.attr('vname', value);
+                        layer.msg('修改成功!', {time: 2000});
+                        cname.text(value);
+                        layer.close(index);
+                    } else if (res.status == 'err') {
+                        layer.msg('操作异常!', {time: 2000});
+                    } else {
+                        layer.msg('修改失败!', {time: 2000});
+                    }
+                }, 'json');
+            }
+        });
+
+    });
+
+    $('.courseTypeDel').on('click', function () {
+
+        var id = $(this).attr('va');
+        var level = $(this).attr('level');
+        var thisHide = $(this).parent().parent();
+
+        layer.confirm('确认删除？', {
+            title: '提示',
+            btn: ['确认', '取消'],
+            icon: 0
+        }, function () {
+
+            if (id) {
+                $.post('/admin/Course/courseTypeDel', {'id': id, 'level': level}, function (res) {
+                    console.log(res);
+                    if (res.status == 'ok') {
+                        layer.msg('已删除!', {icon: 1});
+                        thisHide.hide();
+                    } else if (res.status == 'err') {
+                        layer.msg('操作异常!', {icon: 5})
+                    } else if (res.status == 'errHave') {
+                        layer.msg('含有子类，无法删除!', {icon: 5});
+                    } else {
+                        layer.msg('删除失败!', {icon: 5});
+                    }
+                }, 'json');
+            } else {
+                layer.msg('操作异常!', {icon: 5});
+                console.log('Id Missing');
+            }
+
+        }, function () {
+            layer.msg('操作已取消!');
+        });
+    });
+
+</script>
+
+</body>
+</html>

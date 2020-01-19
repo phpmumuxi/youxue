@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>万人砍课程订单</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 课程管理
+    <span class="c-gray en">&gt;</span> 万人砍课程订单列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.href = '/school/Course/courseWrk';" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="text-c">
+        <input type="text" name="searchData" id="searchData" placeholder="订单号或手机号" style="width:250px"
+               class="input-text"
+               value="{if(isset($orderNo))}{$orderNo}{/if}{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="btnSearch" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <!--<th scope="col" colspan="11">课程订单列表</th>-->
+                <!--<span class="r">共有数据：<strong>{$data['total']}</strong> 条</span>-->
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <span class="l">
+                        课程订单列表
+                    </span>
+                    <span class="r">
+                        共有数据：<strong>{$data['total']}</strong> 条
+                    </span>
+                </div>
+            </tr>
+            <tr class="text-c">
+                <th width="20">ID</th>
+                <th width="20">用户名</th>
+                <th width="20">手机号</th>
+                <th width="30">订单号</th>
+                <th width="30">课程包</th>
+                <th width="30">课程名</th>
+                <th width="20">原价/元</th>
+                <th width="20">金额/元</th>
+                <th width="20">是否签约</th>
+                <th width="20">签约时间</th>
+                <th width="20">顾问</th>
+                <th width="20">订单状态</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+
+            {if condition="$data['data']"}
+            <tbody>
+            {volist name="data['data']" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo.uName}</td>
+                <td>{$vo.phone}</td>
+                <td>{$vo.orderNo}</td>
+                <td>{$vo.wrkName}</td>
+                <td>{$vo.courseName}</td>
+                <td>{$vo.price}</td>
+                <td>{$vo.money}</td>
+                <td>
+                    {if condition="($vo['isSign'] == 1)"}
+                    已签约
+                    {else /}
+                    未签约
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['signTime'])"}
+                    {$vo['signTime']|date='Y-m-d H:i',###}
+                    {/if}
+                </td>
+
+                <td>
+                    {if condition="($vo.adviserName)"}
+                    {$vo.adviserName}
+                    {else /}
+                    无
+                    {/if}
+                </td>
+
+                <td>
+                    {if condition="($vo['orderStatus'] == 1)"}已支付{else /}其他{/if}
+                </td>
+
+                <td>
+                    {if condition="($vo['isSign'] == 0)"}
+                    <a href="javascript:;" title="签约" class="courseSign" va="{$vo.id}" vd="{$vo['orderStatus']}" ve="{$vo['adviserId']}">
+                        <i class="Hui-iconfont Hui-iconfont-hetong"></i>
+                    </a>
+                    {/if}
+                </td>
+            </tr>
+            {/volist}
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+            </tbody>
+            {else /}
+
+            <tbody>
+                <tr class="text-c">
+                    <td colspan="15" style="text-align: center;">
+                        暂无数据
+                    </td>
+                </tr>
+            </tbody>
+            {/if}
+        </table>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript">
+
+    $('.courseSign').on('click', function () {
+        var t = $(this);
+        layer.confirm('确认签约？', {
+            title: '提示',
+            btn: ['确认','取消'] //按钮
+        }, function() {
+
+            // 订单状态
+            var vd = t.attr('vd');
+            if (vd != 1) {
+                layer.msg('非已付款订单无法签约!');
+                return false;
+            }
+            // 订单id
+            var courseOrderId = t.attr('va');
+
+            // 顾问
+            var ve = t.attr('ve');
+            if (!ve || ve == 0) {
+                layer.msg('操作异常!');
+                return false;
+            }
+
+            if (courseOrderId != 0 && courseOrderId != 0) {
+                $.post('/school/Course/courseOrderSignWrk', {courseOrderId: courseOrderId}, function (res) {
+                    console.log(res);
+                    if (res.status == 'ok') {
+                        layer.msg('签约已确定!');
+                        setTimeout(function () {
+                            window.location.href = location.href;
+                        },1000)
+                    } else {
+                        layer.msg('操作失败!');
+                    }
+                }, 'json');
+            } else {
+                layer.msg('操作异常!');
+            }
+        }, function(){
+            layer.msg('操作已取消!');
+        });
+    });
+
+    $('#btnSearch').on('click', function () {
+        var orderNoOrPhone = $('#searchData').val();
+        if (!orderNoOrPhone) {
+            return false;
+        }
+
+        if (/^1(3|4|5|7|8)\d{9}$/.test(orderNoOrPhone)) {
+            window.location.href = '/school/Course/courseWrk?phone=' + orderNoOrPhone;
+        }else {
+            window.location.href = '/school/Course/courseWrk?orderNo=' + orderNoOrPhone;
+        }
+    });
+
+    // 作废
+    $('.againCancel').on('click', function () {
+        var orderId = $(this).attr('va');
+        if (!orderId) {
+            return false;
+        }
+
+        $.post('/school/Course/orderAgainHandle', {orderId: orderId, isAgain: 3}, function (res) {
+            if (res.status == 'ok') {
+                layer.msg('操作成功!');
+                window.location.reload(true);
+            } else {
+                layer.msg('操作失败!');
+            }
+        }, 'json');
+    });
+    // 作废
+    $('.againSure').on('click', function () {
+        var orderId = $(this).attr('va');
+        if (!orderId) {
+            return false;
+        }
+
+        $.post('/school/Course/orderAgainHandle', {orderId: orderId, isAgain: 2}, function (res) {
+            if (res.status == 'ok') {
+                window.location.reload(true);
+                layer.msg('操作成功!');
+            } else {
+                layer.msg('操作失败!');
+            }
+        }, 'json');
+    });
+    // 作废
+    $('#orderStatus').change(function () {
+        var st = $('#orderStatus').val();
+        if(st == -1){
+            return false;
+        }else{
+            window.location.href = '/school/Course/courseWrkList?status=' + st;
+        }
+    });
+    // 作废
+    $('.assignBenefitPerson').on('click', function () {
+        var courseOrderId = $(this).attr('va');
+        if (courseOrderId) {
+            $.post('/school/Course/schoolBenefitPersonList', {id: courseOrderId}, function (res) {
+                console.log(res);
+                if (res.status == 'ok') {
+                    var _html = '<div style="width: 100%;text-align: center;margin-top: 2em;">'
+                        + '<select class="select" style="width: 90%;height: 2em;line-height: 2em;" id="adviserSelect" name="adviserSelect">'
+                        + '<option value="0">选择顾问</option>';
+                    $.each(res.data, function (k, v) {
+                        _html += '<option value="' + v['id'] + '">' + v['name'] + '</option>';
+                    });
+                    _html += '</select>'
+                        + '<div style="position: absolute;bottom: 1em;right: 2em;">'
+                        + '<input id="adviserCancel" style="width: 6em;" class="btn btn-warning radius" type="button" value="取消">'
+                        + '<input id="adviserSure" style="width: 6em;margin-left: 2em;" class="btn radius btn-secondary" type="button" value="确认">'
+                        + '</div>'
+                        + '</div>';
+                    layer.open({
+                        type: 1,
+                        title: '分配受益人',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['420px', '240px'], //宽高
+                        content: _html
+                    });
+                    $('#adviserCancel').on('click', function () {
+                        layer.closeAll();
+                    });
+                    $('#adviserSure').on('click', function () {
+                        var bpId = $('#adviserSelect').val();
+                        if (bpId != 0 && bpId != '') {
+                            $.post('/school/Course/assignBenefitPersonWrk', {
+                                bpId: bpId,
+                                orderId: courseOrderId
+                            }, function (res) {
+                                if (res.status == 'ok') {
+                                    layer.closeAll();
+                                    layer.msg('受益人已分配!', {time: 3000});
+                                    window.location.href = location.href;
+                                } else {
+                                    layer.msg('操作失败!');
+                                }
+                            }, 'json');
+                        } else {
+                            layer.msg('请选择受益人!');
+                        }
+                    });
+                } else if (res.status == 'err') {
+                    layer.msg('无受益人信息!');
+                }
+            }, 'json');
+        } else {
+            layer.msg('操作异常!');
+        }
+    });
+</script>
+
+</body>
+</html>

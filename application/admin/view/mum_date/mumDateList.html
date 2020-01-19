@@ -1,0 +1,208 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+    .pagination {
+        list-style-type: none;
+        display: inline-block;
+        overflow: auto;
+    }
+
+    .pagination li {
+        float: left;
+        /*padding: 6px 12px;*/
+        border: 1px solid #e1e2e3;
+        margin: 3px;
+    }
+
+    .pagination li a, .pagination li span {
+        display: inline-block;
+        padding: 6px 12px;
+    }
+
+    .pagination li:hover {
+        border: 1px solid #38f;
+        background: #f2f8ff;
+    }
+
+    .pagination .active {
+        border: 1px solid #38f;
+    }
+</style>
+{/block}
+{block name="body"}
+<title>妈妈约管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 妈妈约管理 <span
+        class="c-gray en">&gt;</span> 妈妈约列表 <a class="btn btn-success radius r"
+                                               style="line-height:1.6em;margin-top:3px"
+                                               href="javascript:window.location.href = '/admin/MumDate/mumDateList';"
+                                               title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c">
+        <input type="text" name="" id="uPhone" placeholder="手机号" style="width:250px" class="input-text"
+               value="{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="btnSearch" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="r">共有数据：<strong>{$info['total']}</strong> 条</span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr class="text-c">
+                <th width="10">序号</th>
+                <th width="10">活动名称</th>
+                <th width="10">发起人</th>
+                <th width="20">手机号</th>
+                <th width="20">活动地点</th>
+                <th width="10">活动时间</th>
+                <th width="10">已报名人数</th>
+                <th width="20">是否需要赞助</th>
+                <th width="20">人数上限</th>
+                <th width="20">活动状态</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if($info['data'])}
+            {volist name="data" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo['name']}</td>
+                <td>{$vo['uName']}</td>
+                <td>{$vo['phone']}</td>
+                <td>{$vo['address']}</td>
+                <td>{$vo['dateTime']|date='Y-m-d H:i:s',###}</td>
+                <td>{$vo['winNum']}</td>
+                <td>
+                    {if condition="($vo['isSponsor'])"}
+                    是
+                    {else}
+                    否
+                    {/if}
+                </td>
+                <td>
+                    {$vo['peopleNum']}
+                </td>
+                <td>
+                    {$status[$vo['status']]}
+                </td>
+                <td>
+                    <a href="javascript:;" va="{$vo['id']}" class="seeDetail" title="更多">
+                        <i class="Hui-iconfont Hui-iconfont-gengduo"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" va="{$vo['id']}" vb="{$vo['peopleNum']}" class="BtnEdit" title="修改">
+                        <i class="Hui-iconfont Hui-iconfont-manage2"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" va="{$vo['id']}" class="BtnDel" title="删除">
+                        <i class="Hui-iconfont Hui-iconfont-del2"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+            {else /}
+            <tr class="text-c">
+                <td colspan="11">暂无数据</td>
+            </tr>
+            {/if}
+            <tr class="text-c">
+                <td colspan="11" style="text-align: center">{$pages}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+<script type="text/javascript">
+
+    $('#btnSearch').on('click', function () {
+        var uPhone = $('#uPhone').val();
+        if (!uPhone || uPhone == 0 || uPhone == '') {
+            return false;
+        }
+        window.location.href = '/admin/MumDate/mumDateList?phone=' + uPhone;
+    });
+
+    $('.BtnEdit').on('click', function () {
+        var id = $(this).attr('va');
+        var num = $(this).attr('vb');
+        if (!id) {
+            return false;
+        }
+        var ct = $(this);
+        var cp = $(this).parent().prev().prev();
+        layer.prompt({
+            title: '修改上限人数',
+            formType: 0,
+            value: num
+        }, function (value, index) {
+            if (value == num) {
+                layer.msg('请填写新的数值!');
+                return false;
+            } else if (!/^[0-9]*$/.test(value) || !value || value == 0) {
+                layer.msg('请填写正确的数值!');
+                return false;
+            } else {
+                $.post('/admin/MumDate/peopleNumEdit', {'id': id, 'num': value}, function (res) {
+                    if (res.status == 'ok') {
+                        ct.attr('vb', value);
+                        layer.msg('修改成功!', {time: 2000});
+                        cp.text(value);
+                        layer.close(index);
+                    } else if (res.status == 'err') {
+                        layer.msg('操作异常!', {time: 2000});
+                    } else {
+                        layer.msg('修改失败!', {time: 2000});
+                    }
+                }, 'json');
+            }
+        });
+    });
+
+    $('.BtnDel').on('click', function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+
+        var ct = $(this);
+        layer.prompt({
+            title: '删除原因',
+            formType: 2,
+            value: ' '
+        }, function (value, index) {
+            if (!value || value == 0 || value == '') {
+                layer.msg('请填写删除原因!');
+                return false;
+            } else {
+                $.post('/admin/MumDate/mumDateDel', {'id': id, 'note': value}, function (res) {
+                    if (res.status == 'ok') {
+                        ct.parent().parent().hide();
+                        layer.msg('操作成功!');
+                        layer.close(index);
+                    } else if (res.status == 'err') {
+                        layer.msg('操作异常!');
+                    } else {
+                        layer.msg('操作失败!');
+                    }
+                }, 'json');
+            }
+        });
+    });
+
+    $('.seeDetail').on('click', function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+
+        window.location.href = '/admin/MumDate/mumDateDetail?id=' + id;
+    });
+</script>
+{/block}
+</body>
+</html>

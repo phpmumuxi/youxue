@@ -1,0 +1,181 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>管理员列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 管理员列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="userName" placeholder="管理员名称" style="width:250px" class="input-text"
+               value="{if(isset($userName))}{$userName}{/if}">
+        <button name="" id="userButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	{in name='1' value='$actionType'}
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('admin/Admin/add')}" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a></span> <span class="r">共有数据：<strong>{$info['total']}</strong> 条</span></div>
+	{/in}
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">
+				<th width="40">序号</th>
+				<th width="110">登录名</th>
+				<th width="100">手机</th>
+				<th width="90">角色名</th>
+				{eq name='admin_id' value="1"}
+				<th>
+					<select id="adminShopId" style='border:0;background:#f5fafe none repeat scroll 0 0;'>
+					  <option value="0" {eq name="$shopId" value='0'}selected='selected'{/eq}>商户</option>
+					{volist name="shops" id="vo"}
+					  <option value="{$vo.id}" {if condition="$vo.id==$shopId"}selected='selected'{/if}>{$vo.name}</option>
+					{/volist}
+					</select>
+				</th>
+				<th>
+					<select id="adminSchoolId" style='border:0;background:#f5fafe none repeat scroll 0 0;'>
+					  <option value="0" {eq name="$schoolId" value='0'}selected='selected'{/eq}>校区</option>
+					{volist name="schools" id="vo"}
+					  <option value="{$vo.id}" {if condition="$vo.id==$schoolId"}selected='selected'{/if}>{$vo.name}</option>
+					{/volist}
+					</select>
+				</th>
+				{/eq}
+				<th width="120">创建时间</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {if($info['data'])}{volist name="info.data" id="vo" key='k'}
+			<tr class="text-c">
+	   			<td >{$k}</td>
+				<td>{$vo.name}</td>
+				<td>{$vo.phone}</td>
+				<td>{$vo.roleName}</td>
+				{eq name='admin_id' value="1"}
+				<td class="text-l">{$vo.shopName}</td>
+				<td class="text-l">{$vo.schoolName}</td>
+				{/eq}
+				<td class="td-status">{$vo.createTime|date="Y-m-d H:i",###}</td>
+				<td class="td-Admin">{neq name='vo.id' value='1'}
+				{in name='7' value='$actionType'}
+				<a style="text-decoration:none" href="{:url('admin/Admin/auth',['id'=>$vo['id']])}" title="分配权限"><i class="Hui-iconfont f-18">&#xe631;</i></a>
+				{/in}{eq name='admin_id' value="1"}
+				<a href="javascript:;" title="修改手机号"><i class="Hui-iconfont updatePhoneBtn" vaP="{$vo.phone}" vaI="{$vo.id}">&#xe696;</i></a>{/eq}
+				{in name='3' value='$actionType'}
+				<a title="删除" href="{:url('admin/Admin/del',['id'=>$vo['id']])}" onclick="return confirm('删除须谨慎，确认要删除吗？')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+				{/in}
+				{/neq}</td>
+			</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="8">暂无数据</td>
+        </tr>
+        {/if}
+		<tr class="text-c">
+			<td colspan="8" style="text-align: center;">
+			{$page}
+			</td>
+		</tr>
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $('#userButton').click(function () {
+        if ($.trim($('#userName').val()) == '') {
+        	layer.msg('请填写管理员名称!',{icon:2,time:2000});
+            return false;
+        }
+        urlshow();
+    });
+    $('#adminShopId,#adminSchoolId').on('change',function(){
+		urlshow();
+	})
+    
+    function checkPhone(phone) {   		
+		var mobile = /^1[345789]{1}\d{9}$/;
+        if (phone == '') {
+	     	layer.msg('手机号必填!',{icon:2,time:2000});
+            return false;
+        }        
+	  if(phone.length!=11 || !mobile.test(phone)){	  	
+	     layer.msg('请填写正确手机号!',{icon:2,time:2000});
+	     return false;
+	  }
+        return true;
+    };
+
+    $(".updatePhoneBtn").on('click',function(){
+		var id=$(this).attr('vaI');
+		var _phone=$(this).attr('vaP');
+		var _html = '<div style="width: 100%;text-align: center;margin-top: 2em;"><input id="phone" value="'+_phone+'" style="width: 90%;height:3em">';
+	         _html +=
+	             '<div style="position: absolute;bottom: 1em;right: 2em;">'
+	            + '<input id="updatePhoneCancel" style="width: 6em;" class="btn btn-warning radius" type="button" value="取消">'
+	            + '<input id="updatePhoneSure" style="width: 6em;margin-left: 2em;" class="btn radius btn-secondary" type="button" value="确认">'
+	            + '</div>'
+	            + '</div>';
+	        layer.open({
+	            type: 1,
+	            title: '修改手机号',
+	            skin: 'layui-layer-rim',
+	            area: ['400px', '220px'],
+	            content: _html
+	        });
+	        $('#updatePhoneCancel').on('click', function () {
+	            layer.closeAll();
+	        });
+		   $('#updatePhoneSure').on('click', function () {
+			     var tel = $.trim($("#phone").val());
+			     if( checkPhone(tel) ){	
+				     if(tel==_phone){
+				     	layer.msg('手机号更新成功!',{icon:1,time:1200},function(){ urlshow(); });
+				     }else{				     	     	    		
+				     	$.post("/admin/Admin/updatePhone",{id:id,phone:tel},function(res){
+					  		if(res.status=='ok'){
+					  			layer.msg(res.msg,{icon:1,time:1200},function(){ urlshow(); });
+					  		}else{
+					  			layer.msg(res.msg,{icon:2,time:1200},function(){ urlshow(); });		  
+					  		}
+				  		})	
+				  	}		     	
+			     }
+			})
+	})
+
+    function urlshow(){
+		window.location.href= "/admin/Admin/index?userName="+$('#userName').val()+"&shopId="+$('#adminShopId').val()+"&schoolId="+$('#adminSchoolId').val();
+   }
+</script>
+{/block}
+</body>
+</html>

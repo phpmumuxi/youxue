@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>星星灯活动-点灯券兑换</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 星星灯活动
+    <span class="c-gray en">&gt;</span> 星星灯券课程列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.reload();" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="text-c hide">
+        <input type="text" name="searchData" id="searchData" placeholder="订单号或手机号" style="width:250px"
+               class="input-text"
+               value="{if(isset($orderNo))}{$orderNo}{/if}{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="btnSearch" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+
+    <div class="text-c hide">
+        <input type="button" va="1" class="selectOne btn btn-secondary radius" value="课程订单">
+        <input type="button" va="2" class="selectOne btn btn-default radius" value="团购订单">
+        <input type="button" va="3" class="selectOne btn btn-default adius" value="体验课">
+        <input type="button" va="4" class="selectOne btn btn-default radius" value="星星点灯兑换课">
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <span class="l">
+                        星星灯券课程列表
+                    </span>
+                    <span class="r">
+                        共有数据：<strong>{$data['total']}</strong> 条
+                    </span>
+                </div>
+            </tr>
+            <tr class="text-c">
+                <th width="20">序号</th>
+                <th width="20">课程</th>
+                <th width="20">课时</th>
+                <th width="20">用户名</th>
+                <th width="20">手机号</th>
+                <th width="20">顾问</th>
+                <th width="24">领取时间</th>
+                <th width="20">使用时间</th>
+                <th width="20">状态</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+
+            {if condition="$data['data']"}
+            <tbody>
+            {volist name="data['data']" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo.className}</td>
+                <td>{$vo.classNum}</td>
+                <td>{$vo.uName}</td>
+                <td>{$vo.phone}</td>
+                <td>{$vo.adviserName}</td>
+                <td>{$vo['createTime']|date='Y-m-d H:i',###}</td>
+                <td>
+                    {if condition="($vo['useTime'])"}
+                    {$vo['useTime']|date='Y-m-d H:i',###}
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['status'] == 0)"}
+                    未使用
+                    {else /}
+                    已使用
+                    {/if}
+                </td>
+
+                <td>
+                    {if condition="($vo['status'] == 0)"}
+                    <a href="javascript:;" title="确认使用" class="someSure" va="{$vo['id']}">
+                        <i class="Hui-iconfont Hui-iconfont-shenhe-tongguo"></i>
+                    </a>
+                    {/if}
+                </td>
+            </tr>
+            {/volist}
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="11" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+
+            </tbody>
+            {else /}
+
+            <tbody>
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    暂无数据
+                </td>
+            </tr>
+            </tbody>
+            {/if}
+        </table>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/datejs/1.0/date.min.js"></script>
+<script type="text/javascript">
+    // 确认
+    $('.someSure').click(function () {
+        var time = new Date().toString('yyyy-MM-dd HH:mm');
+        var t = $(this);
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+
+        layer.confirm('确认您当前操作？', {
+            title: '提示',
+            btn: ['确定', '取消']
+        }, function () {
+            $.post('/school/StarEvent/starOrderTicketSure', {id: id}, function (res) {
+                if (res.status == 'ok') {
+                    t.parent().prev().text('已使用');
+                    t.parent().prev().prev().text(time);
+                    t.hide();
+                    layer.msg('操作成功!');
+                } else {
+                    layer.msg('操作失败!');
+                }
+            }, 'json');
+        }, function () {
+        });
+    });
+</script>
+
+</body>
+</html>

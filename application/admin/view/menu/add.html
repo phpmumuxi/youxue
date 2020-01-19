@@ -1,0 +1,136 @@
+{extend name="layout" /}
+{block name="body"}
+<title>添加菜单</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+	系统管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/Menu/index')}">菜单管理</a>
+	<span class="c-gray en">&gt;</span>
+	添加菜单
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" onsubmit='return checks()'>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>菜单名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">控制器方法：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="例如：admin/index/index" id="url" name="url">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">图标：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="（选填）如：#xe667;" name="icon" id="icon">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">排序：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="10" name="sort" id="sort">
+			</div>
+		</div>
+      <div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">状态：</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+				<div class="radio-box">
+					<input name="status" value='1' type="radio" id="status-0" checked>
+					<label for="status-0">显示</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value='0' id="status-1" name="status">
+					<label for="status-1">隐藏</label>
+				</div>
+			</div>
+		</div>
+		{if condition="$doType==1"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">操作状态：</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+			<div class="radio-box">
+					<input name="actionType" value='0' type="radio" id="actionType-0" checked>
+					<label for="actionType-0">其他</label>
+				</div>
+				<div class="radio-box">
+					<input name="actionType" value='1' type="radio" id="actionType-1">
+					<label for="actionType-1">添加</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value='2' id="actionType-2" name="actionType">
+					<label for="actionType-2">修改</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value='3' id="actionType-3" name="actionType">
+					<label for="actionType-3">删除</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value='4' id="actionType-4" name="actionType">
+					<label for="actionType-4">审核</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value='5' id="actionType-5" name="actionType">
+					<label for="actionType-5">上架</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value='6' id="actionType-6" name="actionType">
+					<label for="actionType-6">下架</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value='7' id="actionType-7" name="actionType">
+					<label for="actionType-7">分配权限</label>
+				</div>
+			</div>
+		</div>
+		{/if}
+		{if condition="$kot==1"}
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">类型：</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select class="select" size="1" name="type">
+					<option value="1" selected>后台</option>
+					<option value="2">商户</option>
+					<option value="3">校区</option>
+				</select>
+				</span> </div>
+		</div>
+      {/if}
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '10%'
+	});
+});
+	function checks(){
+	  var name = $("#name").val();
+	  if(name==''){	     
+	     layer.msg('菜单名称必填！',{icon:2,time:2000});
+	     return false;
+	  }   
+	  return true;
+	}
+</script>
+{/block}
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

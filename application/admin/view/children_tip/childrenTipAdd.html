@@ -1,0 +1,113 @@
+{extend name="layout" /}
+{block name="body"}
+<title>新增育儿师</title>
+</head>
+<body>
+
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span>
+    育儿师管理
+    <span class="c-gray en">&gt;</span>
+    新增育儿师
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.href = '/admin/ChildrenTip/childrenTipAdd';" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<article class="page-container">
+    <form class="form form-horizontal" action='/admin/ChildrenTip/childrenTipSave' enctype="multipart/form-data"
+          method='post' id="formSubmit">
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>标题：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="title" name="title">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2">性别：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+
+                <input type="radio" id="radio1" name="sex" value="1">
+                <label for="radio1">男</label>
+
+                <input type="radio" id="radio2" name="sex" value="2">
+                <label for="radio2">女</label>
+
+                <input type="radio" id="radio3" name="sex" value="0" checked>
+                <label for="radio3">未知</label>
+
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>选择年龄：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <span class="select-box" style="width: 150px;">
+                    <select id="selectType" class="select" size="1" name="type">
+                        <option value="-1">选择年龄</option>
+                        {foreach name="types" item="vo"}
+                        <option value="{$vo['type']}">{$vo['typeName']}</option>
+                        {/foreach}
+                    </select>
+                </span>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>图文内容：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <textarea name="content" id="container"></textarea>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-2 col-sm-offset-2">
+                <button id="btnSave" type="button" class="btn btn-success radius">
+                    <i class="icon-ok"></i> 保存
+                </button>
+
+                <button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+            </div>
+        </div>
+    </form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<script type="text/javascript">
+    var ue = UE.getEditor('container');
+
+    $('#btnSave').click(function () {
+        var title = $('#title').val();
+        if (!title || title == '' || title == 0) {
+            layer.msg('请填写标题!');
+            return false;
+        }
+
+        var age = $('#selectType').val();
+        if (age == -1) {
+            layer.msg('请填写选择年龄!');
+            return false;
+        }
+
+        var content = ue.getContent();
+        if (!content || content == '') {
+            layer.msg('请填写图文内容!');
+            return false;
+        }
+
+        $('#formSubmit').submit();
+
+    });
+
+</script>
+{/block}
+</body>
+</html>

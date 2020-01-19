@@ -1,0 +1,57 @@
+{extend name="layout" /}
+{block name="body"}
+<title>优选品牌修改</title>
+</head>
+<body>
+<article class="page-container">
+	<div class="form form-horizontal">
+	<input type='hidden' id='hiddenId' value='{$info.id}'>
+		<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">品牌名称：</label>
+			<div class="formControls col-xs-8 col-sm-9"> 
+			<label>{$info.name}</label>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">排序：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$info.sort}" id="sort" style="width:150px;"><label style='color:#b3b3b3;'>（倒叙排列）</label>
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" id="brandEditSubmitBtn" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</div>
+</article>
+{/block}
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+	
+$('#brandEditSubmitBtn').click(function(){
+	var id = $("#hiddenId").val();
+	var sort = $("#sort").val();
+	  
+  	$.post("/admin/PreferredBrand/edit",{id:id,sort:sort},function(res){
+  		var _msg=res.msg;
+  		if(res.status=='ok'){
+  			layerShowMsg(_msg,1);
+  		}else{
+  			layerShowMsg(_msg,2);
+  		}
+  	})
+
+})
+
+function layerShowMsg(msg,type){
+	layer.msg(msg,{icon:type,time:1200},function(){
+	  	layer_close();
+	});
+}
+</script>
+{/block}
+</body>
+</html>

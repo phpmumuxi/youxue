@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>课程审核</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 课程审核
+    <span class="c-gray en">&gt;</span> 课程审核列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.href = '/admin/Course/courseVerify';" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <span class="l">
+                        课程审核列表
+                    </span>
+                    <span class="r">
+                        共有数据：<strong>{$info['total']}</strong> 条
+                    </span>
+                </div>
+            </tr>
+            <tr class="text-c">
+                <th width="20">ID</th>
+                <th width="20">
+                    <select name="" id="selectSchool" class="select" size="1">
+                        <option value="-1">校区</option>
+                        {volist name="$schoolLists" id="vo"}
+                        <option value="{$vo['id']}" {if condition="($vo['id'] == $schoolId)"}selected{/if}>{$vo['name']}</option>
+                        {/volist}
+                    </select>
+                </th>
+                <th width="20">名称</th>
+                <th width="20">类型</th>
+                <th width="20">课时</th>
+                <th width="20">年龄段</th>
+                <th width="20">金额/元</th>
+                <th width="20">申请时间</th>
+                <th width="20">审核时间</th>
+                <th width="20">审核人</th>
+                <th width="20">
+                    <select name="" id="selectStatus" class="select" size="1">
+                        <option value="-1">选择状态</option>
+                        {volist name="$verifyStatus" id="vo"}
+                        <option value="{$key}" {if condition="($key == $status)"}selected{/if}>{$vo}</option>
+                        {/volist}
+                    </select>
+                </th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if condition="($data)"}
+            {volist name="data" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo.schoolName}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.typeName}</td>
+                <td>{$vo.classTime}</td>
+                <td>{$vo.startAge}~{$vo.endAge}</td>
+                <td>{$vo.money}</td>
+                <td>{:date('Y-m-d H:i',$vo.createTime)}</td>
+                <td>
+                    {if condition="($vo['adminTime'])"}
+                    {:date('Y-m-d H:i',$vo.adminTime)}
+                    {else /}
+                    /
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['adminTime'])"}
+                    {$vo.adminName}
+                    {else /}
+                    /
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['status'] == 2)"}
+                    审核通过
+                    {elseif condition="($vo['status'] == 4)" /}
+                    拒绝
+                    {elseif condition="($vo['status'] == 0)" /}
+                    未审核
+                    {/if}
+                </td>
+
+                <td>
+                    {if condition="($vo['status'] != 4)"}
+                        <a href="javascript:;" title="编辑" class="courseMoneyEdit" va="{$vo.id}"">
+                            <i class="Hui-iconfont Hui-iconfont-edit2"></i>
+                        </a>
+                        {if condition="($vo['status'] != 2)"}
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="javascript:;" title="拒绝" class="courseRefuse" va="{$vo.id}">
+                                <i class="Hui-iconfont Hui-iconfont-shenhe-butongguo2"></i>
+                            </a>
+                        {/if}
+                    {/if}
+
+                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <a href="javascript:;" title="星星灯" class="starCourse" va="{$vo.id}" vb="{$vo['isStar']}" vc="{$vo['starNum']}" vd="{$vo['exchangeNum']}">
+                        <i class="Hui-iconfont Hui-iconfont-cang2"></i>
+                    </a>
+
+                </td>
+            </tr>
+            {/volist}
+
+            {else /}
+            <tr class="text-c">
+                <td colspan="15">暂无数据</td>
+            </tr>
+            {/if}
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript">
+
+    $('.courseMoneyEdit').on('click', function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            layer.msg('操作异常!', {time: 2000, icon: 5});
+            return false;
+        }
+        window.location.href = '/admin/Course/courseRule?id=' + id;
+    });
+
+    $('.courseRefuse').on('click', function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            layer.msg('操作异常!', {time: 2000, icon: 5});
+            return false;
+        }
+        var cThis = $(this);
+        $.post('/admin/Course/courseRefuse', {'id': id}, function (res) {
+            console.log(res);
+            if (res.status == 'ok') {
+                cThis.parent().prev().text('拒绝');
+                cThis.parent().text('/');
+                layer.msg('操作成功!', {time: 2000});
+            } else if (res.status == 'err') {
+                layer.msg('操作异常!', {time: 2000, icon: 5});
+            } else {
+                layer.msg('操作失败!', {time: 2000, icon: 5});
+            }
+        }, 'json');
+    });
+    
+    $('#selectStatus').change(function () {
+        var sc = $('#selectSchool').val();
+        var st = $('#selectStatus').val();
+        if(st == -1){
+            return false;
+        }else{
+            window.location.href = '/admin/Course/courseVerify?status=' + st +'&schoolId=' + sc;
+        }
+    });
+
+    $('#selectSchool').change(function () {
+        var ss = $('#selectStatus').val();
+        var st = $('#selectSchool').val();
+        if(st == -1){
+            return false;
+        }else{
+            window.location.href = '/admin/Course/courseVerify?schoolId=' + st +'&status=' + ss;
+        }
+    });
+
+    $('.starCourse').click(function () {
+
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+
+        var preIsStar = 0;
+        var preStarNum = 0;
+        var preExchangeNum = 0;
+        $.post('/admin/Course/getCourseStar',{id: id},function (res) {
+            console.log(res);
+            if(res.status == 'ok'){
+                preIsStar = res.data.isStar;
+                preStarNum = res.data.starNum;
+                preExchangeNum = res.data.exchangeNum;
+
+
+                var _html = '<div style="margin: 15px;">'
+                    + '<label for="starNum" style="font-weight: bold;">兑换所需星星数/每课时:</label>'
+                    + '<input id="starNum" class="input-text radius size-M" type="text" name="starNum" value="" placeholder="请填写大于0的数字">'
+                    + '<br>'
+                    + '<br>'
+                    + '<label for="exchangeNum" style="font-weight: bold;">奖励星星数:</label>'
+                    + '<input id="exchangeNum" class="input-text radius size-M" type="text" name="exchangeNum" value="" placeholder="请填写大于0的数字">'
+                    + '<br>'
+                    + '<br>'
+                    + '<label for="starNum" style="font-weight: bold;">是否参加星星灯活动:</label>'
+                    + '<br>'
+                        +'<input class="isStar" type="radio" id="radio-1" name="isStar" value="1">'
+                        +'<label for="radio-1"> 是</label>'
+                        +'<span>&nbsp;&nbsp;</span>'
+                        +'<input class="isStar" type="radio" id="radio-2" name="isStar" value="0" checked>'
+                        +'<label for="radio-2"> 否</label>'
+                    + '<br>'
+                    + '<input id="newSave" class="btn radius btn-warning" type="button" value="确认" style="position: absolute;right: 15px;bottom: 10px;width: 5em;">'
+                    + '</div>';
+
+                layer.open({
+                    type: 1,
+                    title: '星星数',
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['420px', '300px'], //宽高
+                    content: _html
+                });
+
+                // 设置输入框值
+                $('#starNum').val(preStarNum);
+                $('#exchangeNum').val(preExchangeNum);
+                $('input[name="isStar"]').attr('checked',false);
+                if(preIsStar == 1){
+                    $('#radio-1').attr('checked',true);
+                }else if(preIsStar == 0){
+                    $('#radio-2').attr('checked',true);
+                }
+
+                $('#newSave').click(function () {
+                    var starNum = $('#starNum').val();
+                    var exchangeNum = $('#exchangeNum').val();
+                    var isStar = $("input[name='isStar']:checked").val();
+
+                    if (!/^[0-9]*$/.test(starNum)) {
+                        layer.msg('请填写正确的星星数!');
+                        return false;
+                    }
+                    if (!/^[0-9]*$/.test(exchangeNum)) {
+                        layer.msg('请填写正确的星星数!');
+                        return false;
+                    }
+
+                    $.post('/admin/Course/starCourseAdd', {id: id, starNum: starNum,exchangeNum: exchangeNum,isStar: isStar}, function (res) {
+                        if (res.status == 'ok') {
+                            layer.closeAll();
+                            layer.msg('操作成功!');
+                        } else {
+                            layer.msg('操作失败!');
+                        }
+                    }, 'json');
+                });
+            }else{
+                console.log('Fail To Get Info');
+            }
+        },'json');
+
+    });
+</script>
+
+</body>
+</html>

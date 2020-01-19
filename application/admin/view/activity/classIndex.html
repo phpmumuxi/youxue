@@ -1,0 +1,158 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>活动课程列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 万人砍管理 <span class="c-gray en">&gt;</span> 活动课程列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="className" placeholder="课程名称" style="width:250px" class="input-text"
+               value="{if(isset($className))}{$className}{/if}">
+        <button name="" id="searchClassNameButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('admin/Activity/classAdd')}" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加活动课程</a></span> <span class="r">共有数据：<strong>{$lists['total']}</strong> 条</span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">
+				<th width="40">序号</th>
+				<th width="120">课程名</th>
+				<th width="80">原价</th>
+				<th width="80">现价</th>
+				<th>
+					<select id="classSchoolId" style='border:0;background:#f5fafe none repeat scroll 0 0;'>
+					  <option value="0" >所属校区</option>
+					{volist name="schools" id="vo"}
+					  <option value="{$vo.id}" {if condition="$vo.id==$schoolId"}selected='selected'{/if}>{$vo.name}</option>
+					{/volist}
+					</select>
+				</th>
+				<th>
+					<select id="status" style='border:0;background:#f5fafe none repeat scroll 0 0;'>
+					  <option value="-1" >状态</option>
+					{volist name="classStatus" id="vo"}
+					  <option value="{$key}" {if condition="$key==$status"}selected='selected'{/if}>{$vo}</option>
+					{/volist}
+					</select>
+				</th>				
+				<th width="100">创建人</th>
+				<th width="100">奖励星星数</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {if($lists['data'])}{volist name="lists.data" id="vo" key='k'}
+			<tr class="text-c">
+	   			<td >{$k}</td>
+				<td>{$vo.name}</td>
+				<td>{$vo.price}</td>				
+				<td>{$vo.money}</td>
+				<td>{$vo.schoolName}</td>
+				<td>{$classStatus[$vo.status]}</td>				
+				<td>{$vo.adminName|default=''}</td>				
+				<td>{if condition="$vo.isStar==1"}{$vo.starNum}{else /}不参加{/if}</td>				
+				<td class="td-Admin">				
+				<a style="display:none" href="{:url('admin/Activity/classEdit',['id'=>$vo['id']])}" title="编辑"><i class="Hui-iconfont" id="editActivityClass_{$vo.id}">&#xe6df;</i></a>
+				<a style="text-decoration:none" class="activityClassUpdate"  va="{$vo.id}" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
+				<a title="删除" va="{$vo.id}" href="javascript:;" class="ml-5 activityClassDel" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>				
+				</td>
+			</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="9">暂无数据</td>
+        </tr>
+        {/if}
+		<tr class="text-c">
+			<td colspan="9" style="text-align: center;">
+			{$page}
+			</td>
+		</tr>
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $('#searchClassNameButton').click(function () {
+        if ($('#className').val() == '') {
+        	layer.msg('请填写课程名称!',{icon:2,time:2000});
+            return false;
+        }
+        urlshow();
+    });
+    $('#classSchoolId,#status').on('change',function(){
+		urlshow();
+	})
+    
+    function urlshow(){
+		window.location.href= "/admin/Activity/classIndex?className="+$('#className').val()+"&schoolId="+$('#classSchoolId').val()+"&status="+$('#status').val();
+   }
+
+   $(".activityClassUpdate").on('click',function(){
+		var va=$(this).attr('va');
+		$.post("/admin/Activity/isActivityAndStatus",{id:va},function(res){
+			if(res.status=='no'){
+				$('#editActivityClass_'+va).click();
+			}else{
+				layer.msg('该课程正在进行万人砍活动中或已结束,不能编辑修改！',{icon:2,time:2000})
+			}
+		})		   
+	})
+
+   $(".activityClassDel").on('click',function(){
+		var val=$(this).attr('va');
+		$.post("/admin/Activity/isActivityAndStatus",{id:val},function(res){
+			if(res.status=='no'){
+				layer.confirm('确定要删除?', {icon: 3, title:'提示'}, function(index){
+					$.post("/admin/Activity/classDel",{id:val},function(res){
+				  		if(res.status=='ok'){
+				  			layer.msg(res.msg,{icon:1,time:1200},function(){
+							  		layer_close(index);
+							  		window.location.href=location.href;
+							});
+				  		}else{
+				  			layer.msg(res.msg,{icon:2,time:1200},function(){
+							  		layer_close(index);
+							  		window.location.href=location.href;
+							});
+				  		}
+				  	})
+				})
+			}else{
+				layer.msg('该课程正在进行万人砍活动中或已结束,不能删除！',{icon:2,time:2000})
+			}
+		})   
+	})
+</script>
+{/block}
+</body>
+</html>

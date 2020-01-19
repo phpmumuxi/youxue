@@ -1,0 +1,116 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>商品订单管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 福利专区管理 <span class="c-gray en">&gt;</span> 商品订单管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="phone" placeholder="手机号" style="width:250px" class="input-text"
+               value="{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="orderButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+   <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r">共有数据：<strong>{$info['total']}</strong> 条</span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">	
+				<th width="40">序号</th>
+				<th width="120">用户名</th>
+				<th width="80">手机号</th>
+				<th width="80">商品名称</th>
+				<th width="80">价格</th>
+				<th width="140">规格</th>
+				<th width="80">
+					<select id="useStatus" style='border:0;background:  #f5fafe none repeat scroll 0 0;'>
+					  <option value="0" {eq name="$status" value='0'}selected='selected'{/eq}>状态</option>
+					  <option value="1" {eq name="$status" value='1'}selected='selected'{/eq}>已使用</option>
+					  <option value="2" {eq name="$status" value='2'}selected='selected'{/eq}>未使用</option>
+					</select>
+				</th>
+				<th width="140">使用时间</th>				
+				<th width="80">详情</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {if($info['data'])}{volist name="info.data" id="vo" key='k'}
+			<tr class="text-c">	   			
+	   			<td >{$k}</td>
+				<td>{$vo.uName}</td>
+				<td>{$vo.uPhone}</td>
+				<td>{$vo.goodsName}</td>
+				<td>{$vo.goodsPrice}</td>
+				<td>{$vo.goodsSpecif}</td>
+				<td>{php}echo $vo['status']==1?'已使用':'未使用'{/php}</td>
+				<td>{eq name="vo.status" value='1'}{$vo.useTime|date='Y-m-d H:i:s',###}{else /} /{/eq}</td>	
+				<td class="f-14"><a style="text-decoration:none"  href="javascript:;" onclick="info_show('免费领商品订单详情','/admin/GoodsOrder/info/id/{$vo.id}')" title="详情"><i class="Hui-iconfont">&#xe715;</i></a></td>
+			</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="9">暂无数据</td>
+        </tr>
+        {/if}
+        <tr class="text-c">
+            <td colspan="9" style="text-align: center">{$page}</td>
+        </tr>   
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+	function info_show(title,url){
+		layer_show(title,url);
+   }
+   $('#orderButton').click(function () {
+   		var phone = $("#phone").val();
+		var mobile = /^1[345789]{1}\d{9}$/;
+        if (phone == '') {
+	     	layer.msg('手机号必填!',{icon:2,time:2000});
+            return false;
+        }        
+	  if(phone.length!=11 || !mobile.test(phone)){	  	
+	     layer.msg('请填写正确手机号!',{icon:2,time:2000});
+	     return false;
+	  }
+        urlshow();
+    });
+   $('#useStatus').on('change',function(){
+		urlshow();
+	})
+   function urlshow(){
+		window.location.href= "/admin/GoodsOrder/index?phone=" + $('#phone').val()+ "&status="+$('#useStatus').val();
+   }
+</script>
+{/block}
+</body>
+</html>

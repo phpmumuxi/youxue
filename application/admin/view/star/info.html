@@ -1,0 +1,84 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>用户活动详情</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 星星灯管理 <span class="c-gray en">&gt;</span> 用户活动详情 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr>
+				<th colspan="10">
+                <span class="l"><button onclick="javascript:history.go(-1);" class="btn btn-success radius" type="button"> 返回</button></span>
+				<span class="r mt-5">共有数据：<strong>{$lists['total']}</strong> 条</span></th>
+			</tr>
+			<tr class="text-c">	
+				<th width="40">序号</th>
+				<th width="80">券名称</th>
+				<th width="80">券总数</th>
+				<th width="80">剩余券数</th>		
+                <th width="100">券到期时间</th>           
+                <th width="80">灯名称</th>
+                <th width="80">灯状态</th>           
+                <th width="80">星星数（规则）</th>           
+                <th width="50">第几轮</th>           
+                <th width="80">活动状态</th>           
+			</tr>
+		</thead>
+		<tbody>
+   		{if($lists['data'])}{volist name="lists.data" id="vo" key="k"}
+		<tr class="text-c">	   			
+   			<td>{$k}</td>
+			<td>{$vo.ticketName|default=''}</td>
+            <td>{$vo.num|default=''}</td>            
+            <td>{$vo.remainNum|default=''}</td>            
+            <td>{notempty name="vo.endTime"}{$vo.endTime|date='Y-m-d H:i:s',###}{/notempty}</td>          
+            <td>{$vo.lampName}</td>       
+            <td>{if condition="$vo.status==0"}未亮{elseif condition="$vo.status==1"/}已亮{elseif condition="$vo.status==2"/}已领取{elseif condition="$vo.status==3"/}已报废{else /}/{/if}</td>         
+            <td>{$vo.starNum}</td>            
+            <td>{$vo.starRound}</td>    
+            <td>{if condition="$vo.isEnd==1"}已结束{else/}进行中{/if}
+            </td>
+		</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="10">暂无数据</td>
+        </tr>
+        {/if}
+        <tr class="text-c">
+            <td colspan="10" style="text-align: center">{$page}</td>
+        </tr>
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+</body>
+</html>

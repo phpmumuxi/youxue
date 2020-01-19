@@ -1,0 +1,97 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>礼品管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 女王权杖管理 <span class="c-gray en">&gt;</span> 礼品管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+<div class="text-c">
+        <input type="text" name="" id="freeName" placeholder="礼品名称" style="width:250px" class="input-text"
+               value="{if(isset($freeName))}{$freeName}{/if}">
+        <button name="" id="freeButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	{in name='1' value='$actionType'}
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('admin/VipFree/add')}" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加礼品</a></span><span class="r">共有数据：<strong>{$info['total']}</strong> 条</span></div>{/in}
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">	
+				<th width="40">序号</th>
+				<th width="150">礼品名称</th>
+				<th width="140">列表图片</th>
+				<th width="80">有效天数</th>
+				<th width="140">创建时间</th>				
+				<th width="120">地址管理</th>				
+				<th >操作</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {if($info['data'])}{volist name="info.data" id="vo" key='k'}
+			<tr class="text-c">	   			
+	   			<td >{$k}</td>
+				<td>{$vo.name}</td>
+				<td><img style="width: 50px;height: 50px;" src="{$Think.config.imgUrl}{$vo.listImg}" class="thumbnail"></td>
+				<td>{$vo.validity}</td>
+				<td>{$vo.createTime|date='Y-m-d H:i:s',###}</td>
+				<td><a href="{:url('admin/VipFreeAdd/index',['id'=>$vo['id']])}" class="btn btn-primary radius"> 地址管理</a></td>
+				<td class="f-14">
+				{in name='2' value='$actionType'}
+				 <a title="编辑" href="{:url('admin/VipFree/edit',['id'=>$vo['id']])}"  style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>{/in} 
+				 {in name='3' value='$actionType'}
+				 <a title="删除" href="{:url('admin/VipFree/del',['id'=>$vo['id']])}" onclick="return confirm('删除须谨慎，确认要删除吗？')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+				{/in}</td>
+			</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="7">暂无数据</td>
+        </tr>
+        {/if}
+        <tr class="text-c">
+            <td colspan="7" style="text-align: center">{$page}</td>
+        </tr>
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+	$('#freeButton').click(function () {
+        if ($('#freeName').val() == '') {
+        	layer.msg('请填写礼品名称!',{icon:2,time:2000});
+            return false;
+        }
+        window.location.href = "/admin/VipFree/index?freeName=" + $('#freeName').val()
+    });
+</script>
+{/block}
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>老用户续费课程规则新增</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 课程规则管理
+    <span class="c-gray en">&gt;</span> 老用户续费课程规则新增/修改
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+    <form class="form form-horizontal" id="formSubmit" method="post" enctype="multipart/form-data" action="/admin/Course/oldCourseRuleSaveNew?id={$courseData['id']}">
+
+        <table class="table table-border table-bordered table-bg table-striped table-hover">
+            <thead class="text-c">
+                <tr>
+                    <th colspan="2">老用户续费规则</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        商户:
+                    </td>
+                    <td style="text-align: left;">
+                        <span>{$courseData['shopName']}</span>
+                    </td>
+
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        校区:
+                    </td>
+                    <td style="text-align: left;">
+                        <span>{$courseData['schoolName']}</span>
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        课程名称:
+                    </td>
+                    <td style="text-align: left;">
+                        <span>{$courseData['name']}</span>
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        课程原价/元:
+                    </td>
+                    <td style="text-align: left;">
+                        <span>{$courseData['money']}</span>
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        <span style="color: #ff0000;">* </span>
+                        老用户续费商户结算金额/元:
+                    </td>
+                    <td>
+                        <input id="shopMoney" name="shopMoney" type="text" placeholder="" class="input-text radius size-M writeMoney" value="{if condition="$ruleData"}{$ruleData['shopMoney']}{/if}">
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        <span style="color: #ff0000;">* </span>
+                        老用户续费续费受益人奖励金额/元:
+                    </td>
+                    <td>
+                        <input id="benefitMoney" name="benefitMoney" type="text" placeholder="" class="input-text radius size-M writeMoney" value="{if condition="$ruleData"}{$ruleData['benefitMoney']}{/if}">
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        <span style="color: #ff0000;">* </span>
+                        老用户续费续费推荐人奖励金额/元:
+                    </td>
+                    <td>
+                        <input id="referrerMoney" name="referrerMoney" type="text" placeholder="" class="input-text radius size-M writeMoney" value="{if condition="$ruleData"}{$ruleData['referrer']}{/if}">
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        <span style="color: #ff0000;">* </span>
+                        老用户续费续费普通会员奖励金额/元:
+                    </td>
+                    <td>
+                        <input id="lZero" name="lZero" type="text" placeholder="" class="input-text radius size-M writeMoney" value="{if condition="$ruleData"}{$ruleData['lZero']}{/if}">
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        <span style="color: #ff0000;">* </span>
+                        老用户续费续费钻石Vip奖励金额/元:
+                    </td>
+                    <td>
+                        <input id="lOne" name="lOne" type="text" placeholder="" class="input-text radius size-M writeMoney" value="{if condition="$ruleData"}{$ruleData['lOne']}{/if}">
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        <span style="color: #ff0000;">* </span>
+                        老用户续费续费皇冠Vip奖励金额/元:
+                    </td>
+                    <td>
+                        <input id="lTwo" name="lTwo" type="text" placeholder="" class="input-text radius size-M writeMoney" value="{if condition="$ruleData"}{$ruleData['lTwo']}{/if}">
+                    </td>
+                </tr>
+
+                <!--
+                <tr class="text-r">
+                    <td style="width: 14em;">
+                        <span style="color: #ff0000;">* </span>
+                        老用户续费续费三钻Vip奖励金额/元:
+                    </td>
+                    <td>
+                        <input id="lThree" name="lThree" type="text" placeholder="" class="input-text radius size-M">
+                    </td>
+                </tr>
+
+                <tr class="text-r">
+                    <td style="width: 14em;">
+                        <span style="color: #ff0000;">* </span>
+                        老用户续费续费至尊Vip奖励金额/元:
+                    </td>
+                    <td>
+                        <input id="lFour" name="lFour" type="text" placeholder="" class="input-text radius size-M">
+                    </td>
+                </tr>
+                -->
+
+                <tr class="text-r">
+                    <td style="width: 18em;">
+                        老用户续费续费最小盈利金额/元:
+                    </td>
+                    <td style="text-align: left;color: #ff0000;">
+                        <span id="miniMoney">{if condition="$ruleData"}{$ruleData['miniMoney']}{else /}0{/if}</span>
+                    </td>
+                </tr>
+
+            <tr class="text-r">
+                <td colspan="4">
+                    <input id="btnSaveInfo" style="width: 6em;" class="btn btn-danger radius" type="button" value="保存">
+                    <input id="btnGoBack" style="width: 6em;margin-left: 2em;" class="btn btn-primary radius" type="button" value="返回">
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <input type="hidden" name="classSchoolId" value="{$courseData['id']}">
+        <input type="hidden" name="name" value="{$courseData['name']}">
+        <input type="hidden" name="money" value="{$courseData['money']}" id="money">
+    </form>
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+
+<script type="text/javascript">
+    var myreg = /^[0-9]\d*$/;
+    var myreg2 = /^[0-9]+(.[0-9]{1})?$/;
+
+    $('#btnGoBack').on('click', function () {
+        layer.confirm('确认返回？', {
+            title: '提示',
+            btn: ['确认', '取消'],
+            icon: 0
+        }, function () {
+            history.go(-1);
+        }, function () {
+            layer.msg('操作已取消!');
+        });
+    });
+
+    // 保存审核规则
+    $('#btnSaveInfo').on('click', function () {
+
+        var money = parseInt($('#money').val());
+        var shopMoneyOne = parseInt($('#shopMoney').val());
+        var benefitMoneyOne = parseInt($('#benefitMoney').val());
+        var referrerMoneyOne = parseInt($('#referrerMoney').val());
+        var lZeroOne = parseInt($('#lZero').val());
+        var lOneOne = parseInt($('#lOne').val());
+        var lTwoOne = parseInt($('#lTwo').val());
+        /*
+        var lThreeMoneyOne = $('#lThreeMoneyOne').val();
+        var lFourMoneyOne = $('#lFourMoneyOne').val();
+        */
+        var miniMoneyOne = 0;
+
+        // 商户
+        if(!myreg.test(shopMoneyOne) && !myreg2.test(shopMoneyOne)){
+            layer.msg('请填写正确的商户结算金额!',{icon: 2});
+            return false;
+        }
+        if(shopMoneyOne > money){
+            layer.msg('商户结算金额不能大于课程金额!',{icon: 2});
+            return false;
+        }
+        // 受益人
+        if(!myreg.test(benefitMoneyOne) && !myreg2.test(benefitMoneyOne)){
+            layer.msg('请填写正确的受益人奖励金额!',{icon: 2});
+            return false;
+        }
+        // 推荐人
+        if(!myreg.test(referrerMoneyOne) && !myreg2.test(referrerMoneyOne)){
+            layer.msg('请填写正确的推荐人奖励金额!',{icon: 2});
+            return false;
+        }
+        // 普通会员
+        if(!myreg.test(lZeroOne) && !myreg2.test(lZeroOne)){
+            layer.msg('请填写正确的普会员通奖励金额!',{icon: 2});
+            return false;
+        }
+        // 一级会员
+        if(!myreg.test(lOneOne) && !myreg2.test(lOneOne)){
+            layer.msg('请填写正确的钻石Vip奖励金额!',{icon: 2});
+            return false;
+        }
+        // 二级会员
+        if(!myreg.test(lTwoOne) && !myreg2.test(lTwoOne)){
+            layer.msg('请填写正确的皇冠Vip奖励金额!',{icon: 2});
+            return false;
+        }
+
+        if(lOneOne > lTwoOne){
+            layer.msg('钻石Vip奖励金额不能大于皇冠Vip奖励金额!',{icon: 2});
+            return false;
+        }
+        miniMoneyOne = money - shopMoneyOne - benefitMoneyOne - referrerMoneyOne - lZeroOne - lTwoOne;
+        $('#miniMoney').text(miniMoneyOne);
+        if(miniMoneyOne <= 0){
+            alert(typeof  miniMoneyOne);
+            alert(miniMoneyOne);
+            layer.msg('最小盈利金额不能小于等于0!',{icon: 2});
+            return false;
+        }
+
+        layer.confirm('确认保存？', {
+            title: '提示',
+            btn: ['确认', '取消'],
+            icon: 0
+        }, function () {
+            $('#formSubmit').submit();
+        }, function () {
+            layer.msg('操作已取消!', {time: 1000});
+        });
+    });
+
+    $('.writeMoney').on('change',function () {
+        var miniMoneyOneTmp = 0;
+        var moneyTmp = parseInt($('#money').val())
+        var shopMoneyOneTmp = parseInt($('#shopMoney').val());
+        var benefitMoneyOneTmp = parseInt($('#benefitMoney').val());
+        var referrerMoneyOneTmp = parseInt($('#referrerMoney').val());
+        var lZeroOneTmp = parseInt($('#lZero').val());
+        var lOneOneTmp = parseInt($('#lOne').val());
+        var lTwoOneTmp = parseInt($('#lTwo').val());
+
+        if(!shopMoneyOneTmp){ shopMoneyOneTmp = 0; }
+        if(!benefitMoneyOneTmp){ benefitMoneyOneTmp = 0; }
+        if(!referrerMoneyOneTmp){ referrerMoneyOneTmp = 0; }
+        if(!lZeroOneTmp){ lZeroOneTmp = 0; }
+        if(!lOneOneTmp){ lOneOneTmp = 0; }
+        if(!lTwoOneTmp){ lTwoOneTmp = 0; }
+
+        if(lOneOneTmp > lTwoOneTmp){
+            layer.msg('钻石Vip奖励金额不能大于皇冠Vip奖励金额!',{icon: 2});
+        }
+
+        miniMoneyOneTmp = moneyTmp - shopMoneyOneTmp - benefitMoneyOneTmp - referrerMoneyOneTmp - lZeroOneTmp - lTwoOneTmp;
+
+        $('#miniMoney').text(miniMoneyOneTmp);
+        if(miniMoneyOneTmp <= 0){ layer.msg('最小盈利金额不能小于等于0！',{icon: 2});}
+    });
+</script>
+
+</body>
+</html>

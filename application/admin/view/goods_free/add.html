@@ -1,0 +1,284 @@
+{extend name="layout" /}
+{block name="body"}
+<title>添加免费商品</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    福利专区管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/GoodsFree/index')}">免费商品管理</a>
+	<span class="c-gray en">&gt;</span>
+	添加免费商品
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+	<form class="form form-horizontal" action='' enctype="multipart/form-data" method='post' id="form-goodFree-add" onsubmit='return checks()'>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>免费商品名称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+		</div>
+	</div>
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>顶部图片：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<img style="display: none;width: 150px;height: 80px;" src="" alt="" class="thumbnail" id="topImgUrl">
+				<input type="file" name="topImg" id="topImg"><span class='c-red'>推荐尺寸:1125*528</span></div>
+	</div>
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>列表图片：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<img style="display: none;width: 80px;height: 80px;" src="" alt="" class="thumbnail" id="listImgUrl">
+				<input type="file" name="listImg" id="listImg"><span class='c-red'>推荐尺寸:300*300</span></div>
+		</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>原价：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="price" name="price">
+		</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>商品类型：</label>
+		<div class="formControls col-xs-8 col-sm-9 skin-minimal radioType">
+			<div class="radio-box">
+				<input name="type" value='1' type="radio" id="type-1" checked>
+				<label for="type-1">全员免费</label>
+			</div>
+			<div class="radio-box">
+				<input type="radio" value='2' id="type-2" name="type">
+				<label for="type-2">vip免费</label>
+			</div>
+			<div class="radio-box">
+				<input type="radio" value='3' id="type-3" name="type">
+				<label for="type-3">豆豆福利</label>
+			</div>
+		</div>
+	</div>
+
+    <div class="doudou" style='display:none'>
+	    <div class="row cl doudou">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>豆豆数：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="doudou" name="doudou">
+			</div>
+		</div>
+		<div class="row cl doudou">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>VIP豆豆数：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="vipdoudou" name="vipdoudou">
+			</div>
+		</div>
+	</div>
+
+	<div class="row cl allType">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>免费领校区：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box" style="width:260px;">
+			<select class="select" name="shopId" id="shopsTypes" size="1">
+				<option value="">--请选择商户--</option>
+               {foreach $shops as $v}
+				<option value="{$v.id}">{$v.name}</option>
+		       {/foreach}
+			</select>
+			</span>
+			{foreach $schools as $vo}
+			<dl style="display:none" class="schoolType school_{$vo.shopId}">
+				<dt>
+				    <label>
+					 <input type="checkbox" value="{$vo.id}" name="schoolIds[]">
+					{$vo.name}</label>
+				</dt>
+			</dl>
+			{/foreach}
+		</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3">额外说明：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" autocomplete="off" value="" placeholder="灰姑凉领取点" id="remark" name="remark">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>规则说明：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<textarea name="intr" id="intr" cols="" rows="" class="textarea"  placeholder="说点什么..."></textarea>
+		</div>
+	</div>
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>开始时间：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<input class="input-text" type="text" id="LAY_demorange_s" placeholder="选择开始时间" name="startTime">
+			</div>
+	</div>
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>结束时间：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<input class="input-text" type="text" id="LAY_demorange_e" placeholder="选择结束时间" name="endTime">
+			</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>有效天数：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" placeholder="领取后有效时间" id="days" name="days" style="width:260px">&nbsp;天
+		</div>
+	</div>
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>图文详情：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<!-- <script id="editor" type="text/plain"></script> -->
+				<textarea name="descr" id="container"></textarea>
+			</div>
+	</div>
+
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+			<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+		</div>
+	</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+	var ue = UE.getEditor('container');
+
+//日期插件
+laydate.render({
+elem: '#LAY_demorange_s'
+    ,type: 'datetime'
+    ,format: 'yyyy-MM-dd HH:mm:ss'
+  });
+laydate.render({
+    elem: '#LAY_demorange_e'
+    ,type: 'datetime'
+    ,format: 'yyyy-MM-dd HH:mm:ss'
+  });
+
+$(function(){
+	function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+	$('#shopsTypes').on('change',function(){
+            $('.schoolType').hide();
+            $('.school_'+$(this).val()).show();
+     })
+
+    $('#topImg').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#topImgUrl").attr("src", objUrl);
+            $("#topImgUrl").show();
+        }
+    });
+
+    $('#listImg').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#listImgUrl").attr("src", objUrl);
+            $("#listImgUrl").show();
+        }
+    });
+
+	$('.radioType input').on('ifChecked', function(event){
+		if($(this).val()==3){
+            $('.doudou').show();
+		}else{
+			$('.doudou').hide();
+		}
+    });
+
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+});
+function checks(){
+	  if($("#name").val()==''){
+	     layer.msg('商品名称必填！',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#topImg").val()==''){
+	     layer.msg('请上传顶部图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#listImg").val()==''){
+	     layer.msg('请上传列表图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#price").val()==''){
+	     layer.msg('原价必填!',{icon:2,time:2000});
+	     return false;
+	  }
+
+	  if($("input[name='type']:checked").val()==3){
+		  if($("#doudou").val()==''){
+		     layer.msg('豆豆数必填！',{icon:2,time:2000});
+		     return false;
+		  }
+		  if($("#vipdoudou").val()==''){
+		     layer.msg('VIP豆豆数必填!',{icon:2,time:2000});
+		     return false;
+		  }
+	  }
+	  if($("#shopsTypes").val()==''){
+	     layer.msg('请选择商户!',{icon:2,time:2000});
+	      return false;
+	  }
+
+	  if($(".schoolType input[type='checkbox']:checked").length == 0){
+	     layer.msg('请选择校区!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#intr").val()==''){
+	     layer.msg('规则说明必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#LAY_demorange_s").val()==''){
+	     layer.msg('开始时间必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#LAY_demorange_e").val()==''){
+	     layer.msg('结束时间必填!',{icon:2,time:2000});
+	      return false;
+	  }
+	  if($("#LAY_demorange_s").val() > $("#LAY_demorange_e").val()){
+	  	layer.msg('时间错误!',{icon:2,time:2000});
+	      return false;
+	  }
+	  if($("#days").val()==''){
+	     layer.msg('有效天数必填!',{icon:2,time:2000});
+	      return false;
+	  }
+	  if(ue.getContent()==''){
+	     layer.msg('图文详情必填!',{icon:2,time:2000});
+	      return false;
+	  }
+
+	  return true;
+	}
+
+
+</script>
+{/block}
+</body>
+</html>

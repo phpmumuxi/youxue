@@ -1,0 +1,51 @@
+{extend name="layout" /}
+{block name="body"}
+<title>商户信息管理</title>
+</head>
+<body>
+
+<div class="page-container">
+
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-sort">	
+			<tbody>
+				<tr>
+					<td class="text-r" width="20%">ID：</td>
+					<td>{$info.id}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">规格图片：</td><td>
+					<img src="{$Think.config.imgUrl}{$info.specifImg}" width='100px' height='100px'></td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">用户名：</td><td>{$info.uName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">用户手机号：</td><td>{$info.uPhone}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">用户地址：</td><td>{$info.uAddress}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">商品名称：</td><td>{$info.goodsName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">价格：</td><td>{$info.goodsPrice}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">规格：</td><td>{$info.goodsSpecif}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">豆豆数：</td><td>{$info.doudou}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">领取校区：</td><td>{$info.schoolName}</td>
+				</tr>
+								
+			</tbody>
+		</table>
+	</div>
+</div>
+{/block}
+</body>
+</html>

@@ -1,0 +1,76 @@
+{extend name="layout" /}
+{block name="body"}
+<title>添加开通城市</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+   系统管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/OpenCity/index')}">城市管理</a>
+	<span class="c-gray en">&gt;</span>
+	添加开通城市
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+
+	<form class="form form-horizontal" action='' method='post' id="form-admin-add" onsubmit='return checks()'>	
+	<input type="hidden" name="cityName" value='' id='hiddenCityName'/>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择省份：</label>
+		<div class="formControls col-xs-8 col-sm-9"> 
+		 <span class="select-box" style="width:150px;">
+			<select class="select" name="province_code" id="district_province" size="1">
+				<option value="">--请选择省份--</option>
+               {foreach $provinces as $v}
+				<option value="{$v.id}">{$v.district_name}</option>
+		       {/foreach}
+			</select>
+		 </span>
+            <span class="select-box" id="district_city_span" style="width:150px;display:none">
+			<select class="select" name="cityCode" id="district_city" size="1">
+			</select>
+			</span>
+		</div>
+	</div>
+
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+		</div>
+	</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+function checks(){
+	var city_code = $("#district_city").val();
+	if(city_code ==''){
+		layer.msg('请选择开通城市！',{icon:2,time:2000});
+	     return false;
+	}
+	var city_name=$("#district_city").find("option:selected").text();
+	$("#hiddenCityName").val(city_name);
+	 return true;
+}
+$(function(){
+	$('#district_province').change(function(){
+		var province_id = $(this).val();
+		if(province_id !=''){
+			$('#district_city_span').show();
+			$.get("{:url('admin/OpenCity/getCitys')}",'province_id='+province_id,function(res){
+						$('#district_city').empty();
+		                $('#district_city').html(res);
+			});
+		}else{
+			$('#district_city_span').hide();
+		}
+    });	
+});
+</script>
+{/block}
+</body>
+</html>

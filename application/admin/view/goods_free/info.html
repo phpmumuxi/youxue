@@ -1,0 +1,80 @@
+{extend name="layout" /}
+{block name="body"}
+<title>商户信息管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    福利专区管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/GoodsFree/index')}">免费商品管理</a>
+	<span class="c-gray en">&gt;</span>
+	免费商品详情
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-sort">	
+			<tbody>
+				<tr>
+					<td class="text-r" width="20%">顶部图片：</td><td>
+					<img src="{$Think.config.imgUrl}{$info.topImg}" width='100px' height='100px'></td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">列表图片：</td><td>
+					<img src="{$Think.config.imgUrl}{$info.listImg}" width='100px' height='100px'></td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">ID：</td><td>{$info.id}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">商品名称：</td><td>{$info.name}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">创建时间：</td><td>{$info.createTime}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">原价：</td><td>{$info.price}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">开始时间：</td><td>{$info.startTime}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">结束时间：</td><td>{$info.endTime}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">商品类型：</td><td>{$info.type}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">豆豆数：</td><td>{$info.doudou}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">VIP豆豆数：</td><td>{$info.vipdoudou}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">商户：</td><td>{$info.shopName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">领取点学校：</td><td>{$info.schoolName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">库存：</td><td>{$info.num}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">已领取数：</td><td>{$info.getNum}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">规则说明：</td><td>{$info.intr}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">额外说明：</td><td>{$info.remark}</td>
+				</tr>
+								
+			</tbody>
+		</table>
+	</div>
+</div>
+{/block}
+</body>
+</html>

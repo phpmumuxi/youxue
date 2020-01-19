@@ -1,0 +1,75 @@
+{extend name="layout" /}
+{block name="body"}
+<title>优选品牌添加</title>
+</head>
+<body>
+<article class="page-container">
+	<div class="form form-horizontal">
+		<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择品牌：</label>
+		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
+			<select class="select" name="brandId" id="brandId" size="1">
+				<option value="">--请选择--</option>
+               {foreach $preferredBrands as $vo}
+				<option value="{$vo.id}">{$vo.name}</option>
+		       {/foreach}
+			</select>
+			</span> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">排序：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="100" name="sort" style="width:150px;" id="sort"><label style='color:#b3b3b3;'>（倒叙排列）</label>
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" id="addSubmitBtn" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>				
+			</div>
+		</div>
+	</div>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+	function checks(brandId){
+	  if(brandId==''){
+	     layer.msg('请选择品牌！',{icon:2,time:2000});
+	     return false;
+	  }
+	  return true;
+	}
+$('#addSubmitBtn').click(function(){
+	  var brandId = $("#brandId").val();
+	  var sort = $("#sort").val();
+	  var re = checks(brandId);
+	  if(re){
+	  	$.post("/admin/PreferredBrand/add",{brandId:brandId,sort:sort},function(res){
+	  		var _msg=res.msg;
+	  		if(res.status=='has'){
+	  			layerShowMsg(_msg,2); 			
+	  		}else if(res.status=='no'){
+	  			layerShowMsg(_msg,2);
+	  		}else if(res.status=='ok'){
+	  			layerShowMsg(_msg,1);
+	  		}else{
+	  			layerShowMsg(_msg,2);
+	  		}
+	  	})
+	  }
+
+})
+
+function layerShowMsg(msg,type){
+	layer.msg(msg,{icon:type,time:1200},function(){
+	  	layer_close();
+	});
+}
+</script>
+{/block}
+
+</body>
+</html>

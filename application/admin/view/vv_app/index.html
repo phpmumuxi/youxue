@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>app版本信息</title>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/lib/bootstrap.min.js"></script>
+	<style type="text/css" media="screen">
+		.app_div{
+			width: 60%;
+			margin:50px auto;
+			padding: 20px;
+			/*background: red;*/
+		}
+		.app_div1{
+			padding: 10px 0;
+		}
+	</style>
+</head>
+<body>
+	{if($type==1)}
+	<div class="container panel panel-primary app_div">
+		<div class="panel-heading">同城优学android_apk(now)</div>
+		<div class="panel-body">
+			<div class="app_div1">
+				android apk name <span class="label label-default">{$data['url']}</span>
+			</div>
+			<div class="app_div1">
+				android version <span class="label label-default" id="ver">{$data['version']}</span>
+			</div>
+		</div>
+		<div class="panel-heading">同城优学android_apk(update)</div>
+		<div class="panel-body">
+		<form action="/admin/VvApp/androidUpdate" method="post" enctype="multipart/form-data" >
+			<div class="form-group">
+				<label for="version">android version</label>
+				<input type="text" class="form-control" id="version" placeholder="version" name='version'>
+			</div>
+			<div class="form-group">
+				<label for="url">android apk</label>
+				<input type="file" id="url" name='url'>
+				<p class="help-block">android安卓包上传</p>
+			</div>
+			<div class="form-group">
+				<label for="explain">android 更新说明</label>
+				<textarea class="form-control" rows="3" name="explain" id='explain' placeholder="版本更新说明..."></textarea>
+			</div>
+			<button type="submit" class="btn btn-default" id='submit'>Submit</button>
+		</form>
+		</div>
+	</div>
+	{else/}
+	<div class="container panel panel-primary app_div">
+		<div class="panel-heading">同城优学ios_apk(now)</div>
+		<div class="panel-body">
+			<div class="app_div1">
+				ios version <span class="label label-default" id="ver">{$data['version']}</span>
+			</div>
+		</div>
+		<div class="panel-heading">同城优学ios_apk(update)</div>
+		<div class="panel-body">
+		<form action="/admin/VvApp/iosUpdate" method="post" enctype="multipart/form-data" >
+			<div class="form-group">
+				<label for="version">ios version</label>
+				<input type="text" class="form-control" id="version" placeholder="version" name='version'>
+			</div>
+			<div class="form-group">
+				<label for="explain">ios 更新说明</label>
+				<textarea class="form-control" rows="3" name="explain" id='explain' placeholder="版本更新说明..."></textarea>
+			</div>
+			<button type="submit" class="btn btn-default" id='submit'>Submit</button>
+		</form>
+		</div>
+	</div>
+	{/if}
+</body>
+</html>
+<script type="text/javascript">
+	$(function(){
+		$('#submit').click(function(){
+			var a = $('#explain').val().length;
+			if(a>300||a<10){
+				alert('字数范围10~300！');
+				return false;
+			}
+			if($("#ver").text()>=$("#version").val()){
+				alert('版本号不能低于当前版本！');
+				return false;
+			}
+		})
+	})
+</script>

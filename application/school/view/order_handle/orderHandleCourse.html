@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>消息提醒-优选课程</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 消息提醒
+    <span class="c-gray en">&gt;</span> 优选课程订单未处理列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.reload();" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="text-c hide">
+        <input type="text" name="searchData" id="searchData" placeholder="订单号或手机号" style="width:250px"
+               class="input-text"
+               value="{if(isset($orderNo))}{$orderNo}{/if}{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="btnSearch" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+
+    <div class="text-c hide">
+        <input type="button" va="1" class="selectOne btn btn-secondary radius" value="课程订单" >
+        <input type="button" va="2" class="selectOne btn btn-default radius" value="团购订单">
+        <input type="button" va="3" class="selectOne btn btn-default adius" value="体验课">
+        <input type="button" va="4" class="selectOne btn btn-default radius" value="星星点灯兑换课">
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <span class="l">
+                        消息提醒列表
+                    </span>
+                    <span class="r">
+                        共有数据：<strong>{$data['total']}</strong> 条
+                    </span>
+                </div>
+            </tr>
+            <tr class="text-c">
+                <th width="5">序号</th>
+                <th width="10">用户名</th>
+                <th width="20">手机号</th>
+                <th width="30">订单号</th>
+                <th width="20">名称</th>
+                <th width="5">金额/元</th>
+                <th width="10">顾问</th>
+                <th width="10">支付时间</th>
+                <th width="5">操作</th>
+            </tr>
+            </thead>
+
+            {if condition="$data['data']"}
+            <tbody>
+            {volist name="data['data']" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo.uName}</td>
+                <td>{$vo.phone}</td>
+                <td>{$vo.orderNo}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.money}</td>
+                <td>{$vo.adviserName}</td>
+                <td>{$vo['payDate']}</td>
+
+                <td>
+                    {if condition="($vo['adviserId'] == 0)"}
+                    <a href="javascript:;" title="分配顾问" class="assignPerson" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-manage2"></i><span>&nbsp;&nbsp;</span>
+                    </a>
+                    {/if}
+                    <a href="javascript:;" title="处理" class="messageHandle" va="{$vo['id']}" vb="{$vo['adviserId']}">
+                        <i class="Hui-iconfont Hui-iconfont-shenhe-tongguo"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="11" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+
+            </tbody>
+            {else /}
+
+            <tbody>
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    暂无数据
+                </td>
+            </tr>
+            </tbody>
+            {/if}
+        </table>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript">
+
+    $('#btnSearch').on('click', function () {
+        var orderNoOrPhone = $('#searchData').val();
+        if (!orderNoOrPhone) {
+            return false;
+        }
+
+        if (/^1(3|4|5|7|8)\d{9}$/.test(orderNoOrPhone)) {
+            window.location.href = '/school/Course/courseList?phone=' + orderNoOrPhone;
+        }else {
+            window.location.href = '/school/Course/courseList?orderNo=' + orderNoOrPhone;
+        }
+    });
+
+    // 分配顾问
+    $('.assignPerson').on('click', function () {
+        var t = $(this);
+        var courseOrderId = $(this).attr('va');
+        if (courseOrderId) {
+            $.post('/school/OrderHandle/schoolAdviserList', {id: courseOrderId}, function (res) {
+                console.log(res);
+                if (res.status == 'ok') {
+                    var _html = '<div style="width: 100%;text-align: center;margin-top: 2em;">'
+                        + '<select class="select" style="width: 90%;height: 2em;line-height: 2em;" id="adviserSelect" name="adviserSelect">'
+                        + '<option value="0">选择顾问</option>';
+                    $.each(res.data, function (k, v) {
+                        _html += '<option value="' + v['id'] + '">' + v['name'] + '</option>';
+                    });
+                    _html += '</select>'
+                        + '<div style="position: absolute;bottom: 1em;right: 2em;">'
+                        + '<input id="adviserSure" style="width: 6em;background-color: #ff0000;border-color: #ff0000;" class="btn radius btn-secondary" type="button" value="确认">'
+                        + '<input id="adviserCancel" style="width: 6em;margin-left: 2em;background-color: #eee;border-color: #eee;color: #000000;" class="btn btn-warning radius" type="button" value="取消">'
+                        + '</div>'
+                        + '</div>';
+                    layer.open({
+                        type: 1,
+                        title: '分配顾问',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['420px', '240px'], //宽高
+                        content: _html
+                    });
+                    $('#adviserCancel').on('click', function () {
+                        layer.closeAll();
+                    });
+                    $('#adviserSure').on('click', function () {
+                        var bpId = $('#adviserSelect').val();
+                        // 获取option的值
+                        var bpName = $('#adviserSelect option:selected').text();
+                        if (bpId != 0 && bpId != '') {
+                            $.post('/school/OrderHandle/assignAdviser', {
+                                adviserId: bpId,
+                                id: courseOrderId,
+                                type: 1
+                            }, function (res) {
+                                if (res.status == 'ok') {
+                                    t.parent().prev().prev().text(bpName);
+                                    t.next().attr('vb',bpId);
+                                    t.hide();
+                                    layer.closeAll();
+                                    layer.msg('顾问已分配!', {time: 3000});
+//                                    window.location.href = location.href;
+                                } else {
+                                    layer.msg('操作失败!');
+                                }
+                            }, 'json');
+                        } else {
+                            layer.msg('请选择顾问!');
+                        }
+                    });
+                } else if (res.status == 'false') {
+                    layer.msg('无顾问信息!');
+                }
+            }, 'json');
+        } else {
+            layer.msg('操作异常!');
+        }
+    });
+
+    // 处理消息
+    $('.messageHandle').click(function () {
+        var t = $(this);
+        layer.confirm('确认处理？', {
+            title: '提示',
+            btn: ['确认','取消'] //按钮
+        }, function(){
+
+            // 订单id
+            var id = t.attr('va');
+            // 订单顾问id
+            var adviserId = t.attr('vb');
+
+            if(!adviserId || adviserId == 0){
+                layer.msg('请先分配顾问!');
+                return false;
+            }
+
+            $.post('/school/OrderHandle/handleOrder',{id: id,type: 1},function (res) {
+                if(res.status == 'ok'){
+                    layer.msg('操作成功!');
+                    setTimeout(function () {
+                        window.location.reload();
+                    },500);
+                }else{
+                    layer.msg('操作失败!');
+                }
+            },'json');
+
+        }, function(){
+            layer.msg('操作已取消!');
+        });
+    });
+</script>
+
+</body>
+</html>

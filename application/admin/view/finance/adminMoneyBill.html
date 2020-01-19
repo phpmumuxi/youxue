@@ -1,0 +1,96 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>校区收入详情</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    财务管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/Finance/adminMoney')}">平台收入统计管理</a>
+	<span class="c-gray en">&gt;</span>
+	校区收入详情
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('admin/Finance/adminMoney')}" class="btn btn-success radius"> 返回</a> </span><span class="r">共有数据：<strong>{$lists['total']}</strong> 条</span></div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="60">序号</th>
+					<th width="200">
+						<select id="schoolId" style='border:0;background:#f5fafe none repeat scroll 0 0;'>
+			                    <option value="0">分校</option>
+			                    {foreach $schools as $v}
+			                    <option value="{$v.id}" {if condition="$v.id==$schoolId"}selected='selected'{/if}>{$v.name}</option>
+			                    {/foreach}
+			         </select>
+					</th>
+					<th width="100">总收入</th>
+					<th width="100">已出账</th>
+					<th width="100">未出账</th>
+					<th width="80">详情</th>
+				</tr>
+			</thead>
+			<tbody>
+			{if($lists['data'])}{volist name="lists.data" id="vo" key='k'}
+				<tr class="text-c">
+					<td>{$k}</td>
+					<td>{$vo.name}</td>
+					<td>{$vo.onMoney+$vo.offMoney}</td>
+					<td>{$vo.onMoney}</td>
+					<td>{$vo.offMoney}</td>
+					<td><a href="{:url('admin/Finance/adminMoneyDetailBill',['id'=>$vo['id'],'shopId'=>$datas['id'],'sTime'=>$datas['sTime'],'eTime'=>$datas['eTime']])}" title="账单详情"><i class="Hui-iconfont">&#xe63a;</i></a></td>
+				</tr>
+				{/volist}
+				{else /}
+                <tr class="text-c">
+                    <td colspan="6">暂无数据</td>
+                </tr>
+                {/if}
+				<tr class="text-c">
+					<td colspan="6" style="text-align: center;">
+					{$page}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+$('#schoolId').on('change',function(){
+     window.location.href = (location.href.split('?'))[0]+"?schoolId="+$('#schoolId').val();
+})
+</script>
+{/block}
+</body>
+</html>

@@ -1,0 +1,181 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>活动列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 万人砍管理 <span class="c-gray en">&gt;</span> 活动列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="activityName" placeholder="活动名称" style="width:250px" class="input-text"
+               value="{if(isset($activityName))}{$activityName}{/if}">
+        <button name="" id="searchActivityNameButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('admin/Activity/activityAdd')}" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加万人砍活动</a></span> <span class="r">共有数据：<strong>{$lists['total']}</strong> 条</span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">
+				<th width="40">序号</th>
+				<th width="90">活动名称</th>
+				<th width="80">创建者</th>
+				<th width="110">开始时间</th>
+				<th width="110">结束时间</th>
+				<th width="80">原价</th>
+				<th width="80">活动价格</th>
+				<th>
+					<select id="status" style='border:0;background:#f5fafe none repeat scroll 0 0;'>
+					  <option value="-1" >活动状态</option>
+					{volist name="activityStatus" id="vo"}
+					  <option value="{$key}" {if condition="$key==$status"}selected='selected'{/if}>{$vo}</option>
+					{/volist}
+					</select>
+				</th>				
+				<th width="70">库存总量</th>
+				<th width="70">剩余库存量</th>
+				<th width="70">卖出的量</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {if($lists['data'])}{volist name="lists.data" id="vo" key='k'}
+			<tr class="text-c">
+	   			<td >{$k}</td>
+				<td>{$vo.name}</td>
+				<td>{$vo.adminName}</td>
+				<td>{if condition="$vo.startTime > 1000"}{$vo.startTime|date='Y-m-d H:i',###}{/if}</td>			
+				<td>{if condition="$vo.endTime > 1000"}{$vo.endTime|date='Y-m-d H:i',###}{/if}</td>				
+				<td>{$vo.price}</td>				
+				<td>{$vo.money}</td>
+				<td>{$activityStatus[$vo.status]}</td>
+				<td>{$vo.stock}</td>
+				<td>{$vo.surplus}</td>
+				<td>{$vo.sellNum}</td>
+				<td class="td-Admin">				
+				{if condition='$time < $vo.startTime'}<a style="text-decoration:none"  href="{:url('admin/Activity/activityEdit',['id'=>$vo['id']])}" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>{/if}
+				<a vaId="{$vo.id}" vaNum="{$vo.surplus|default=0}" href="javascript:;" title="编辑剩余库存量" class="activitySurplusButton"><i class="Hui-iconfont">&#xe60c;</i></a>
+				{if condition='$vo.status != 3'}<a title="删除下架" va="{$vo.id}" href="javascript:;" class="ml-5 activityDelButton" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>{/if}				
+				</td>
+			</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="12">暂无数据</td>
+        </tr>
+        {/if}
+		<tr class="text-c">
+			<td colspan="12" style="text-align: center;">
+			{$page}
+			</td>
+		</tr>
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $('#searchActivityNameButton').click(function () {
+        if ($('#activityName').val() == '') {
+        	layer.msg('请填写活动名称!',{icon:2,time:2000});
+            return false;
+        }
+        urlshow();
+    });
+    $('#status').on('change',function(){
+		urlshow();
+	})
+    
+    function urlshow(){
+		window.location.href= "/admin/Activity/activityIndex?activityName="+$('#activityName').val()+"&status="+$('#status').val();
+   }
+
+   $(".activitySurplusButton").on('click',function(){
+		var id=$(this).attr('vaId');
+		var num=$(this).attr('vaNum');
+		var _html = '<div style="width: 100%;text-align: center;margin-top: 2em;"><input id="surplus" value="'+num+'" style="width: 90%;height:3em">';
+	         _html +=
+	             '<div style="position: absolute;bottom: 1em;right: 2em;">'
+	            + '<input id="activitySurplusCancel" style="width: 6em;" class="btn btn-warning radius" type="button" value="取消">'
+	            + '<input id="activitySurplusSure" style="width: 6em;margin-left: 2em;" class="btn radius btn-secondary" type="button" value="确认">'
+	            + '</div>'
+	            + '</div>';
+	        layer.open({
+	            type: 1,
+	            title: '编辑剩余库存量',
+	            skin: 'layui-layer-rim',
+	            area: ['400px', '220px'],
+	            content: _html
+	        });
+	        $('#activitySurplusCancel').on('click', function () {
+	            layer.closeAll();
+	        });
+		   $('#activitySurplusSure').on('click', function () {
+			     var surplus = $.trim($("#surplus").val());
+			     if(surplus){
+			     	if(!isNaN(surplus) && parseInt(surplus)>=0){     		
+				     	$.post("/admin/Activity/activitySurplusEdit",{id:id,num:surplus},function(res){
+					  		if(res.status=='ok'){
+					  			layerShowMsg(res.msg,1);
+					  		}else{
+					  			layerShowMsg(res.msg,2);
+					  		}
+				  		})
+			     	}else{
+			     		layer.msg('剩余库存量为正整数!',{icon:2,time:2000});
+			     	}
+			     }else{
+			     	layer.msg('请填写剩余库存量!',{icon:2,time:2000});
+			     }
+			})
+	})
+	
+   $(".activityDelButton").on('click',function(){
+		var val=$(this).attr('va');
+		layer.confirm('删除会后下架,确定要删除该活动嘛?', {icon: 3, title:'提示'}, function(index){
+			$.post("/admin/Activity/activityDel",{id:val},function(res){
+		  		if(res.status=='ok'){
+		  			layerShowMsg(res.msg,1);		  	
+		  		}else{
+		  			layerShowMsg(res.msg,2);
+		  		}
+		  	})
+		})    
+	})
+   
+   function layerShowMsg(msg,type){
+		layer.msg(msg,{icon:type,time:1200},function(){
+		  		layer.closeAll();
+		  		window.location.href=location.href;
+		});
+	}
+</script>
+{/block}
+</body>
+</html>

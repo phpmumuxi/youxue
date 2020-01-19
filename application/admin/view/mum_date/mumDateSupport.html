@@ -1,0 +1,135 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+    .pagination {
+        list-style-type: none;
+        display: inline-block;
+        overflow: auto;
+    }
+
+    .pagination li {
+        float: left;
+        /*padding: 6px 12px;*/
+        border: 1px solid #e1e2e3;
+        margin: 3px;
+    }
+
+    .pagination li a, .pagination li span {
+        display: inline-block;
+        padding: 6px 12px;
+    }
+
+    .pagination li:hover {
+        border: 1px solid #38f;
+        background: #f2f8ff;
+    }
+
+    .pagination .active {
+        border: 1px solid #38f;
+    }
+</style>
+{/block}
+{block name="body"}
+<title>妈妈约赞助管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 妈妈约管理 <span
+        class="c-gray en">&gt;</span> 妈妈约赞助列表 <a class="btn btn-success radius r"
+                                                 style="line-height:1.6em;margin-top:3px"
+                                                 href="javascript:window.location.href = '/admin/MumDate/mumDateSupport';"
+                                                 title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+
+    <div class="text-c">
+        开始时间: <input type="text" name="aTime" id="aTime" placeholder="开始时间" style="width:150px" class="input-text"
+                     value="{if(isset($aTime))}{$aTime}{/if}">
+        &nbsp;
+        结束时间: <input type="text" name="bTime" id="bTime" placeholder="结束时间" style="width:150px" class="input-text"
+                     value="{if(isset($bTime))}{$bTime}{/if}">
+        <button name="" id="btnSearch" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="r">共有数据：<strong>{$info['total']}</strong> 条</span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr class="text-c">
+                <th width="10">序号</th>
+                <th width="10">活动名称</th>
+                <th width="10">发起人</th>
+                <th width="20">参与人数</th>
+                <th width="10">赞助次数</th>
+                <!--<th width="20">操作</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            {if($info['data'])}
+            {volist name="data" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo['eName']}</td>
+                <td>{$vo['uName']}</td>
+                <td>{$vo['winNum']}</td>
+                <td>{$vo['supportNum']}</td>
+                <!--<td>-->
+                <!--<a href="javascript:;" va="{$vo['id']}" class="seeDetail" title="更多">-->
+                <!--<i class="Hui-iconfont Hui-iconfont-gengduo"></i>-->
+                <!--</a>-->
+                <!--</td>-->
+            </tr>
+            {/volist}
+            {else /}
+            <tr class="text-c">
+                <td colspan="11">暂无数据</td>
+            </tr>
+            {/if}
+            <tr class="text-c">
+                <td colspan="11" style="text-align: center">{$pages}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+<script src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+    laydate.render({
+        elem: '#aTime',
+        value: '{$aTime}',
+        max: '{$cTime}'
+    });
+    laydate.render({
+        elem: '#bTime',
+        value: '{$bTime}',
+        max: '{$cTime}'
+    });
+
+    $('#btnSearch').on('click', function () {
+        var aTime = $('#aTime').val();
+        var bTime = $('#bTime').val();
+
+        if (!/\d{4}-\d{2}-\d{2}/.test(aTime)) {
+            layer.msg('请选择或填写正确是时间!');
+            return false;
+        }
+
+        if (!/\d{4}-\d{2}-\d{2}/.test(bTime)) {
+            layer.msg('请选择或填写正确是时间!');
+            return false;
+        }
+
+        if (aTime > bTime) {
+            layer.msg('开始时间不能大于结束时间!');
+            return false;
+        }
+
+        window.location.href = '/admin/MumDate/mumDateSupport?aTime=' + aTime + '&bTime=' + bTime;
+    });
+</script>
+{/block}
+</body>
+</html>

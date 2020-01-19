@@ -1,0 +1,110 @@
+﻿{extend name="layout" /}
+{block name="body"}
+<title>免费商品库存管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 福利专区管理 <span class="c-gray en">&gt;</span> 免费商品库存管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('admin/GoodsStock/add',['goodsId'=>$goods['id']])}" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加商品库存</a></span><span class="r"><button onclick="javascript:window.location.href='/admin/GoodsFree/index';" class="btn btn-success radius" type="button"> 返回</button></span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">	
+				<th width="60">库存ID</th>
+				<th width="120">商品名称</th>
+				<th width="140">图片</th>				
+				<th width="100">库存</th>
+				<th width="100">规格</th>
+				<th >操作</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {volist name="stocks" id="vo"}
+			<tr class="text-c">	   			
+	   			<td >{$vo.id}</td>
+				<td>{$vo.goodsName}</td>
+				<td><img src="{$Think.config.imgUrl}{$vo.img}" width='50px' height='50px'></td>
+				<td>{$vo.num}</td>
+				<td>{$vo.specif}</td>
+				<td class="f-14">
+				{if condition="(strtotime($goods['startTime'])>time())"}
+				 <a title="编辑" href="{:url('admin/GoodsStock/edit',['id'=>$vo['id']])}"  style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> 
+				<a style="text-decoration:none" class="ml-5" href="javascript:;" onclick="stock_del('{$vo.goodsId}','{$vo.id}','{$vo.num}')" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>{/if}				
+				</td>
+			</tr>
+	   {/volist}	   
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+	function info_show(title,url){
+		layer_show(title,url);
+   }
+   function upGoodsFree(num){
+   		if(num <= 0){
+			layer.msg('请先添加库存数量',{icon:2,time:2000});
+			return false;
+   		}
+   		if (confirm("您确定要上架吗？")) {
+            return true;
+        } else {
+           return false;
+        }
+   }
+   function downGoodsFree(startTime,endTime){
+   		var nowtime = $("#nowtime").val();
+   		if(startTime < nowtime && endTime > nowtime ){   			 
+            if (confirm("活动正在进行中,您确定要下架吗？")) {
+                return true;
+            } else {
+               return false;
+            }
+        }else{
+            if (confirm("您确定要下架吗？")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+   }
+
+   function stock_del(goodsId,id,num){        
+        $.get("{:url('admin/GoodsStock/selGoodsFree')}",{'goodsId':goodsId},function(res){
+            if((res-num)==0){
+                if (confirm("删除后，商品下架。您确定要删除吗？")) {
+                    $.get("{:url('admin/GoodsStock/delStock')}",{'goodsId':goodsId,'id':id,'num':num,'type':1},function(re){
+	                        if(re.code){
+								layer.msg(re.msg,{icon:1,time:2000});
+							}else{
+								layer.msg(re.msg,{icon:2,time:2000});
+							}
+	                        window.location.href=re.url
+                    });
+                } else {
+                    return false;
+                }
+            }else{
+                if (confirm("您确定要删除吗？")) {
+                    $.get("{:url('admin/GoodsStock/delStock')}",{'goodsId':goodsId,'id':id,'num':num,'type':0},function(re){
+						if(re.code){
+							layer.msg(re.msg,{icon:1,time:2000});
+						}else{
+							layer.msg(re.msg,{icon:2,time:2000});
+						}
+                        window.location.href=re.url
+                    });
+                } else {
+                    return false;
+                }       
+            }
+        })
+    }
+</script>
+{/block}
+</body>
+</html>

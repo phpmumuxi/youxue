@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>线下预订列表</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 线下预订管理
+    <span class="c-gray en">&gt;</span> 线下预订列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.href = '/school/OrderSubscribe/orderSubscribeList';" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray">
+        <span class="l">
+            <a href="javascript:;" class="btn btn-primary radius" id="newAdd">
+                <i class="Hui-iconfont">&#xe600;</i> 填写线下订单
+            </a>
+
+            <a href="javascript:;" class="btn btn-warning radius" id="newAddZero">
+                <i class="Hui-iconfont">&#xe600;</i> 零元预订
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <th scope="col" colspan="15">线下预订列表</th>
+            </tr>
+            <tr class="text-c">
+                <th width="5">序号</th>
+                <th width="5">用户</th>
+                <th width="20">手机</th>
+                <th width="10">支付金额/元</th>
+                <th width="10">支付方式</th>
+                <th width="20">支付信息</th>
+                <th width="10">订单类型</th>
+                <th width="10">备注</th>
+                <th width="10">顾问</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {if condition="($data['data'])"}
+            {volist name="data['data']" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo['uName']}</td>
+                <td>{$vo['phone']}</td>
+                <td>{$vo['money']}</td>
+                <td>
+                    {if condition="($vo['payType'] == 1)"}
+                    支付宝
+                    {elseif condition="($vo['payType'] == 2)"}
+                    微信
+                    {elseif condition="($vo['payType'] == 3)"}
+                    POS机
+                    {elseif condition="($vo['payType'] == 4)"}
+                    其他
+                    {/if}
+                </td>
+                <td>{$vo['orderInfo']}</td>
+                <td>
+                    {if condition="($vo['orderType'] == 1)"}
+                    订金
+                    {elseif condition="($vo['orderType'] == 2)"}
+                    尾款或分笔
+                    {/if}
+                </td>
+                <td>
+                    {if condition="($vo['mark'])"}
+                    {$vo['mark']}
+                    {else/}
+                    无
+                    {/if}
+                </td>
+
+                <td>
+                    {$vo['adviserName']}
+                </td>
+
+                <td>
+                    {if condition="($vo['isDone'] == 0)"}
+                        {if condition="($vo['orderType'] == 1)"}
+                        <a href="javascript:;" title="填写尾款" class="someAddMoney" va="{$vo.id}">
+                            <i class="Hui-iconfont Hui-iconfont-add f-16"></i>
+                        </a>
+                        <span>&nbsp;&nbsp;</span>
+                        {/if}
+                    <a href="javascript:;" title="修改" class="someEdit" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-edit f-16"></i>
+                    </a>
+                    <span>&nbsp;&nbsp;</span>
+                    <a href="javascript:;" title="删除" class="someDelete" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-del3 f-16"></i>
+                    </a>
+                        {if condition="($vo['orderType'] == 2)"}
+                            <span>&nbsp;&nbsp;</span>
+                            <a href="javascript:;" title="导入个人订单" class="someSave" va="{$vo.id}">
+                                <i class="Hui-iconfont Hui-iconfont-daoru f-16"></i>
+                            </a>
+                        {/if}
+                    {/if}
+                </td>
+            </tr>
+            {/volist}
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+
+            {else /}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    暂无数据
+                </td>
+            </tr>
+            {/if}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript" src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+
+    // 新增
+    $('#newAdd').on('click',function () {
+        window.location.href = '/school/OrderSubscribe/addOrderSubscribe';
+    });
+
+    // 新增零元预订
+    $('#newAddZero').on('click',function () {
+        window.location.href = '/school/OrderSubscribe/addOrderSubscribeZero';
+    });
+
+    // 修改
+    $('.someEdit').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+        window.location.href = '/school/OrderSubscribe/editOrderSubscribe?id='+ id;
+    });
+
+    // 删除
+    $('.someDelete').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+
+        layer.confirm('确认删除当前线下订单记录？', {
+            btn: ['确认','取消']
+        }, function(){
+            $.post('/school/OrderSubscribe/deleteOrderSubscribe',{id: id},function (res) {
+                if(res.status == 'ok'){
+                    layer.msg('操作成功!');
+                    setTimeout(function () {
+                        window.location.reload();
+                    },500);
+                }else if(res.status == 'errHad'){
+                    layer.msg('请先删除尾款记录!');
+                }else{
+                    layer.msg('操作失败!');
+                }
+            },'json');
+        }, function(){
+        });
+    });
+
+    // 导入
+    $('.someSave').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+
+        $.post('/school/OrderSubscribe/courseList',{id: id},function (res) {
+            if(res.status == 'ok') {
+                var _html = '<div style="width: 100%;text-align: center;margin-top: 2em;">'
+                    +'<div style="text-align: left;margin-left: 2em;">'
+                    + '<span>是否续费用户:&nbsp;&nbsp;&nbsp;</span>'
+                    + '<input id="oldA" type="radio" name="isOldCustom" value="1">'
+                    + '<label for="oldA">是</label>'
+                    + '<span>&nbsp;&nbsp;</span>'
+                    + '<input id="oldB" type="radio" name="isOldCustom" value="2">'
+                    + '<label for="oldB">否</label>'
+                    + '</div>'
+                    + '<select class="select" style="width: 90%;height: 2em;line-height: 2em;" id="courseSelect" name="courseSelect">'
+                    + '<option value="-1">选择课程</option>';
+
+                $.each(res.data, function (k, v) {
+                    _html += '<option value="' + v['id'] + '">' + v['name'] + '金额: '+ v['money'] + '&nbsp;&nbsp;续费金额: '+ v['againMoney'] +'</option>';
+                });
+
+                _html += '</select>'
+                    + '<div style="position: absolute;bottom: 1em;right: 2em;">'
+                    + '<input id="adviserSure" style="width: 6em;background-color: #ff0000;border-color: #ff0000;" class="btn radius btn-secondary" type="button" value="确认">'
+                    + '<input id="adviserCancel" style="width: 6em;margin-left: 2em;background-color: #eee;border-color: #eee;color: #000000;" class="btn btn-warning radius" type="button" value="取消">'
+                    + '</div>'
+                    + '</div>';
+
+                layer.open({
+                    title: '提示',
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['520px', '340px'],
+                    content: _html
+                });
+
+                $('#adviserSure').on('click',function () {
+                    var isOld = $('input[name="isOldCustom"]:checked').val();
+                    if(!isOld){
+                        layer.msg('请选择是否是续费用户!');
+                        return false;
+                    }
+
+                    var courseId = $('#courseSelect').val();
+                    if(courseId == -1){
+                        layer.msg('请选择课程!');
+                        return false;
+                    }
+
+                    layer.confirm('确认签约并导入到用户订单？', {
+                        btn: ['确认','取消']
+                    }, function() {
+                        $.post('/school/OrderSubscribe/doneOrderSubscribe',{id: id,courseId: courseId,isOld: isOld},function (ret) {
+                            if(ret.status == 'ok'){
+                                layer.closeAll();
+                                layer.msg('操作成功!');
+                                setTimeout(function () {
+                                    window.location.reload();
+                                },500);
+                            }else if(ret.status == 'errMoney'){
+                                layer.msg('已付金额与课程金额不符!');
+                            }else{
+                                layer.msg('操作失败!');
+                            }
+                        },'json');
+                    });
+                });
+
+                $('#adviserCancel').on('click',function () {
+                    layer.closeAll();
+                });
+            }else{
+                layer.msg('操作异常!');
+            }
+        },'json');
+
+        /*
+        layer.confirm('确认线下订单已支付全部金额，并导入到用户订单？', {
+            btn: ['确认','取消']
+        }, function(){
+            $.post('/school/OrderSubscribe/doneOrderSubscribe',{id: id},function (res) {
+                if(res.status == 'ok'){
+                    layer.msg('操作成功!');
+                    setTimeout(function () {
+                        window.location.reload();
+                    },500);
+                }else{
+                    layer.msg('操作失败!');
+                }
+            },'json');
+        }, function(){
+        });
+        */
+    });
+
+    // 新增尾款
+    $('.someAddMoney').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+        window.location.href = '/school/OrderSubscribe/addOrderSubscribeMoney?id=' + id;
+    });
+</script>
+
+</body>
+</html>

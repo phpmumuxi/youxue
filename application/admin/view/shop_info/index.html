@@ -1,0 +1,118 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>商户信息管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    商户管理
+	<span class="c-gray en">&gt;</span>
+	商户信息
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="shopName" placeholder="商户名" style="width:250px" class="input-text"
+               value="{if(isset($shopName))}{$shopName}{/if}">
+        <button name="" id="searchButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="50">序号</th>
+					<th >商户名称</th>
+					<th width="80">
+						<select id="bankType" style='border:0;background:  #f5fafe none repeat scroll 0 0;'>
+					  <option value="0" {eq name="$type" value='0'}selected='selected'{/eq}>类型</option>
+					  <option value="2" {eq name="$type" value='2'}selected='selected'{/eq}>私人</option>
+					  <option value="1" {eq name="$type" value='1'}selected='selected'{/eq}>对公</option>
+					</select>
+					</th>
+					<th width="100">
+						<select id="useStatus" style='border:0;background:  #f5fafe none repeat scroll 0 0;'>
+					  <option value="0" {eq name="$status" value='0'}selected='selected'{/eq}>状态</option>
+					  <option value="1" {eq name="$status" value='1'}selected='selected'{/eq}>已上架</option>
+					  <option value="2" {eq name="$status" value='2'}selected='selected'{/eq}>已下架</option>
+					  <option value="5" {eq name="$status" value='5'}selected='selected'{/eq}>待上架</option>
+					</select>
+					</th>
+					<th width="100">详情</th>
+					<th width="100">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+			{volist name="lists.data" id="vo" key='k'}
+				<tr class="text-c">
+					<td>{$k}</td>
+					<td class="text-l">{$vo.name}</td>
+					<td>{eq name="vo.bankType" value="1"}对公{else /}私人{/eq}</td>
+					<td>{if condition="$vo.status==1"}已上架{elseif condition="$vo.status==2"/}已下架{elseif condition="$vo.status==3"/}已删除{else /}待上架{/if}</td>
+					<td class="f-14 product-brand-manage">					
+					<a style="text-decoration:none"  href="javascript:;" onclick="info_show('商户详情','/admin/ShopInfo/info/id/{$vo.id}')" title="详情"><i class="Hui-iconfont">&#xe715;</i></a></td>
+					<td class="f-14 product-brand-manage">
+					{in name='5' value='$actionType'}{in name="vo['status']" value='0,2'}
+					<a style="text-decoration:none"  href="{:url('admin/ShopInfo/upShop',['id'=>$vo['id']])}" onclick="return confirm('确认该商户上架吗？')" title="上架"><i class="Hui-iconfont">&#xe6dc;</i></a> {/in}{/in}
+					{in name='6' value='$actionType'}{eq name="vo['status']" value='1'}
+					<a style="text-decoration:none" class="ml-5" href="{:url('admin/ShopInfo/downShop',['id'=>$vo['id']])}" onclick="return confirm('确认该商户下架吗？')" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>{/eq}{/in}</td>
+				</tr>
+				{/volist}
+				<tr class="text-c">
+                    <td colspan="10" style="text-align: center">{$page}</td>
+                </tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+	function info_show(title,url){
+		layer_show(title,url);
+   }
+   $('#searchButton').click(function () {
+        if ($('#shopName').val() == '') {
+        	layer.msg('请填写商户名!',{icon:2,time:2000});
+            return false;
+        }
+        urlshow();
+    });
+    $('#useStatus,#bankType').on('change',function(){
+		urlshow();
+	})
+	
+	function urlshow(){
+		window.location.href= "/admin/ShopInfo/index?shopName=" + $('#shopName').val()+ "&status="+$('#useStatus').val()+ "&type="+$('#bankType').val();
+   }
+</script>
+{/block}
+</body>
+</html>

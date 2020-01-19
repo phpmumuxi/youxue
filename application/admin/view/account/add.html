@@ -1,0 +1,148 @@
+{extend name="layout" /}
+{block name="body"}
+<title>商户账号添加</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    财务管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/Account/index')}">账号管理</a>
+	<span class="c-gray en">&gt;</span>
+	商户账号添加
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-shop-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>商户名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" id='name' name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>银行卡用户名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" id='bankUserName' name="bankUserName">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>开户行名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" id='bankName' name="bankName">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>银行卡号：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" id='bankCard' name="bankCard">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>出账时间：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			  <input type="text" class="input-text" style="width:90%" value="" placeholder="填写天数" id='time' name="time">&nbsp;&nbsp;&nbsp;天
+			</div>
+		</div>
+		<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>银行卡类型：</label>
+		<div class="formControls col-xs-8 col-sm-9 skin-minimal radioType">
+			<div class="radio-box">
+				<input name="bankType" value='1' type="radio" id="type-1" checked>
+				<label for="type-1">对公账号</label>
+			</div>
+			<div class="radio-box">
+				<input type="radio" value='2' id="type-2" name="bankType">
+				<label for="type-2">私人账号</label>
+			</div>
+		</div>
+	   </div>
+
+	   <div class="row cl adminRoleType">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择品牌：</label>
+		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
+			<select class="select" name="brandId" id="brandId" size="1">
+				<option value="">--请选择品牌--</option>
+               {foreach $brands as $vo}
+				<option value="{$vo.id}">{$vo.name}</option>
+		       {/foreach}
+			</select>
+			</span> </div>
+		</div>
+		<div class="row cl adminRoleType">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择城市：</label>
+		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
+			<select class="select" name="cityCode" id="selectCity" size="1">
+				<option value="">--请选择城市--</option>
+               {foreach $citys as $vo}
+				<option value="{$vo.cityCode}">{$vo.cityName}</option>
+		       {/foreach}
+			</select>
+			</span> </div>
+		</div>
+		<input type="hidden" id="cityName" name="cityName"/>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+                <button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="/static/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+
+	$("#selectCity").change(function(){
+		var city_name=$(this).find("option:selected").text();
+		$("#cityName").val(city_name);
+	});
+
+	$("#form-shop-add").validate({
+		rules:{
+			name:{
+				required:true,
+			},
+			bankUserName:{
+				required:true,				
+			},
+			bankName:{
+				required:true,
+			},
+			bankCard:{
+				required:true,
+				number:true,
+			 	minlength:16,
+			 	maxlength:19,
+			},
+			time:{
+				required:true,
+			},
+			brandId:{
+				required:true,
+			},
+			cityCode:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+	});
+})
+</script>
+{/block}
+
+</body>
+</html>

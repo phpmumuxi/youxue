@@ -1,0 +1,152 @@
+{extend name="layout" /}
+{block name="body"}
+<title>修改活动课程</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 万人砍管理 <span class="c-gray en">&gt;</span><a href="{:url('admin/Activity/classIndex')}">活动课程列表</a><span class="c-gray en">&gt;</span>修改活动课程<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<article class="page-container">
+	<form class="form form-horizontal" action='' method='post' onsubmit='return checks()'>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>课程名称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="{$info.name}" placeholder="" id="name" name="name">
+		</div>
+	</div>
+	
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>原价：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="{$info.price}" placeholder="课程价格" id="price" name="price">
+		</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>现价：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text"  value="{$info.money}" placeholder="课程活动价格" id="money" name="money">
+		</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择品牌：</label>
+		<div class="formControls col-xs-8 col-sm-9"> 
+			<span class="select-box" style="width:150px;">
+			<select class="select" name="brandId" id="brandId" size="1">
+				<option value="">--请选择品牌--</option>
+               {foreach $brands as $v}
+				<option value="{$v.id}" {if condition="$info.brandId==$v.id"}selected='selected'{/if}>{$v.name}</option>
+		       {/foreach}
+			</select>
+			</span>
+            <span class="select-box" style="width:150px;">
+			<select class="select" name="shopId" id="shopId" size="1">
+				<option value="">--请选择商户--</option>
+				{foreach $shops as $v}
+				<option value="{$v.id}" {if condition="$info.shopId==$v.id"}selected='selected'{/if}>{$v.name}</option>
+				{/foreach}
+			</select>
+			</span>
+			<span class="select-box" style="width:150px;">
+			<select class="select" name="schoolId" id="schoolId" size="1">
+				<option value="">--请选择校区--</option>
+				{foreach $schools as $v}
+				<option value="{$v.id}" {if condition="$info.schoolId==$v.id"}selected='selected'{/if}>{$v.name}</option>
+				{/foreach}
+			</select>
+			</span>
+		</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>课程详情：</label>
+		<div class="formControls col-xs-8 col-sm-9">				
+			<textarea name="content" id="classContainer">{$info.content|htmlspecialchars_decode}</textarea>
+		</div>
+	</div>
+
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+		</div>
+	</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+$('#brandId').change(function(){
+	var brandId=parseInt($(this).val());
+	if(brandId>0){
+		$.post("/admin/Activity/getAjaxDatas",{id:brandId,type:'1'},function(res){
+			$('#shopId').empty();
+	        $('#shopId').html(res);
+	        $('#schoolId').empty();
+			$('#schoolId').html('<option value="">--请选择校区--</option>');
+	    });
+	}else{
+		$('#shopId').empty();
+		$('#shopId').html('<option value="">--请选择商户--</option>');
+		$('#schoolId').empty();
+		$('#schoolId').html('<option value="">--请选择校区--</option>');
+	}
+});
+$('#shopId').change(function(){
+	var shopId=parseInt($(this).val());
+	if(shopId>0){
+		$.post("/admin/Activity/getAjaxDatas",{id:shopId,type:'2'},function(res){
+			$('#schoolId').empty();
+	        $('#schoolId').html(res);	        
+	    });
+	}else{
+		$('#schoolId').empty();
+		$('#schoolId').html('<option value="">--请选择校区--</option>');
+	}
+});
+
+var ue = UE.getEditor('classContainer');
+function checks(){
+	  var name = $.trim($("#name").val());
+	  var price = $.trim($("#price").val());
+	  var money = $.trim($("#money").val());	  
+	  var brandId = $.trim($("#brandId").val());
+	  var shopId = $.trim($("#shopId").val());
+	  var schoolId = $.trim($("#schoolId").val());
+	  if(name==''){
+	     layer.msg('课程名称必填！',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(price==''){	  	
+	     layer.msg('原价必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(money==''){	  	
+	     layer.msg('现价必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(brandId==''){	  	
+	     layer.msg('品牌必选!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(shopId==''){	  	
+	     layer.msg('商户必选!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(schoolId==''){	  	
+	     layer.msg('校区必选!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(ue.getContent()==''){
+	     layer.msg('课程详情必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  return true;
+	}
+</script>
+{/block}
+</body>
+</html>

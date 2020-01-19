@@ -1,0 +1,95 @@
+{extend name="layout" /}
+
+{block name="body"}
+<title>添加商品库存</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    福利专区管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/GoodsFree/index')}">免费商品管理</a>
+	<span class="c-gray en">&gt;</span>
+	添加商品库存
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+	<form class="form form-horizontal" action='' enctype="multipart/form-data" method='post' id="form-goodFree-add" onsubmit='return checks()'>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>商品规格：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="specif" name="specif">
+		</div>
+	</div>
+	
+	<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>图片：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<img style="display: none;width: 100px;height: 100px;" src="" alt="" class="thumbnail" id="imgUrl">
+				<input type="file" name="img" id="img"></div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>库存：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="num" name="num">
+		</div>
+	</div>
+	
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+			<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+		</div>
+	</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+
+<script type="text/javascript">
+$(function(){
+	function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    $('#img').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#imgUrl").attr("src", objUrl);
+            $("#imgUrl").show();
+        }
+    });
+});
+function checks(){
+	  if($("#specif").val()==''){
+	     layer.msg('填写商品规格！',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#img").val()==''){	  	
+	     layer.msg('请上传图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#num").val()==''){	  	
+	     layer.msg('请填写库存!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if($("#num").val()<0){	  	
+	     layer.msg('库存为正数!',{icon:2,time:2000});
+	     return false;
+	  }
+	  return true;
+	}
+</script>
+{/block}
+</body>
+</html>

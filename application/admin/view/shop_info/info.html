@@ -1,0 +1,72 @@
+{extend name="layout" /}
+{block name="body"}
+<title>商户信息管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    商户管理
+	<span class="c-gray en">&gt;</span>
+	商户信息详情
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-sort">	
+			<tbody>
+				<tr>
+					<td class="text-r" width="20%">ID：</td><td>{$info.id}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">商户名称：</td><td>{$info.name}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">银行卡用户名称：</td><td>{$info.bankUserName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">开户行名称：</td><td>{$info.bankName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">银行卡号：</td><td>{$info.bankCard}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">出账时间：</td><td>{$info.time}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">银行卡类型：</td><td>{$info.bankType}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">创建时间：</td><td>{$info.createTime}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">品牌名称：</td><td>{$info.brandName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">学校数量：</td><td>{$info.schoolNum}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">课程数量：</td><td>{$info.classNum}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">商户余额：</td><td>{$info.money}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">创建人：</td><td>{$info.createName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">所在城市：</td><td>{$info.cityName}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">城市码：</td><td>{$info.cityCode}</td>
+				</tr>
+				<tr>
+					<td class="text-r" width="20%">状态：</td><td>{$info.status}</td>
+				</tr>				
+			</tbody>
+		</table>
+	</div>
+</div>
+{/block}
+</body>
+</html>

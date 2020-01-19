@@ -1,0 +1,124 @@
+{extend name="layout" /}
+{block name="body"}
+<title>新建星星灯</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+   	星星灯管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/Star/index')}">星星灯列表</a>
+	<span class="c-gray en">&gt;</span>
+	新建星星灯
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal"  enctype="multipart/form-data" onsubmit='return checks()'>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>星星灯名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="白羊" id='name' name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">图片：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<img style="display: none;width: 100px;height: 100px;" src="" alt="" class="thumbnail" id="imgUrl">
+				<input type="file" name="img" id="img"><span class='c-red'>推荐尺寸:200*200</span></div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">星星灯等级：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="1" id="level" name="level">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">亮灯所需星星数：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="100" id="starNum" name="starNum">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">亮灯奖励课时数：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="5" id="classNum" name="classNum">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">亮灯所需天数：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" placeholder="30" id="days" name="days">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+				<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+	function checks(){
+	  var name = $("#name").val();
+	  var img = $("#img").val();
+	  var level = $("#level").val();
+	  var starNum = $("#starNum").val();
+	  var classNum = $("#classNum").val();
+	  var days = $("#days").val();
+	  if(name==''){
+	     layer.msg('品星星灯名称必填！',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(img==''){	  	
+	     layer.msg('请上传图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(level==''){	  	
+	     layer.msg('请填写等级!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(starNum==''){	  	
+	     layer.msg('请填写亮灯所需星星数!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(classNum==''){	  	
+	     layer.msg('请填写亮灯奖励课时数!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(days==''){	  	
+	     layer.msg('请填写亮灯所需天数!',{icon:2,time:2000});
+	     return false;
+	  }
+	  return true;
+	}
+
+	function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    $('#img').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#imgUrl").attr("src", objUrl);
+            $("#imgUrl").show();
+        }
+    });
+    
+</script>
+{/block}
+
+</body>
+</html>

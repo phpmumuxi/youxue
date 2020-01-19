@@ -1,0 +1,55 @@
+{extend name="layout" /}
+{block name="body"}
+<title>添加角色</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+   管理员管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/AdminRole/index')}">角色管理</a>
+	<span class="c-gray en">&gt;</span>
+	添加角色
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal"  onsubmit='return checks()'>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="超级管理员" id='roleName' name="roleName">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">备注(描述)：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="具有添加、删除的权限" name="remark">
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+				<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+	function checks(){
+	  var name = $("#roleName").val();
+	  if(name==''){	     
+	     layer.msg('角色名称必填！',{icon:2,time:2000});
+	     return false;
+	  }   
+	  return true;
+	}
+</script>
+{/block}
+
+</body>
+</html>

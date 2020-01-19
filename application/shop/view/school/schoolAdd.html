@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>校区新增</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+
+        #allmap {
+            width: 100%;
+            height: 350px;
+        }
+
+        #mapSure {
+            position: absolute;
+            right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 校区管理
+    <span class="c-gray en">&gt;</span> 校区新增
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+    <form class="form form-horizontal" id="formSchoolAdd" method="post" enctype="multipart/form-data"
+          action="/shop/School/schoolAddSave">
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                校区名称：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="schoolName"
+                       name="schoolName">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                校区联系人：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="userName"
+                       name="userName">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                电话：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                城市：
+            </label>
+
+            <div class="formControls col-xs-4 col-sm-3">
+				<span class="select-box">
+				<select id="citySelect" name="citySelect" class="select">
+					<option value="0">选择城市</option>
+                    {volist name="citiesOpened" id="vo"}
+					    <option value="{$vo.cityCode}">{$vo.cityName}</option>
+                    {/volist}
+				</select>
+				</span>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                具体地址：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="address"
+                       name="address">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>经纬度：</label>
+
+            <div class="formControls col-xs-3 col-sm-2">
+                <input type="text" class="input-text" value="" placeholder="" id="longitude"
+                       name="longitude">
+            </div>
+
+            <div class="formControls col-xs-3 col-sm-2">
+                <input type="text" class="input-text" value="" placeholder="" id="latitude"
+                       name="latitude">
+            </div>
+
+            <div class="formControls col-xs-3 col-sm-2">
+                <input id="mapClick" class="btn btn-primary-outline radius" type="button" value="地图选点">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                校区Logo：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <img style="display: none;width: 100px;height: 100px;" src="" alt="" class="thumbnail" id="logoUrl">
+
+                <span class="btn-upload">
+                    <a href="javascript:void(0);" class="btn btn-primary-outline radius">选择图片</a>
+                    <input type="file" name="logo" class="input-file" id="logo">
+                </span>
+                <span style="color: #ff0000;">&nbsp;&nbsp;推荐尺寸: 300*300</span>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                校区图片：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <img style="display: none;width: 200px;height: 200px;" src="" alt="" class="thumbnail" id="imgUrl">
+
+                <span class="btn-upload">
+                    <a href="javascript:void(0);" class="btn btn-primary-outline radius">选择图片</a>
+                    <input type="file" name="img" class="input-file" id="img">
+                </span>
+                <span style="color: #ff0000;">&nbsp;&nbsp;推荐尺寸: 820*396</span>
+            </div>
+        </div>
+
+        <div class="row cl tuwen">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                介绍：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <textarea name="content" id="content" cols="30" rows="10">
+				</textarea>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <button id="btnSaveInfo" class="btn btn-primary radius" type="button">
+                    <!--<i class="Hui-iconfont">&#xe632;</i>--> &nbsp;&nbsp;保存&nbsp;&nbsp;
+                </button>
+                &nbsp;
+                <button id="btnGoBack" class="btn btn-default radius" type="button">
+                    &nbsp;&nbsp;返回&nbsp;&nbsp;
+                </button>
+            </div>
+        </div>
+
+        <input type="hidden" name="cityCode" value="" id="cityCode">
+        <input type="hidden" name="cityName" value="" id="cityName">
+    </form>
+</div>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=d5lpqrbGOeo9KnuQYE2uqEjvGGyMpvgq"></script>
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript" src="/static/js/H-ui.js"></script>
+
+<!-- 配置文件 -->
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="/static/ueditor/ueditor.all.js"></script>
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+    var ue = UE.getEditor('content');
+</script>
+
+<script type="text/javascript">
+
+    $('#btnGoBack').on('click', function () {
+        layer.confirm('确认返回？', {
+            title: '提示',
+            btn: ['确认', '取消'],
+            icon: 0
+        }, function () {
+            history.go(-1);
+        }, function () {
+            layer.msg('操作已取消!', {time: 1000});
+        });
+    });
+
+    $('#mapClick').on('click', function () {
+        var address = $('#address').val();
+
+        var _html = '<div id="allmap">'
+            +'</div>'
+            +'<div style="margin-top: 5px;">'
+            +'<p>'
+            +'<br>&nbsp;地址: <input class="input-text radius size-M" type="text" name="searchAddress" id="searchAddress" value="'+ address +'" style="width: 200px;">&nbsp;&nbsp;<input id="btnAddress" class="btn btn-warning radius" type="button" value="搜索">'
+            +'<br>&nbsp;纬度: <span id="lng"></span>&nbsp;&nbsp;经度: <span id="lat"></span>'
+            +'<br><input id="mapSure" class="btn btn-primary size-M radius" type="button" value="确认" style="width: 5em;">'
+            +'</p>'
+            +'</div>';
+
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['750px', '510px'], //宽高
+            title: '地图 <span style="color: #ff0000;font-weight: bold;">(点击校区所在位置获取经纬度)</span>',
+            content: _html
+        });
+
+        var prelng = $('#longitude').val();
+        var prelat = $('#latitude').val();
+
+        $('#lng').text(prelng);
+        $('#lat').text(prelat);
+
+        var map = new BMap.Map("allmap", {enableMapClick: false});
+        map.centerAndZoom("南京", 15);
+
+        var local = new BMap.LocalSearch(map, {
+            renderOptions:{map: map}
+        });
+        local.search(address);
+
+        function showInfo(e) {
+            var lng = e.point.lng;
+            var lat = e.point.lat;
+
+            $('#lng').text(lng);
+            $('#lat').text(lat);
+        }
+
+        map.enableScrollWheelZoom(true);
+        map.addEventListener("click", showInfo);
+
+        $('#mapSure').on('click', function () {
+            var changeLng = $('#lng').text();
+            var changeLat = $('#lat').text();
+
+            $('#longitude').val(changeLng);
+            $('#latitude').val(changeLat);
+
+            layer.closeAll();
+        });
+
+        $('#btnAddress').on('click',function () {
+            var btnAddress = $('#searchAddress').val();
+            $('#address').val(btnAddress);
+            local.search(btnAddress);
+        });
+
+    });
+
+    $('#citySelect').on('change', function () {
+        var cityCode = $('#citySelect').find("option:selected").val();
+        var cityName = $('#citySelect').find("option:selected").text();
+
+        $('#cityCode').val(cityCode);
+        $('#cityName').val(cityName);
+    });
+
+    $('#btnSaveInfo').on('click', function () {
+        layer.confirm('确认提交？', {
+            title: '提示',
+            btn: ['确认', '取消'],
+            icon: 0
+        }, function () {
+
+            var schoolName = $('#schoolName').val();
+            var userName = $('#userName').val();
+            var phone = $('#phone').val();
+            var cityCode = $('#cityCode').val();
+            var address = $('#address').val();
+            var longitude = $('#longitude').val();
+            var latitude = $('#latitude').val();
+
+            var logo = $('#logo').val();
+            var img = $('#img').val();
+
+            if (schoolName.replace('/[]/g', ' ').length == 0 || !schoolName) {
+                layer.msg('请填写校区名称!', {time: 1000});
+                return false;
+            }
+
+            if (userName.replace('/[]/g', ' ').length == 0 || !userName) {
+                layer.msg('请填写校区联系人姓名!', {time: 1000});
+                return false;
+            }
+
+            if (phone.replace('/[]/g', ' ').length == 0 || !phone) {
+                layer.msg('请填写校区联系人手机号!', {time: 1000});
+                return false;
+            } else {
+                var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18|[0-9]{1})|(19[0-9]{1}))+\d{8})$/;
+                if (!myreg.test(phone)) {
+                    layer.msg("请填写正确的手机号码!");
+                    return false;
+                }
+            }
+
+            if (cityCode.replace('/[]/g', ' ').length == 0 || !cityCode || cityCode == 0) {
+                layer.msg('请选择校区所在城市!', {time: 1000});
+                return false;
+            }
+
+            if (address.replace('/[]/g', ' ').length == 0 || !address) {
+                layer.msg('请填写校区详细地址!', {time: 1000});
+                return false;
+            }
+
+            if (longitude.replace('/[]/g', ' ').length == 0 || !longitude) {
+                layer.msg('请在地图上选择校区所在地点!', {time: 1000});
+                return false;
+            }
+
+            if (latitude.replace('/[]/g', ' ').length == 0 || !latitude) {
+                layer.msg('请在地图上选择校区所在地点!', {time: 1000});
+                return false;
+            }
+
+            if (logo.replace('/[]/g', ' ').length == 0 || !logo) {
+                layer.msg('请上传校区logo图片!', {time: 1000});
+                return false;
+            }
+
+            if (img.replace('/[]/g', ' ').length == 0 || !img) {
+                layer.msg('请上传校区图片!', {time: 1000});
+                return false;
+            }
+
+            var content = ue.getContent('content');
+
+            if (content.length == 0 || !content) {
+                layer.msg('请填写内容!');
+                return false;
+            }
+
+            $('#formSchoolAdd').submit();
+        }, function () {
+            layer.msg('操作已取消!', {time: 1000});
+        });
+    });
+
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    $('#logo').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#logoUrl").attr("src", objUrl);
+            $("#logoUrl").show();
+        }
+    });
+
+    $('#img').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#imgUrl").attr("src", objUrl);
+            $("#imgUrl").show();
+        }
+    });
+</script>
+
+</body>
+</html>

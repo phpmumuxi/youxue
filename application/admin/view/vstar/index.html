@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+	<title>星星点灯</title>
+    <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" />
+    <script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/npm.js"></script>
+	<style type="text/css" media="screen">
+		body{
+			background: #f0bc31;
+		}
+		.container-fluid{
+			padding:0;
+			position: relative;
+		}
+		.container-fluid .bg{
+			width: 100%!important;
+		}
+		#form_div{
+			width: 100%;
+			position: absolute;
+			top: 70%;
+		}
+		#form{
+			width: 100%;
+			margin: auto;
+			position: absolute;
+			top: 20px;
+			left: 0;
+			right: 0;
+		}
+		#form form{
+			width: 100%;
+			text-align: center;
+			border-bottom:2px dashed  rgba(255,255,255,0.5); 
+			padding-bottom: 10px;
+		}
+
+		#link_app{
+			width: 100%;
+			margin: 0 auto;
+			text-align: center;
+			padding-top: 27px;
+			padding-bottom: 10px;
+		}
+
+
+		#link_app div{
+			display: inline-block;
+			width: 90px;
+		}
+		#link_app a{
+			display: inline-block;
+		}
+		#link_app span{
+			display: inline-block;
+			width: 80px;
+			font-size: 14px;
+			text-align: center;
+			color: #333;
+		}
+		#link_ios{
+			margin-right: 15%;
+		}
+		#link_android{
+
+			margin-left: 15%;
+		}
+		#link_app .link_img{
+			width: 74px;
+		}
+		.star_but,.star_but:hover{
+			background:#4b2589;
+			width: 81px;
+			height: 40px;
+			color:#fff;
+			text-align: center;
+			padding: 0;
+			border: 1px solid #4b2589;
+		}
+		.star_text{
+			width: 175px;
+			height: 39px;
+			background: #fff;
+			opacity: 0.5;
+			border: 1px solid #666;
+		}
+		.form-group{
+			display: inline-block;
+		}
+		.star_txt{
+			font-size: 15px;
+			font-weight: bold;
+			color: #4b2589;
+			height: 55px;
+			padding: 0 10px;
+		}
+	</style>
+</head>
+<body>
+	<div  class="container-fluid">
+	<img src="/static/h-ui.admin/images/bg.png" alt="" class="bg">
+		<div id = 'form_div'>
+			<div id="form">
+				<form class="form-inline" >
+					<div class="form-group">
+					    <input type="text" class="form-control star_text" placeholder="输入手机号">
+					    <input type="hidden" name="type" value="{$type}" id='type'>
+					</div>
+					<div class="form-group">
+					<button type="button" class="btn star_but" id='submit'>提交报名</button>
+					</div>
+				</form>
+
+				<div id='link_app'>
+					<div id='link_ios'>
+						<a href="https://itunes.apple.com/cn/app/同城优学/id1205391147?mt=8
+"><img src="/static/h-ui.admin/images/ios.png" class='link_img' ></a>
+						<span>IOS手机</span>
+						<span>点击下载</span>
+					</div>
+					<div id='link_android'>
+						<a href="http://114.55.92.220:8088/tongchengyouxue.apk"><img src="/static/h-ui.admin/images/android.png"  class='link_img' ></a>
+						<span>Android手机</span>
+						<span>点击下载</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#submit').click(function(){
+			var phone = $('.star_text').val();
+			if(!(/^1[3|4|5|7|8|9][0-9]\d{4,8}$/.test(phone))){
+		        layer.msg('请输入正确手机号');
+		        $('.star_text').focus(); 
+		        return false; 
+    		}
+    		var type = $('#type').val();
+
+			$.post('/admin/Vstar/shareUser',
+			{
+				'phone':phone,
+				'type':type,
+			},
+			function(data,status){
+				console.log(data);
+				// return false;
+				if(data===true){
+					$('#form form').html('<div class="star_txt">报名成功，请点击下载APP</div>');
+				}else if(data===false){
+					layer.msg('报名失败!');
+					$('.star_text').focus();
+				}else{
+					$('#form form').html('<div class="star_txt">'+data+'</div>');
+				}
+				// alert("数据：" + data + "\n状态：" + status);
+			},'json')
+		})
+	})
+</script>

@@ -1,0 +1,138 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+    .pagination {
+        list-style-type: none;
+        display: inline-block;
+        overflow: auto;
+    }
+
+    .pagination li {
+        float: left;
+        /*padding: 6px 12px;*/
+        border: 1px solid #e1e2e3;
+        margin: 3px;
+    }
+
+    .pagination li a, .pagination li span {
+        display: inline-block;
+        padding: 6px 12px;
+    }
+
+    .pagination li:hover {
+        border: 1px solid #38f;
+        background: #f2f8ff;
+    }
+
+    .pagination .active {
+        border: 1px solid #38f;
+    }
+</style>
+{/block}
+{block name="body"}
+<title>会员课程订单详细</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 会员管理 <span
+        class="c-gray en">&gt;</span> 会员课程订单详细 <a class="btn btn-success radius r"
+                                                  style="line-height:1.6em;margin-top:3px"
+                                                  href="javascript:window.location.href = '/admin/Member/memberCourseOrderDetail?id={$Think.get.id}';"
+                                                  title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <tbody>
+            <tr>
+                <td class="text-r">订单号</td>
+                <td class="text-l">{$data['orderNo']}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">订单时间</td>
+                <td class="text-l">{$data['createTime']|date='Y-m-d H:i:s',###}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">订单价格</td>
+                <td class="text-l">{$data['money']}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">订单状态</td>
+                <td class="text-l">{$status[$data['status']]}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">支付记录</td>
+                <td class="text-l">
+                    <table class="table table-border table-bordered table-bg table-admin">
+                        <tr class="text-c">
+                            <td>支付时间</td>
+                            <td>支付金额</td>
+                            <td>支付方式</td>
+                            <td>支付凭证</td>
+                            <td>支付状态</td>
+                        </tr>
+                        {if condition="($data['sp'])"}
+                            {volist name="$data['sp']" id="vo"}
+                            <tr class="text-c">
+                                <td>{$vo['payTime']|date='Y-m-d H:i:s',###}</td>
+                                <td>{$vo['money']}</td>
+                                <td>{$payType[$vo['payType']]}</td>
+                                <td>{$vo['payRecord']}</td>
+                                <td>{$payStatus[$vo['status']]}</td>
+                            </tr>
+                            {/volist}
+                        {/if}
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="text-r">用户姓名</td>
+                <td class="text-l">{$data['uName']}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">用户手机</td>
+                <td class="text-l">{$data['phone']}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">商户名称</td>
+                <td class="text-l">{$data['shopName']}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">校区名称</td>
+                <td class="text-l">{$data['schoolName']}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">课程名称</td>
+                <td class="text-l">{$data['name']}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">再次购买</td>
+                <td class="text-l">{$againStatus[$data['isAgain']]}</td>
+            </tr>
+
+            <tr>
+                <td class="text-r">签约</td>
+                <td class="text-l">{$signStatus[$data['isSign']]}</td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+
+</script>
+{/block}
+</body>
+</html>

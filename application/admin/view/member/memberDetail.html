@@ -1,0 +1,145 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+    .pagination {
+        list-style-type: none;
+        display: inline-block;
+        overflow: auto;
+    }
+
+    .pagination li {
+        float: left;
+        /*padding: 6px 12px;*/
+        border: 1px solid #e1e2e3;
+        margin: 3px;
+    }
+
+    .pagination li a, .pagination li span {
+        display: inline-block;
+        padding: 6px 12px;
+    }
+
+    .pagination li:hover {
+        border: 1px solid #38f;
+        background: #f2f8ff;
+    }
+
+    .pagination .active {
+        border: 1px solid #38f;
+    }
+</style>
+{/block}
+{block name="body"}
+<title>会员管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 会员管理 <span
+        class="c-gray en">&gt;</span> 会员详情 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+                                              href="javascript:window.location.href = location.href;"
+                                              title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-c">
+        <input type="button" class="btn btn-primary radius jumpDetail" name="账单详情" va="1" value="账单详情">
+        <input type="button" class="btn btn-primary radius jumpDetail" name="课程订单" va="2" value="课程订单">
+        <input type="button" class="btn btn-primary radius jumpDetail" name="团购订单" va="3" value="团购订单">
+        <input type="button" class="btn btn-primary radius jumpDetail" name="VIP免费体验课" va="4" value="VIP免费体验课">
+        <!--<input type="button" class="btn btn-primary radius jumpDetail" name="玩乐券详情" va="5" value="玩乐券详情">-->
+        <!--<input type="button" class="btn btn-primary radius jumpDetail" name="照片详情" va="6" value="照片详情">-->
+    </div>
+
+    <div class="cl pd-5 bg-1 bk-gray mt-10" style="height: 2em;line-height: 2em;">
+        <span class="l">会员详情</span>
+        <span class="r">
+            <input id="btnBack" class="btn btn-primary radius" type="button" value="返回">
+        </span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-striped radius">
+            <tbody>
+            {if condition="($data)"}
+            <tr>
+                <td width="20%" class="text-r">姓名</td>
+                <td class="text-l">{$data.name}</td>
+            </tr>
+            <tr>
+                <td width="20%" class="text-r">性别</td>
+                <td class="text-l">{$sex[$data['sex']]}</td>
+            </tr>
+            <tr>
+                <td class="text-r">手机</td>
+                <td class="text-l">{$data.phone}</td>
+            </tr>
+            <tr>
+                <td class="text-r">会员等级</td>
+                <td class="text-l">{$mLevel[$data.memberLevel]}</td>
+            </tr>
+            <tr>
+                <td class="text-r">是否推荐人</td>
+                <td class="text-l">{$ifNot[$data.isReferrer]}</td>
+            </tr>
+            <tr>
+                <td class="text-r">是否顾问</td>
+                <td class="text-l">{$ifNot[$data.isAdviser]}</td>
+            </tr>
+            <tr>
+                <td class="text-r">余额</td>
+                <td class="text-l">{$data.balance}</td>
+            </tr>
+            <tr>
+                <td class="text-r">豆豆</td>
+                <td class="text-l">{$data.doudou}</td>
+            </tr>
+            <tr>
+                <td class="text-r">注册时间</td>
+                <td class="text-l">{$data.createTime|date='Y-m-d H:i:s',###}</td>
+            </tr>
+            {else /}
+            <tr class="text-c">
+                <td colspan="11">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+    </div>
+
+    <input type="hidden" id="uid" value="{$Think.get.id}" name="uid">
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    var jumpUrl = function (url) {
+        window.location.href = url;
+    };
+
+    $('.jumpDetail').on('click', function () {
+        var uid = $('#uid').val();
+        if (!uid || uid == 0) {
+            layer.msg('操作异常!');
+            return false;
+        }
+        var va = $(this).attr('va');
+        va = parseInt(va);
+        switch (va) {
+            case 1:
+                jumpUrl('/admin/Member/memberMoney?id=' + uid);
+                break;
+            case 2:
+                jumpUrl('/admin/Member/memberCourseOrder?id=' + uid);
+                break;
+            case 3:
+                jumpUrl('/admin/Member/memberGroupBuy?id=' + uid);
+                break;
+            case 4:
+                jumpUrl('/admin/Member/memberVipFreeCourse?id=' + uid);
+                break;
+        }
+    });
+
+    $('#btnBack').on('click',function () {
+        window.history.go(-1);
+    });
+</script>
+{/block}
+</body>
+</html>

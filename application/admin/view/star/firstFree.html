@@ -1,0 +1,128 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+/*分页样式*/  
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>免费券订单</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+   	星星灯活动管理
+	<span class="c-gray en">&gt;</span>
+	免费券订单
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="userPhone" placeholder="手机号" style="width:250px" class="input-text"
+               value="{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="searchButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"><span class="r">共有数据：<strong>{$lists['total']}</strong> 条</span></div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="40">序号</th>
+					<th width="100">用户</th>
+					<th width="100">手机号</th>
+					<th width="60">顾问</th>
+					<th width="100">
+						<select id="orderSchoolId" style='border:0;background:#f5fafe none repeat scroll 0 0;'>
+			                    <option value="0">所属校区</option>
+			                    {volist name="schools" id="vo"}
+			                    <option value="{$vo.id}" {if condition="($vo.id == $schoolId)"}selected='selected'{/if}>{$vo.name}</option>
+			                    {/volist}
+			            </select>
+					</th>
+					<th width="100">
+						<select id="orderStatus" style='border:0;background:#f5fafe none repeat scroll 0 0;'>
+			                    <option value="-1">状态</option>
+			                    {volist name="orderStatus" id="vo"}
+			                    <option value="{$key}" {if condition="($key == $status)"}selected='selected'{/if}>{$vo}</option>
+			                    {/volist}
+			            </select>
+					</th>
+					<th width="100">使用时间</th>
+					<th width="110">创建时间</th>
+				</tr>
+			</thead>
+			<tbody>
+			{if($lists['data'])}{volist name="lists.data" id="vo" key='k'}
+				<tr class="text-c">
+					<td>{$k}</td>
+					<td>{$vo.userName}</td>
+					<td>{$vo.phone}</td>
+					<td>{$vo.adviserName|default='无'}</td>
+					<td>{$vo.schoolName}</td>
+					<td>{$orderStatus[$vo.status]}</td>
+					<td>{eq name="vo.status" value="1"}{$vo.useTime|date="Y-m-d H:i:s",###}{else /}/{/eq}</td>
+					<td>{$vo.createTime|date="Y-m-d H:i:s",###}</td>
+				</tr>
+				{/volist}
+				{else /}
+			    <tr class="text-c">
+			        <td colspan="8">暂无数据</td>
+			    </tr>
+			    {/if}
+				<tr class="text-c">
+					<td colspan="8" style="text-align: center;">
+					{$page}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+     $('#searchButton').click(function () {
+   		var phone = $("#userPhone").val();
+		var mobile = /^1[345789]{1}\d{9}$/;
+        if (phone == '') {
+	     	layer.msg('手机号必填!',{icon:2,time:2000});
+            return false;
+        }        
+	  if(phone.length!=11 || !mobile.test(phone)){	  	
+	     layer.msg('请填写正确手机号!',{icon:2,time:2000});
+	     return false;
+	  }
+        urlshow();
+    });
+   $('#orderStatus,#orderSchoolId').on('change',function(){
+		urlshow();
+	})
+   function urlshow(){
+		window.location.href= "/admin/Star/firstFree?phone=" + $('#userPhone').val()+ "&status="+$('#orderStatus').val() +"&schoolId="+$('#orderSchoolId').val();
+   }
+</script>
+{/block}
+</body>
+</html>

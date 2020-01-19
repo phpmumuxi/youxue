@@ -1,0 +1,94 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>分配顾问管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 顾问管理 <span class="c-gray en">&gt;</span> 分配顾问管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="phone" placeholder="手机号" style="width:250px" class="input-text" value="{if(isset($phone))}{$phone}{/if}">
+        <button name="" id="adviserButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>	
+	<div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"><a href="{:url('school/Adviser/adviserLogs')}" class="btn btn-primary radius"> 顾问日志</a></span ><span class="r">共有数据：<strong>{$lists['total']}</strong> 条</span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">	
+				<th width="80">序号</th>
+				<th width="100">顾问昵称</th>
+				<th width="140">手机号</th>				
+				<th width="120">创建时间</th>								
+				<th width="120">名下客户</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {if($lists['data'])}{volist name="lists.data" id="vo" key="k"}
+			<tr class="text-c">	   			
+	   			<td >{$k}</td>
+				<td>{$vo.name}</td>
+				<td>{$vo.phone}</td>
+				<td>{$vo.createTime|date='Y-m-d H:i:s',###}</td>				
+				<td><a href="{:url('school/Adviser/adviserDownUsers',['id'=>$vo['id']])}" class="btn btn-primary radius"> 名下客户</a></td>				
+			</tr>
+	   {/volist}
+	   {else /}
+            <tr class="text-c">
+                <td colspan="5">暂无数据</td>
+            </tr>
+            {/if}
+			<tr class="text-c">
+				<td colspan="5" style="text-align: center;">
+				{$page}
+				</td>
+			</tr>	   
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+$('#adviserButton').click(function () {
+		var phone = $("#phone").val();
+		var mobile = /^1[345789]{1}\d{9}$/;
+        if (phone == '') {
+	     	layer.msg('手机号必填!',{icon:2,time:2000});
+            return false;
+        }        
+	  if(phone.length!=11 || !mobile.test(phone)){	  	
+	     layer.msg('请填写正确手机号!',{icon:2,time:2000});
+	     return false;
+	  }
+        window.location.href= "/school/Adviser/distribute?phone="+phone;
+    });
+</script>
+{/block}
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>模块说明管理</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 模块说明管理
+    <span class="c-gray en">&gt;</span> 模块说明列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray">
+        <span class="l">
+            <a id="someAdd" href="/admin/ModuleContent/moduleContentAdd" class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> 添加模块说明
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <span class="l">
+                        模块说明列表
+                    </span>
+                    <span class="r">
+                        共有数据：<strong>{$data['total']}</strong> 条
+                    </span>
+                </div>
+            </tr>
+            <tr class="text-c">
+                <th width="20">ID</th>
+                <th width="40">类型</th>
+                <th width="40">创建时间</th>
+                <th width="40">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name="data['data']" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>
+                    {if condition="($vo['type'] <= 16)"}
+                    {$type[$vo['type']]}
+                    {else /}
+                    {$vo['name']}
+                    {/if}
+                </td>
+                <td>{:date('Y-m-d H:i:s',$vo['createTime'])}</td>
+
+                <td>
+                    <a href="javascript:;" title="详情" class="someDetail" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-gengduo"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" title="编辑" class="someEdit" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-edit"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" title="删除" class="someDelete" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-del3"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="11" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript">
+    // 查看内容详细
+    $('.someDetail').click(function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+        $.post('/admin/ModuleContent/getModuleContentAjax', {id: id}, function (res) {
+            if (res.status == 'ok') {
+                layer.open({
+                    title: '模块介绍内容',
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['520px', '340px'], //宽高
+                    content: '<div style="margin: 5px;">' + res.data + '</div>'
+                });
+            } else {
+                layer.msg('操作失败!');
+            }
+        }, 'json');
+    });
+
+    // 编辑
+    $('.someEdit').click(function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+        window.location.href = '/admin/ModuleContent/moduleContentUpdate?id=' + id;
+    });
+
+    // 新增
+    $('#someAdd').click(function () {
+        window.location.href = '/admin/ModuleContent/moduleContentAdd';
+    });
+    
+    // 删除
+    $('.someDelete').click(function () {
+        var t = $(this);
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+        
+        $.post('/admin/ModuleContent/moduleContentDelete',{id: id},function (res) {
+            if(res.status == 'ok'){
+                t.parent().parent().hide();
+                layer.msg('操作成功!');
+            }else{
+                layer.msg('操作失败!');
+            }
+        },'json');
+    });
+</script>
+
+</body>
+</html>

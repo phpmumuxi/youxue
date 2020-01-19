@@ -1,0 +1,164 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css"> 
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>免费商品管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 福利专区管理 <span class="c-gray en">&gt;</span> 免费商品管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="goodsName" placeholder="免费商品名称" style="width:250px" class="input-text"
+               value="{if(isset($goodsName))}{$goodsName}{/if}">
+        <button name="" id="goodsButton" class="btn btn-success" type="button"><i class="Hui-iconfont">&#xe665;</i>搜索
+        </button>
+    </div>
+	{in name='1' value='$actionType'}
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('admin/GoodsFree/add')}" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加免费商品</a></span><span class="r">共有数据：<strong>{$info['total']}</strong> 条</span></div>{/in}
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">	
+				<th width="40">序号</th>
+				<th width="120">名称</th>
+				<th width="80">
+            <select id="useType" style='border:0;background:  #f5fafe none repeat scroll 0 0;'>
+            <option value="0" {eq name="$type" value='0'}selected='selected'{/eq}>类型</option>
+            <option value="1" {eq name="$type" value='1'}selected='selected'{/eq}>全员免费</option>
+            <option value="2" {eq name="$type" value='2'}selected='selected'{/eq}>vip免费</option>
+            <option value="3" {eq name="$type" value='3'}selected='selected'{/eq}>豆豆福利</option>
+          </select>
+        </th>
+				<th width="60">价格</th>
+				<th width="120">开始时间</th>
+        <th width="120">结束时间</th>
+				<th width="50">有效时间</th>
+				<th width="60">库存</th>				
+				<th width="80">
+            <select id="useStatus" style='border:0;background:  #f5fafe none repeat scroll 0 0;'>
+            <option value="0" {eq name="$status" value='0'}selected='selected'{/eq}>状态</option>
+            <option value="1" {eq name="$status" value='1'}selected='selected'{/eq}>已上架</option>
+            <option value="2" {eq name="$status" value='2'}selected='selected'{/eq}>已下架</option>
+          </select>
+        </th>				
+				<th width="80">库存管理</th>				
+				<th width="50">详情</th>				
+				<th width="60">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {if($info['data'])}{volist name="info.data" id="vo" key='k'}
+			<tr class="text-c">	   			
+	   			<td >{$k}</td>
+				<td>{$vo.name}</td>
+				<td>{if condition="$vo.type==1"}全员免费{elseif condition="$vo.type==2" /}vip免费{else /}豆豆福利{/if}</td>
+				<td>{$vo.price}</td>
+				<td>{$vo.startTime}</td>
+        <td>{$vo.endTime}</td>
+				<td>{$vo.days}</td>
+				<td>{$vo.num}</td>
+				<td>{if condition="$vo.status==1"}已上架{elseif condition="$vo.status==2"/}已下架{else /}待上架{/if}</td>
+				<td><a href="{:url('admin/GoodsStock/index',['id'=>$vo['id']])}" class="btn btn-primary radius"> 库存管理</a></td>
+				<td class="f-14"><a style="text-decoration:none"  href="javascript:;" onclick="info_show('免费领商品详情','/admin/GoodsFree/info/id/{$vo.id}')" title="详情"><i class="Hui-iconfont">&#xe715;</i></a></td>
+				<td class="f-14">
+				{in name='2' value='$actionType'}
+				{if condition="$vo.status!=1"}
+				 <a title="编辑" href="{:url('admin/GoodsFree/edit',['id'=>$vo['id']])}"  style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>{/if}{/in}
+				 {if condition="$vo.status==1"}
+				 {in name='6' value='$actionType'}
+				&nbsp;&nbsp;&nbsp;<a style="text-decoration:none" href="{:url('admin/GoodsFree/downGoodsFree',['id'=>$vo['id']])}" onclick="return downGoodsFree('{$vo.startTime}','{$vo.endTime}')" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>{/in}{else /}{in name='5' value='$actionType'}
+				&nbsp;&nbsp;&nbsp;<a style="text-decoration:none" href="{:url('admin/GoodsFree/upGoodsFree',['id'=>$vo['id']])}" onclick="return upGoodsFree('{$vo.num}')" title="上架"><i class="Hui-iconfont">&#xe6dc;</i></a>{/in}{/if}
+				</td>
+			</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="11">暂无数据</td>
+        </tr>
+        {/if}
+        <tr class="text-c">
+            <td colspan="11" style="text-align: center">{$page}</td>
+        </tr>
+	   <input type="hidden" id="nowtime" value="{php} echo date('Y-m-d H:i:s',time()); {/php}">
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+	$('#goodsButton').click(function () {
+        if ($('#goodsName').val() == '') {
+          layer.msg('请填写免费商品名称!',{icon:2,time:2000});
+            return false;
+        }
+        urlshow();
+    });
+
+  $('#useStatus,#useType').on('change',function(){
+     urlshow();
+  })
+  
+  function urlshow(){
+    window.location.href = "/admin/GoodsFree/index?goodsName=" + $('#goodsName').val()+ "&status="+$('#useStatus').val()+ "&type="+$('#useType').val();
+   }
+
+	function info_show(title,url){
+		layer_show(title,url);
+   }
+   function upGoodsFree(num){
+   		if(num <= 0){
+			layer.msg('请先添加库存数量',{icon:2,time:2000});
+			return false;
+   		}
+   		if (confirm("您确定要上架吗？")) {
+            return true;
+        } else {
+           return false;
+        }
+   }
+   function downGoodsFree(startTime,endTime){
+   		var nowtime = $("#nowtime").val();
+   		if(startTime < nowtime && endTime > nowtime ){   			 
+            if (confirm("活动正在进行中,您确定要下架吗？")) {
+                return true;
+            } else {
+               return false;
+            }
+        }else{
+            if (confirm("您确定要下架吗？")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+   }
+</script>
+{/block}
+</body>
+</html>

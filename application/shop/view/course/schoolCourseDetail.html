@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>校区课程详情</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+
+        .mText img {
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 校区课程管理
+    <span class="c-gray en">&gt;</span> 校区课程详情
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+    <form class="form form-horizontal" id="formSchoolAdd" method="post" enctype="multipart/form-data"
+          action="">
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                课程名称：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                {$data['name']}
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                课时：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                {$data['classTime']}
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                课程类型：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                {$data['typeName']}
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                年龄范围：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                {$data['startAge']} - {$data['endAge']}岁
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                价格/元：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                {$data['money']}
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                课程列表图片：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <img style="width: 200px;height: 200px;" src="{$Think.config.imgUrl}{$data['listImg']}" alt=""
+                     class="thumbnail">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                课程顶部图片：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                <img style="width: 300px;height: 200px;" src="{$Think.config.imgUrl}{$data['topImg']}" alt=""
+                     class="thumbnail">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                是否属于老用户续费课程：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                {if condition="($data['isOldCustom'] == 1)"}
+                是
+                {else /}
+                否
+                {/if}
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                课程详情：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9 mText">
+                {:htmlspecialchars_decode($data['content'])}
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                创建时间：
+            </label>
+
+            <div class="formControls col-xs-8 col-sm-9">
+                {:date('Y-m-d H:i:s',$data['createTime'])}
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <button id="btnGoBack" class="btn btn-default radius" type="button">
+                    &nbsp;&nbsp;返回&nbsp;&nbsp;
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+
+
+<script type="text/javascript">
+
+    $('#btnGoBack').on('click', function () {
+        history.go(-1);
+    });
+
+</script>
+
+</body>
+</html>

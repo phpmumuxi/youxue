@@ -1,0 +1,105 @@
+{extend name="layout" /}
+{block name="body"}
+<title>添加管理员</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> <a href="{:url('shop/Admin/index')}">管理员列表</a><span class="c-gray en">&gt;</span> 添加管理员 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<article class="page-container">
+	<form class="form form-horizontal" action='' method='post' id="form-admin-add">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员名称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+		</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="password" class="input-text" autocomplete="off" value="" placeholder="密码" id="password" name="password">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="password" class="input-text" autocomplete="off"  placeholder="确认新密码" id="password2" name="password2">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
+		</div>
+	</div>
+	
+	<div class="row cl allType">
+		<label class="form-label col-xs-4 col-sm-3">选择校区：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<span class="select-box" style="width:260px;"> 
+			<select class="select" name="schoolId" id="schoolId" size="1">
+				<option value="0">--请选择--</option>
+               {foreach $schools as $v}
+				<option value="{$v.id}">{$v.name}</option>
+		       {/foreach}
+			</select>
+			</span>
+			<span class="c-red">
+				&nbsp;&nbsp;*&nbsp;添加该商户下校区管理员时选择
+			</span>
+		</div>
+	</div>
+
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+		</div>
+	</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#form-admin-add").validate({
+		rules:{
+			name:{
+				required:true,
+				minlength:5,
+				maxlength:16
+			},
+			password:{
+				required:true,
+				minlength:5,
+				maxlength:16
+			},
+			password2:{
+				required:true,
+				equalTo: "#password"
+			},
+			phone:{
+				required:true,
+				isMobile:true,
+			}
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+	});
+
+	// 手机号码验证
+    jQuery.validator.addMethod("isMobile", function(value, element) {
+        var length = value.length;
+        var mobile = /^1[345789]{1}\d{9}$/;
+        return this.optional(element) || (length == 11 && mobile.test(value));
+    }, "请正确填写您的手机号码");
+});
+</script>
+{/block}
+</body>
+</html>

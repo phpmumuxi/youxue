@@ -1,0 +1,160 @@
+{extend name="layout" /}
+{block name="body"}
+<title>新建品牌</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    商户管理
+	<span class="c-gray en">&gt;</span>
+	<a href="{:url('admin/Brand/index')}">品牌管理</a>
+	<span class="c-gray en">&gt;</span>
+	新建品牌
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+	<form action="{:url('admin/Brand/add')}" method="post" class="form form-horizontal"  enctype="multipart/form-data" onsubmit='return checks()'>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>品牌名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" id='name' name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">品牌说明：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" name="explain">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">排序：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" name="sort">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">首页图片：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<img style="display: none;width: 100px;height: 70px;" src="" alt="" class="thumbnail" id="homeImgUrl">
+				<input type="file" name="homeImg" id="homeImg"><span class='c-red'>推荐尺寸:516*315</span></div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">大图：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<img style="display: none;width: 150px;height: 100px;" src="" alt="" class="thumbnail" id="bigImgUrl">
+				<input type="file" name="bigImg" id="bigImg"><span class='c-red'>推荐尺寸:1125*528</span></div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">小图：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+			<img style="display: none;width: 80px;height: 80px;" src="" alt="" class="thumbnail" id="smallImgUrl">
+				<input type="file" name="smallImg" id="smallImg"><span class='c-red'>推荐尺寸:300*300</span></div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否参加星星活动：</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal radioType">
+				<div class="radio-box">
+					<input name="isStar" value='0' type="radio" id="type-1" checked>
+					<label for="type-1">否</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio" value='1' id="type-2" name="isStar">
+					<label for="type-2">是</label>
+				</div>			
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>品牌介绍：</label>
+			<div class="formControls col-xs-8 col-sm-9">				
+				<textarea name="intr" id="container"></textarea>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+				<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+	var ue = UE.getEditor('container');
+	function checks(){
+	  var name = $("#name").val();
+	  var homeImg = $("#homeImg").val();
+	  var bigImg = $("#bigImg").val();
+	  var smallImg = $("#smallImg").val();
+	  if(name==''){
+	     layer.msg('品牌名称必填！',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(homeImg==''){	  	
+	     layer.msg('请上传首页图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(bigImg==''){	  	
+	     layer.msg('请上传大图图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(smallImg==''){	  	
+	     layer.msg('请上传小图图片!',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(ue.getContent()==''){
+	     layer.msg('品牌介绍必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  return true;
+	}
+
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+
+	function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    $('#homeImg').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#homeImgUrl").attr("src", objUrl);
+            $("#homeImgUrl").show();
+        }
+    });
+    $('#bigImg').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#bigImgUrl").attr("src", objUrl);
+            $("#bigImgUrl").show();
+        }
+    });
+    $('#smallImg').change(function () {
+        var objUrl = getObjectURL(this.files[0]);
+        if (objUrl) {
+            $("#smallImgUrl").attr("src", objUrl);
+            $("#smallImgUrl").show();
+        }
+    });
+</script>
+{/block}
+
+</body>
+</html>

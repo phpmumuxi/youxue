@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>业绩归属列表</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 业绩归属管理
+    <span class="c-gray en">&gt;</span> 业绩归属列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.href = '/school/WrkActivityMoney/wrkList';" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray hide">
+        <span class="l">
+            <a href="javascript:;" class="btn btn-primary radius" id="newAdd">
+                <i class="Hui-iconfont">&#xe600;</i> 业绩归属列表
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <th scope="col" colspan="15">业绩归属列表</th>
+            </tr>
+            <tr class="text-c">
+                <th width="5">序号</th>
+                <th width="5">订单号</th>
+                <th width="20">万人砍活动</th>
+                <th width="10">用户</th>
+                <th width="20">电话</th>
+                <th width="10">支付时间</th>
+                <th width="10">顾问</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {if condition="($data['data'])"}
+            {volist name="data['data']" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo['orderNo']}</td>
+                <td>{$vo['wrkName']}</td>
+                <td>{$vo['uName']}</td>
+                <td>{$vo['phone']}</td>
+
+                <td>
+                    {$vo['payDate']}
+                </td>
+
+                <td>
+                    {if condition="($vo['adviserId'])"}
+                        {$vo['adviserName']}
+                    {else /}
+                        无
+                    {/if}
+                </td>
+
+                <td>
+                    {if condition="(!$vo['adviserId'])"}
+                    <a href="javascript:;" title="业绩归属" class="someEdit" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-edit f-16"></i>
+                    </a>
+                    {/if}
+                </td>
+            </tr>
+            {/volist}
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+
+            {else /}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    暂无数据
+                </td>
+            </tr>
+            {/if}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript" src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+
+    $('.someEdit').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+
+        layer.confirm('确认指定业绩到校区顾问？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            $.post('/school/WrkActivityMoney/assignAdviser',{id: id},function (res) {
+                if(res.status == 'ok'){
+                    layer.msg('操作成功!');
+                    setTimeout(function () {
+                        window.location.reload();
+                    },500);
+                }else if(res.status == 'errHad'){
+                    layer.msg('已经被分配了业绩顾问!');
+                }else if(res.status == 'errAdviser'){
+                    layer.msg('请先分配万人砍课程订单顾问!');
+                }else{
+                    layer.msg('操作失败!');
+                }
+            },'json');
+        }, function(){
+        });
+    });
+
+    // 业绩归属
+    $('.someEditError').on('click',function () {
+        var id = $(this).attr('va');
+        if(!id){
+            return false;
+        }
+
+        $.post('/school/WrkActivityMoney/schoolAdviserList', {id: id}, function (res) {
+            if (res.status == 'ok') {
+                var _html = '<div style="width: 100%;text-align: center;margin-top: 2em;">'
+                    + '<select class="select" style="width: 90%;height: 2em;line-height: 2em;" id="adviserSelect" name="adviserSelect">'
+                    + '<option value="0">选择顾问</option>';
+                $.each(res.data, function (k, v) {
+                    _html += '<option value="' + v['id'] + '">' + v['name'] + '</option>';
+                });
+                _html += '</select>'
+                    + '<div style="position: absolute;bottom: 1em;right: 2em;">'
+                    + '<input id="adviserSure" style="width: 6em;background-color: #ff0000;border-color: #ff0000;" class="btn radius btn-secondary" type="button" value="确认">'
+                    + '<input id="adviserCancel" style="width: 6em;margin-left: 2em;background-color: #eee;border-color: #eee;color: #000000;" class="btn btn-warning radius" type="button" value="取消">'
+                    + '</div>'
+                    + '</div>';
+
+                layer.open({
+                    type: 1,
+                    title: '分配业绩顾问',
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['420px', '240px'], //宽高
+                    content: _html
+                });
+
+                $('#adviserCancel').on('click', function () {
+                    layer.closeAll();
+                });
+                $('#adviserSure').on('click', function () {
+                    var bpId = $('#adviserSelect').val();
+                    // 获取option的值
+                    var bpName = $('#adviserSelect option:selected').text();
+                    if (bpId != 0 && bpId != '') {
+                        $.post('/school/WrkActivityMoney/assignAdviser', {
+                            adviserId: bpId,
+                            id: id,
+                        }, function (res) {
+                            if (res.status == 'ok') {
+                                layer.closeAll();
+                                layer.msg('顾问已分配!');
+                                setTimeout(function () {
+                                    window.location.reload();
+                                },500);
+                            }else if(res.status == 'errHad'){
+                                layer.msg('已经被分配了业绩顾问!');
+                            } else {
+                                layer.msg('操作失败!');
+                            }
+                        }, 'json');
+                    } else {
+                        layer.msg('请选择顾问!');
+                    }
+                });
+            } else if (res.status == 'false') {
+                layer.msg('无顾问信息!');
+            }
+        }, 'json');
+    });
+
+</script>
+
+</body>
+</html>

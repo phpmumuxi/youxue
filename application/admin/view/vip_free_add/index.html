@@ -1,0 +1,85 @@
+﻿{extend name="layout" /}
+{block name="body"}
+<title>礼品地址管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 女王权杖管理 <span class="c-gray en">&gt;</span> 礼品地址管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">	
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" class="btn btn-primary radius" onclick="addVipaddr('添加礼品地址','{:url(\'admin/VipFreeAdd/add\',[\'vipFreeId\'=>$id])}')"><i class="Hui-iconfont">&#xe600;</i> 添加礼品地址</a></span><span class="r"><button onclick="javascript:window.location.href='/admin/VipFree/index';" class="btn btn-success radius" type="button"> 返回</button> </span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr class="text-c">	
+				<th width="60">序号</th>
+				<th width="120">商品名称</th>
+				<th width="160">地址</th>				
+				<th width="120">电话</th>
+				<th width="120">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+	   {volist name="adds" id="vo" key='k'}
+			<tr class="text-c">	   			
+	   			<td >{$k}</td>
+				<td>{$vo.FreeName}</td>
+				<td>{$vo.vipAdd}</td>
+				<td>{$vo.vipPhone}</td>
+				<td class="f-14">
+				 <a title="编辑" href="javascript:;" onclick="editVipaddr('编辑礼品地址','{:url(\'admin/VipFreeAdd/edit\',[\'id\'=>$vo[\'id\']])}')" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> 
+				<a style="text-decoration:none" class="ml-5 addrDelButton" href="javascript:;" va="{$vo['id']}" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>				
+				</td>
+			</tr>
+	   {/volist}	   
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+/*添加礼品地址*/
+function addVipaddr(title,url){
+	showIframe(title,url);
+}
+/*编辑礼品地址*/
+function editVipaddr(title,url){
+	showIframe(title,url);
+}
+
+function showIframe(title,url){
+	layer.open({
+		type: 2,
+		area: ['800px', '340px'],
+		fix: false, //不固定
+		maxmin: true,
+		shade:0.4,
+		title: title,
+		content: url,
+		end: function () {
+            location.reload();               
+        }
+	});
+}
+$(".addrDelButton").on('click',function(){
+	var val=$(this).attr('va');
+	layer.confirm('确定要删除?', {icon: 3, title:'提示'}, function(index){
+		$.post("/admin/VipFreeAdd/del",{id:val},function(res){
+	  		var _msg=res.msg;
+	  		if(res.status=='ok'){
+	  			layerShowMsg(_msg,1,index);
+	  		}else{
+	  			layerShowMsg(_msg,2,index);
+	  		}
+	  	})
+	})    
+})
+function layerShowMsg(msg,type,index){
+	layer.msg(msg,{icon:type,time:1200},function(){
+	  		layer_close(index);
+	  		window.location.href=location.href;
+	});
+}
+</script>
+{/block}
+</body>
+</html>

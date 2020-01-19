@@ -1,0 +1,76 @@
+{extend name="layout" /}
+{block name="body"}
+<title>添加礼品地址</title>
+</head>
+<body>
+<article class="page-container">
+  <div class="form form-horizontal" >
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>领取地址：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="vipAdd" name="vipAdd">
+		</div>
+	</div>
+
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>联系方式：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="vipPhone" name="vipPhone">
+		</div>
+	</div>
+	<input type="hidden" id="hiddenVipFreeId" value="{$vipFreeId}"/>
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<button type="submit" id='addrSubmitBtn' class="btn btn-success radius"><i class="icon-ok"></i> 确定</button>
+		</div>
+	</div>
+  </div>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+
+<script type="text/javascript">
+function checks(phone,name){
+	  if(name==''){
+	     layer.msg('领取地址必填！',{icon:2,time:2000});
+	     return false;
+	  }
+	  if(phone==''){
+	     layer.msg('手机号必填!',{icon:2,time:2000});
+	     return false;
+	  }
+
+	  if(!(/^0\d{2,3}-?\d{8}$/.test(phone))&&!(/^1(3|4|5|7|8)\d{9}$/.test(phone))){
+	     layer.msg('请填写正确号码!',{icon:2,time:2000});
+	     return false;
+	  }
+	  return true;
+}
+$('#addrSubmitBtn').click(function(){
+	  var phone = $("#vipPhone").val();
+	  var name = $("#vipAdd").val();
+	  var id = $("#hiddenVipFreeId").val();
+	  var re = checks(phone,name);
+	  if(re){
+	  	$.post("/admin/VipFreeAdd/add",{vipFreeId:id,vipAdd:name,vipPhone:phone},function(res){
+	  		var _msg=res.msg;
+	  		 if(res.status=='ok'){
+	  			layerShowMsg(_msg,1);
+	  		}else{
+	  			layerShowMsg(_msg,2);
+	  		}
+	  	})
+	  }
+
+})
+function layerShowMsg(msg,type){
+	layer.msg(msg,{icon:type,time:1200},function(){
+	  	layer_close();
+	});
+}
+</script>
+{/block}
+</body>
+</html>

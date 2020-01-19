@@ -1,0 +1,180 @@
+{extend name="layout" /}
+{block name="body"}
+<title>添加管理员</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span><a href="{:url('admin/Admin/index')}">管理员列表</a><span class="c-gray en">&gt;</span>添加管理员<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<article class="page-container">
+	<form class="form form-horizontal" action='' method='post' id="form-admin-add">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员名称：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+		</div>
+	</div>
+	
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="password" class="input-text" autocomplete="off" value="" placeholder="密码" id="password" name="password">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="password" class="input-text" autocomplete="off"  placeholder="确认新密码" id="password2" name="password2">
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
+		<div class="formControls col-xs-8 col-sm-9">
+			<input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
+		</div>
+	</div>
+	{eq name='admin_id' value="1"}
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员类型：</label>
+		<div class="formControls col-xs-8 col-sm-9 skin-minimal radioType">
+			<div class="radio-box">
+				<input name="type" value='1' type="radio" id="type-1" checked>
+				<label for="type-1">后台</label>
+			</div>
+			<div class="radio-box">
+				<input type="radio" value='2' id="type-2" name="type">
+				<label for="type-2">商户</label>
+			</div>
+			<div class="radio-box">
+				<input type="radio" value='3' id="type-3" name="type">
+				<label for="type-3">校区</label>
+			</div>
+			<div class="radio-box">
+				<input type="radio" value='4' id="type-4" name="type">
+				<label for="type-4">后台版本更新<span class="c-red">&nbsp;(只给开发人员用)</span></label>
+			</div>
+		</div>
+	</div>
+	{/eq}
+	<div class="row cl adminRoleType">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色类别：</label>
+		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
+			<select class="select" name="roleId" id="roleidType" size="1">
+				<option value="">--请选择--</option>
+               {foreach $roles as $vo}
+				<option value="{$vo.id}">{$vo.roleName}</option>
+		       {/foreach}
+			</select>
+			</span> </div>
+	</div>
+	{eq name='admin_id' value="1"}
+	<div class="row cl allType" style="display:none">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>选择商户：</label>
+		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
+			<select class="select" name="shopId" id="shopsTypes" size="1">
+				<option value="">--请选择--</option>
+               {foreach $shops as $v}
+				<option value="{$v.id}">{$v.name}</option>
+		       {/foreach}
+			</select>
+			</span>
+            <span class="select-box" id="schoolSpan" style="width:150px;display:none">
+			<select class="select" name="schoolId" id="schoolType" size="1">
+			  <option value="">--请选择--</option>
+			</select>
+			</span>
+		</div>
+	</div>
+	{/eq}
+	<div class="row cl">
+		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+			<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+		</div>
+	</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__STATIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('.radioType input').on('ifChecked', function(event){
+		var id = $(this).val();
+		if(id==2){
+				$('.adminRoleType').hide();
+            $('.allType').show();
+            $('#schoolSpan').hide();
+		}else if(id==3){
+			$('.adminRoleType').hide();
+			$('.allType').show();
+			$('#schoolSpan').show();
+			$('#shopsTypes').change(function(){
+				var shopid=$(this).val();
+				$.get("{:url('admin/Admin/getSchools')}",'id='+shopid,function(res){
+					$('#schoolType').empty();
+	                $('#schoolType').html(res);
+			    });
+			});
+		}else{
+			$('.adminRoleType').show();
+			$('.allType').hide();
+		}
+    });
+
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+
+	$("#form-admin-add").validate({
+		rules:{
+			name:{
+				required:true,
+				minlength:5,
+				maxlength:16
+			},
+			password:{
+				required:true,
+				minlength:5,
+				maxlength:16
+			},
+			password2:{
+				required:true,
+				equalTo: "#password"
+			},
+			type:{
+				required:true,
+			},
+			phone:{
+				required:true,
+				isMobile:true,
+			},
+			roleId:{
+				required:true,
+			},
+			shopId:{
+				required:true,
+			},
+			schoolId:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+	});
+	    // 手机号码验证
+    jQuery.validator.addMethod("isMobile", function(value, element) {
+        var length = value.length;
+        var mobile = /^1[345789]{1}\d{9}$/;
+        return this.optional(element) || (length == 11 && mobile.test(value));
+    }, "请正确填写您的手机号码");
+});
+</script>
+{/block}
+</body>
+</html>

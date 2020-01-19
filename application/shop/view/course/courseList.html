@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>课程管理</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 课程管理
+    <span class="c-gray en">&gt;</span> 课程列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.reload();" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <a href="{:url('shop/Course/courseAdd')}" class="btn btn-primary radius">
+                <i class="Hui-iconfont">&#xe600;</i> 添加课程
+            </a>
+        </span>
+
+        <!--
+        <span class="r" style="margin-left: 1em;">
+            <input id="assignSchool" class="btn radius btn-warning" type="button" value="分配校区">
+        </span>
+
+        <span class="r" style="margin-left: 1em;">
+            <input id="schoolList" class="btn btn-success radius" type="button" value="校区列表">
+        </span>
+
+        <span class="r">
+            <input id="classDetail" class="btn btn-primary radius" type="button" value="查看详情">
+        </span>
+        -->
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <!--<th scope="col" colspan="8">课程列表</th>-->
+                <div class="cl pd-5 bg-1 bk-gray mt-20">
+                    <span class="l">
+                        课程列表
+                    </span>
+                    <span class="r">
+                        共有数据：<strong>{$data['total']}</strong> 条
+                    </span>
+                </div>
+            </tr>
+            <tr class="text-c">
+                <!--<th width="5"></th>-->
+                <th width="20">ID</th>
+                <th width="80">名称</th>
+                <th width="20">课时</th>
+                <th width="40">类型</th>
+                <th width="40">价格/元</th>
+                <th width="40">创建时间</th>
+                <th width="40">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name="data['data']" id="vo" key="k"}
+            <tr class="text-c">
+                <!--<td class="selectOneTd">-->
+                    <!--<input type="radio" name="id" value="{$vo.id}" class="selectOne">-->
+                <!--</td>-->
+                <td>{$k}</td>
+                <td>{$vo.name}</td>
+                <td>{$vo.classTime}</td>
+                <td>{$vo.typeName}</td>
+                <td>{$vo.money}</td>
+                <td>{:date('Y-m-d H:i',$vo.createTime)}</td>
+
+                <td>
+                    <a href="javascript:;" title="详情" class="courseDetail" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-gengduo f-16"></i>
+                    </a>
+                    &nbsp;
+                    &nbsp;<a href="javascript:;" title="校区课程列表" class="schoolCourseList" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-menu f-16"></i>
+                    </a>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;<a href="javascript:;" title="编辑" class="courseEdit" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-edit f-16"></i>
+                    </a>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <a href="javascript:;" title="删除" class="courseDel" va="{$vo.id}">
+                        <i class="Hui-iconfont Hui-iconfont-del3 f-16"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+        </table>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript">
+
+    $('.courseDetail').on('click', function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+        window.location.href = '/shop/Course/courseDetail?id=' + id;
+    });
+
+    $('.courseEdit').on('click', function () {
+        var id = $(this).attr('va');
+        if (id) {
+            var url = '/shop/Course/courseEdit' + '?id=' + id;
+            window.location.href = url;
+        } else {
+            layer.msg('操作异常!', {icon: 5});
+            console.log('Id Missing');
+            return false;
+        }
+    });
+
+    $('.courseDel').on('click', function () {
+
+        var id = $(this).attr('va');
+        var thisHide = $(this).parent().parent();
+
+        layer.confirm('确认删除该课程模板？', {
+            title: '提示',
+            btn: ['确认', '取消'],
+            icon: 0
+        }, function () {
+
+            if (id) {
+                $.post('/shop/Course/courseDel', {'id': id}, function (res) {
+                    console.log(res);
+                    if (res.status == 'ok') {
+                        layer.msg('已删除!', {icon: 1});
+                        thisHide.hide();
+                    } else {
+                        layer.msg('该课程模板仍有校区在使用', {icon: 5});
+                    }
+                }, 'json');
+            } else {
+                layer.msg('操作异常!', {icon: 5});
+                console.log('Id Missing');
+            }
+
+        }, function () {
+            layer.msg('操作已取消!');
+        });
+    });
+
+    $('.changeCourseStatus').on('click', function () {
+        var thisPre = $(this).prev();
+        var schoolStatus = $(this).attr('va');
+        var schoolId = $(this).attr('schoolId');
+        var tip = '确认下架该校区?';
+        var status = 2;
+        if (schoolStatus == 2) {
+            tip = '确认上架该校区?';
+            status = 1;
+        }
+        layer.confirm(tip, {
+            title: '提示',
+            btn: ['确认', '取消'],
+            icon: 0
+        }, function () {
+            $.post('/shop/Course/changeCourseStatus', {status: status, id: schoolId}, function (res) {
+                console.log(res);
+                if (res.status == 'ok') {
+                    var _textStatus = '上架中';
+                    if (status == 2) {
+                        _textStatus = '已下架';
+                    }
+                    thisPre.text(_textStatus);
+                    layer.msg('操作成功!');
+                } else if (res.status == 'err') {
+                    layer.msg('该校区下没有课程不能上架!');
+                } else {
+                    layer.msg('操作失败!');
+                }
+            }, 'json');
+        }, function () {
+            layer.msg('操作已取消!');
+        });
+    });
+
+    $('.selectOneTd').on('click', function () {
+        $('.selectOne').attr('checked', false);
+        $(this).children().attr('checked', true);
+    });
+
+    // 作废
+    $('#classDetail').on('click', function () {
+        var id = $('input:radio:checked').val();
+        if(!id){
+            layer.msg('请选择课程!',{time: 2000});
+            return false;
+        }
+        window.location.href = '/shop/Course/courseDetail?id=' + id;
+    });
+    // 作废
+    $('#schoolList').on('click', function () {
+        var id = $('input:radio:checked').val();
+        if(!id) {
+            layer.msg('请选择课程!', {time: 2000});
+            return false;
+        }
+            window.location.href = '/shop/Course/courseSchoolList?id=' + id;
+    });
+
+    $('.schoolCourseList').on('click', function () {
+        var id = $(this).attr('va');
+        if(!id) {
+            return false;
+        }
+        window.location.href = '/shop/Course/courseSchoolList?id=' + id;
+    });
+
+    // 作废
+    $('#assignSchool').on('click', function () {
+        var id = $('input:radio:checked').val();
+        if(!id) {
+            layer.msg('请选择课程!', {time: 2000});
+            return false;
+        }
+        window.location.href = '/shop/Course/courseAssignSchool?id=' + id;
+    });
+</script>
+
+</body>
+</html>

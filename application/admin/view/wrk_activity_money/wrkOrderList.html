@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/static/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/static/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/static/h-ui/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/static/h-ui.admin/css/style.css"/>
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/static/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>业绩归属列表</title>
+
+    <style>
+        .layui-layer-btn0 {
+            background-color: red !important;
+            border-color: red !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i> 首页
+    <span class="c-gray en">&gt;</span> 业绩归属管理
+    <span class="c-gray en">&gt;</span> 业绩归属列表
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+       href="javascript:location.href = '/admin/WrkActivityMoney/wrkList';" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+
+<div class="page-container">
+
+    <div class="cl pd-5 bg-1 bk-gray hide">
+        <span class="l">
+            <a href="javascript:;" class="btn btn-primary radius" id="newAdd">
+                <i class="Hui-iconfont">&#xe600;</i> 业绩归属列表
+            </a>
+        </span>
+    </div>
+
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr>
+                <th scope="col" colspan="15">业绩归属列表</th>
+            </tr>
+            <tr class="text-c">
+                <th width="5">序号</th>
+                <th width="5">订单号</th>
+                <th width="20">万人砍活动</th>
+                <th width="10">用户</th>
+                <th width="20">电话</th>
+                <th width="10">支付时间</th>
+                <th width="10">业绩顾问</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {if condition="($data['data'])"}
+            {volist name="data['data']" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo['orderNo']}</td>
+                <td>{$vo['wrkName']}</td>
+                <td>{$vo['uName']}</td>
+                <td>{$vo['phone']}</td>
+
+                <td>
+                    {$vo['payDate']}
+                </td>
+
+                <td>
+                    {if condition="($vo['adviserId'])"}
+                        {$vo['adviserName']}
+                    {else /}
+                        无
+                    {/if}
+                </td>
+
+                <td>
+                    <a href="javascript:;" title="{if condition="($vo['adviserId'])"}重新划分业绩归属{else /}划分业绩归属{/if}" class="someEdit" va="{$vo.id}" vb="{$vo.adviserId}">
+                        <i class="Hui-iconfont Hui-iconfont-edit f-16"></i>
+                    </a>
+
+                </td>
+            </tr>
+            {/volist}
+
+            {if condition="$pages"}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    {$pages}
+                </td>
+            </tr>
+            {/if}
+
+            {else /}
+            <tr class="text-c">
+                <td colspan="15" style="text-align: center;">
+                    暂无数据
+                </td>
+            </tr>
+            {/if}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/static/js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="/static/js/layer/layer.js"></script>
+<script type="text/javascript" src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+
+    $('.someEdit').on('click',function () {
+        var id = $(this).attr('va');
+        var adviserId = $(this).attr('vb');
+        if(!id){
+            return false;
+        }
+
+        $.post('/admin/WrkActivityMoney/getWrkOrderInfo',{id: id},function (res) {
+            if(res.status == 'ok') {
+                var _html = '<div style="margin: 10px;">'
+                                + '<table class="table table-border table-bordered table-bg table-admin">'
+                                    + '<tr>'
+                                        + '<th>校区</th>'
+                                        + '<th>活动名</th>'
+                                        + '<th>签约时间</th>'
+                                        + '<th>顾问</th>'
+                                        + '<th>操作</th>'
+                                    + '</tr>';
+
+                $(res.data).each(function (k, v) {
+                    _html += '<tr>'
+                                + '<td>' + v.schoolName + '</td>'
+                                + '<td>' + v.name + '</td>'
+                                + '<td>' + v.signTime + '</td>'
+                                + '<td>' + v.adviserName + '</td>'
+                                + '<td>'
+                                    + ( v.adviserId ? '<a href="javascript:;" title="划分业绩归属" class="assignAdviser" va="'+ v.wrkOrderId +'" vb="'+ v.id +'">'
+                                        +'<i class="Hui-iconfont Hui-iconfont-edit f-16"></i>'
+                                    +'</a>' : '')
+                                +'</td>'
+                            +'</tr>';
+                });
+                _html += '</table></div>';
+
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['420px', '240px'],
+                    content: _html
+                });
+                
+                $('.assignAdviser').on('click',function () {
+                    var wrkOrderId = $(this).attr('va');
+                    var wrkInfoId = $(this).attr('vb');
+                    if(!wrkInfoId || !wrkOrderId){
+                        return false;
+                    }
+
+                    layer.confirm('确认指定业绩到当前顾问？', {
+                        btn: ['确认','取消']
+                    }, function() {
+                        $.post('/admin/WrkActivityMoney/reAssignAdviser', {
+                            wrkInfoId: wrkInfoId,
+                            wrkOrderId: wrkOrderId
+                        }, function (resData) {
+                            if (resData.status == 'ok') {
+                                layer.msg('操作成功!');
+                                layer.closeAll();
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 500);
+                            } else {
+                                layer.msg('操作失败!');
+                            }
+                        }, 'json');
+                    });
+                });
+
+            }else{
+                layer.msg('操作异常!');
+            }
+        },'json');
+
+    });
+</script>
+
+</body>
+</html>

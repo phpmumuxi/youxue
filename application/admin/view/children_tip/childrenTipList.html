@@ -1,0 +1,199 @@
+{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+    .pagination {
+        list-style-type: none;
+        display: inline-block;
+        overflow: auto;
+    }
+
+    .pagination li {
+        float: left;
+        /*padding: 6px 12px;*/
+        border: 1px solid #e1e2e3;
+        margin: 3px;
+    }
+
+    .pagination li a, .pagination li span {
+        display: inline-block;
+        padding: 6px 12px;
+    }
+
+    .pagination li:hover {
+        border: 1px solid #38f;
+        background: #f2f8ff;
+    }
+
+    .pagination .active {
+        border: 1px solid #38f;
+    }
+</style>
+{/block}
+{block name="body"}
+<title>妈妈约管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 妈妈约管理 <span
+        class="c-gray en">&gt;</span> 妈妈约列表 <a class="btn btn-success radius r"
+                                               style="line-height:1.6em;margin-top:3px"
+                                               href="javascript:window.location.href = '/admin/ChildrenTip/childrenTipList';"
+                                               title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <div class="text-l">
+        <span class="select-box" style="width: 150px;">
+            <select id="selectType" class="select" size="1" name="type">
+                <option value="-1">选择类型</option>
+                {foreach name="types" item="vo" key="k" }
+                    <option value="{$vo['type']}" {if condition="($type == $vo['type'])" }selected{/if} >{$vo['typeName']}</option>
+                {/foreach}
+            </select>
+        </span>
+        <span>
+            <input id="seeAll" class="btn btn-primary radius" type="button" value="全部">
+        </span>
+
+    </div>
+
+    <div class="cl pd-5 bg-1 bk-gray mt-20">
+        <span class="l">
+            <input id="addOne" class="btn btn-warning radius" type="button" value="新增">
+        </span>
+        <span class="r">共有数据：<strong>{$info['total']}</strong> 条</span>
+    </div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-bg table-admin">
+            <thead>
+            <tr class="text-c">
+                <th width="10">序号</th>
+                <th width="10">年龄</th>
+                <th width="10">标题</th>
+                <th width="20">
+                    <select name="" id="selectSex" class="select" size="1">
+                        <option value="-1">选择性别</option>
+                        <option value="0" {if condition="($sex == 0)"}selected{/if}>未知</option>
+                        <option value="1" {if condition="($sex == 1)"}selected{/if}>男</option>
+                        <option value="2" {if condition="($sex == 2)"}selected{/if}>女</option>
+                    </select>
+                </th>
+                <th width="20">创建时间</th>
+                <th width="20">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if($info['data'])}
+            {volist name="data" id="vo" key="k"}
+            <tr class="text-c">
+                <td>{$k}</td>
+                <td>{$vo['typeName']}</td>
+                <td>{$vo['title']}</td>
+                <td>{$typeSex[$vo['sex']]}</td>
+                <td>{$vo['createTime']|date='Y-m-d H:i:s',###}</td>
+
+                <td>
+                    <a href="javascript:;" va="{$vo['id']}" class="seeDetail" title="查看内容">
+                        <i class="Hui-iconfont Hui-iconfont-gengduo"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" va="{$vo['id']}" class="BtnEdit" title="修改">
+                        <i class="Hui-iconfont Hui-iconfont-manage2"></i>
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="javascript:;" va="{$vo['id']}" class="BtnDel" title="删除">
+                        <i class="Hui-iconfont Hui-iconfont-del2"></i>
+                    </a>
+                </td>
+            </tr>
+            {/volist}
+            {else /}
+            <tr class="text-c">
+                <td colspan="11">暂无数据</td>
+            </tr>
+            {/if}
+            <tr class="text-c">
+                <td colspan="11" style="text-align: center">{$pages}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    $('#selectType').on('change', function () {
+        var va = $(this).val();
+        if (va == -1) {
+            return false;
+        }
+        window.location.href = '/admin/ChildrenTip/childrenTipList?type=' + va;
+    });
+
+    $('#seeAll').on('click', function () {
+        window.location.href = '/admin/ChildrenTip/childrenTipList';
+    });
+
+    $('#addOne').click(function () {
+        window.location.href = '/admin/ChildrenTip/childrenTipAdd';
+    });
+
+    $('.seeDetail').click(function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+
+        $.post('/admin/ChildrenTip/childrenTipContent', {id: id}, function (res) {
+            if (res.status == 'ok') {
+                var _html = '<div style="margin: 5px;">';
+                _html += res.data;
+                _html += '</div>';
+                layer.open({
+                    title: '详细内容',
+                    type: 1,
+                    skin: 'layui-layer-rim',
+                    area: ['500px', '400px'],
+                    content: _html
+                });
+            } else {
+                layer.msg('操作异常!');
+            }
+        }, 'json');
+    });
+
+    $('.BtnEdit').click(function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+
+        window.location.href = '/admin/ChildrenTip/childrenTipEdit?id=' + id;
+    });
+
+    $('.BtnDel').click(function () {
+        var id = $(this).attr('va');
+        if (!id) {
+            return false;
+        }
+        var ct = $(this);
+        $.post('/admin/ChildrenTip/childrenTipDelete', {id: id}, function (res) {
+            if (res.status == 'ok') {
+                ct.parent().parent().hide();
+                layer.msg('操作成功!');
+            } else {
+                layer.msg('操作失败!');
+            }
+        }, 'json');
+    });
+    
+    $('#selectSex').change(function () {
+        var sex = $('#selectSex').val();
+        if(sex == -1){
+            return false;
+        }else{
+            window.location.href = '/admin/ChildrenTip/childrenTipList?sex=' + sex;
+        }
+    });
+</script>
+{/block}
+</body>
+</html>

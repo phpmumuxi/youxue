@@ -1,0 +1,48 @@
+{extend name="layout" /}
+{block name="body"}
+<title>商户简介</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+    商户简介管理
+	<span class="c-gray en">&gt;</span>
+	商户简介
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal"  enctype="multipart/form-data" onsubmit='return checks()'>
+		<div class="row cl">
+			<label class="form-label col-xs-3 col-sm-2"><span class="c-red">*</span>商户简介：</label>
+			<div class="formControls col-xs-7 col-sm-8">				
+				<textarea name="content" id="container">{$content|htmlspecialchars_decode|default=''}</textarea>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius"><i class="icon-ok"></i> 提交</button>
+				<button onclick="javascript:history.go(-1);" class="btn btn-default radius" type="button"> 返回</button>
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+
+{block name="script"}
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+	var ue = UE.getEditor('container');
+	function checks(){
+	  if(ue.getContent()==''){
+	     layer.msg('商户简介必填!',{icon:2,time:2000});
+	     return false;
+	  }
+	  return true;
+	}
+</script>
+{/block}
+
+</body>
+</html>

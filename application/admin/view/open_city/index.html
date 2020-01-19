@@ -1,0 +1,49 @@
+﻿{extend name="layout" /}
+{block name="body"}
+<title>添加开通城市</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span> 城市管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	{in name='1' value='$actionType'}
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="{:url('admin/OpenCity/add')}" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加开通城市</a></span> </div>
+	{/in}
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr>
+				<th scope="col" colspan="8">管理员列表</th>
+			</tr>
+			<tr class="text-c">
+				<th width="40">序号</th>
+				<th width="80">城市名</th>
+				<th width="100">城市码</th>
+				<th width="120">创建时间</th>
+				<th width="90">状态</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		{volist name="info" id="vo" key='k'}
+			<tr class="text-c">
+	   			<td>{$k}</td>
+				<td>{$vo.cityName}</td>
+				<td>{$vo.cityCode}</td>
+				<td>{$vo.createTime|date="Y-m-d H:i:s",###}</td>
+				<td>{php}echo $vo['status']==1 ? '开通' : '未开通';{/php}</td>
+				<td class="td-Admin">
+				{in name='2' value='$actionType'}
+				{eq name="vo['status']" value='2'}
+				<a style="text-decoration:none"  href="{:url('admin/OpenCity/edit',['id'=>$vo['id']])}" title="开通"><i class="Hui-iconfont">&#xe6e1;</i></a>{/eq} {/in}
+				{in name='3' value='$actionType'}{eq name="vo['status']" value='1'}
+				<a title="不开通" href="{:url('admin/OpenCity/del',['id'=>$vo['id']])}" onclick="return confirm('确认要停止开通？')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6dd;</i></a>{/eq}
+				{/in}</td>
+			</tr>
+	   {/volist}
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+</body>
+</html>

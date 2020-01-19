@@ -1,0 +1,140 @@
+﻿{extend name="layout" /}
+{block name="css"}
+<style type="text/css">
+.pagination{
+    list-style-type: none;
+    display: inline-block;
+    overflow: auto;
+}
+.pagination li{
+    float: left;
+    /*padding: 6px 12px;*/
+    border:1px solid #e1e2e3;
+    margin: 3px;
+}
+.pagination li a,.pagination li span{
+    display: inline-block;
+    padding: 6px 12px;
+}
+.pagination li:hover{
+    border:1px solid #38f;
+    background: #f2f8ff;
+}
+.pagination .active{
+    border:1px solid #38f;
+}
+</style>
+{/block}
+{block name="body"}
+<title>到账管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 财务管理 <span class="c-gray en">&gt;</span> 到账管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace((location.href.split('?'))[0]);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+        <input type="text" name="" id="ArrivalManagementTime" style="width:200px" class="input-text" {if($data['type']==2)}disabled{/if}
+               value="{if(isset($data['start_time']) && $data['type']==1)}{$data['start_time']|date='Y-m-d',###}{/if}">
+        <button name="" id="ArrivalButtonToday" class="btn btn-primary-outline radius" type="button">今日未处理账单
+        </button>&nbsp;&nbsp;<button name="" id="ArrivalButtonHistory" class="btn btn-success-outline radius" type="button">历史未处理账单
+        </button>
+    </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l" style="margin-top:5px;color:red">备注：默认导出是当天账单</span><span class="r"><a class="btn btn-primary radius" href="/admin/ArrivalManagement/export?type={$data['type']}" onclick="return confirm('确认要导出账单数据吗？')" >导出</a>&nbsp;&nbsp;<a class="btn btn-success radius" href="{:url('admin/ArrivalManagement/confirm',['type'=>$data['type']])}" onclick="return confirm('确认账单数据成功吗？')">确认成功</a></span></div>
+   <div class="mt-20">
+	<table class="table table-border table-bordered table-bg table-admin">
+		<thead>
+			<tr>
+				<th colspan="7"><span class="l"><h4>对公账户</h4></span>
+				<span class="r" style="margin-top:20px">共有数据：<strong>{$publicData['total']}</strong> 条</span></th>
+			</tr>
+			<tr class="text-c">
+				<th width="100">入账时间</th>
+				<th width="100">出账时间</th>
+				<th >商户名称</th>
+				<th width="100">出账金额</th>
+				<th width="140">户名</th>
+				<th width="100">付账否</th>
+				<th width="80">处理状态</th>
+			</tr>
+		</thead>
+		<tbody>
+   		{if($publicData['data'])}{volist name="publicData.data" id="vo"}
+		<tr class="text-c">
+   			<td>{$vo.inDate}</td>
+			<td>{$vo.outDate}</td>
+			<td>{$vo.name}</td>
+			<td>{$vo.money}</td>
+			<td>{$vo.bankName}</td>
+			<td>{eq name="vo.isOff" value='1'}是{else /}否{/eq}</td>
+			<td>{if condition="$vo.status==0" }未处理{elseif condition="$vo.status==1"/}待处理{elseif condition="$vo.status==2"/}已处理{else /}{/if}</td>
+		</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="7">暂无数据</td>
+        </tr>
+        {/if}
+        <tr class="text-c">
+            <td colspan="7" style="text-align: center">{$publicPage}</td>
+        </tr>
+		</tbody>
+	</table>
+
+	<table class="table table-border table-bordered table-bg table-admin mt-40">
+		<thead>
+			<tr>
+				<th colspan="7"><span class="l"><h4>私人账户</h4></span>
+				<span class="r" style="margin-top:20px">共有数据：<strong>{$privateData['total']}</strong> 条</span></th>
+			</tr>
+			<tr class="text-c">
+				<th width="100">入账时间</th>
+				<th width="100">出账时间</th>
+				<th >商户名称</th>
+				<th width="100">出账金额</th>
+				<th width="140">户名</th>
+				<th width="100">付账否</th>
+				<th width="80">处理状态</th>
+			</tr>
+		</thead>
+		<tbody>
+   		{if($privateData['data'])}{volist name="privateData.data" id="vo"}
+		<tr class="text-c">
+   			<td>{$vo.inDate}</td>
+			<td>{$vo.outDate}</td>
+			<td>{$vo.name}</td>
+			<td>{$vo.money}</td>
+			<td>{$vo.bankName}</td>
+			<td>{eq name="vo.isOff" value='0'}否{else /}是{/eq}</td>
+			<td>{if condition="$vo.status==0" }未处理{elseif condition="$vo.status==1"/}待处理{else /}已处理{/if}</td>
+		</tr>
+	   {/volist}
+	   {else /}
+        <tr class="text-c">
+            <td colspan="7">暂无数据</td>
+        </tr>
+        {/if}
+        <tr class="text-c">
+            <td colspan="7" style="text-align: center">{$privatePage}</td>
+        </tr>
+		</tbody>
+	</table>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script src="/static/lib/laydate/laydate.js"></script>
+<script type="text/javascript">
+	laydate.render({
+	    elem: '#ArrivalManagementTime'
+	    ,max: 0
+	});
+
+	$('#ArrivalButtonToday').click(function () {
+        window.location.href = "/admin/ArrivalManagement/index?type=1&start_time=" + $('#ArrivalManagementTime').val();
+    })
+    $('#ArrivalButtonHistory').click(function(){
+		window.location.href= "/admin/ArrivalManagement/index?type=2";
+	})
+</script>
+{/block}
+</body>
+</html>
